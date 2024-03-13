@@ -1,66 +1,36 @@
-## Foundry
+## Introduction
+Blockchain-based implementation of the popular 2048 game,
+leveraging Web3 technology to enable decentralized gameplay and transactions.
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+The game is played on a 4x4 grid, where the player combines tiles with the same numbers
+to achieve the tile with the number 2048.
 
-Foundry consists of:
+## Getting Started
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+### Smart Contract
 
-## Documentation
+...
 
-https://book.getfoundry.sh/
+### Frontend
 
-## Usage
+First, open frontend folder and run the development server:
 
-### Build
-
-```shell
-$ forge build
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-### Test
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-```shell
-$ forge test
-```
 
-### Format
+## Author
+Name: Jason Yapri
 
-```shell
-$ forge fmt
-```
+Website: https://jasonyapri.com
 
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+LinkedIn: https://linkedin.com/in/jasonyapri/
