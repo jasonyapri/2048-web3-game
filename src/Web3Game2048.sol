@@ -2,7 +2,7 @@
 // @author: Jason Yapri
 // @website: https://jasonyapri.com
 // @linkedIn: https://linkedin.com/in/jasonyapri
-// @version: 0.2.0 2024.03.13
+// @version: 0.2.1 (2024.03.13)
 // Contract: Web3 Game - 2048
 pragma solidity ^0.8.24;
 
@@ -79,16 +79,19 @@ contract Web3Game2048 {
     }
 
     function placeTwoNewTiles() internal returns (bool) {
-        TileLocation[] memory emptyTiles = new TileLocation[](0);
+        TileLocation[] memory emptyTiles = new TileLocation[](16);
 
+        uint emptyTilesCount = 0;
         for (uint8 i = 0; i < 4; i++) {
             for (uint8 j = 0; j < 4; j++) {
-                if (gameBoard[i][j] == 0)
-                    emptyTiles[emptyTiles.length] = TileLocation(i, j);
+                if (gameBoard[i][j] == 0) {
+                    emptyTiles[emptyTilesCount] = TileLocation(i, j);
+                    emptyTilesCount++;
+                }
             }
         }
 
-        if (emptyTiles.length == 0) return false;
+        if (emptyTilesCount == 0) return false;
 
         // Add Tile 2 to two random empty tiles
         uint256 randomIndex1 = uint256(
@@ -99,7 +102,7 @@ contract Web3Game2048 {
                     "randomIndex1"
                 )
             )
-        ) % emptyTiles.length;
+        ) % emptyTilesCount;
         uint256 randomIndex2;
         uint8 counter = 0;
         do {
@@ -114,9 +117,9 @@ contract Web3Game2048 {
                         )
                     )
                 ) %
-                emptyTiles.length;
+                emptyTilesCount;
             counter++;
-        } while (randomIndex1 == randomIndex2 && counter < emptyTiles.length);
+        } while (randomIndex1 == randomIndex2 && counter < emptyTilesCount);
 
         uint8 randomRow1 = emptyTiles[randomIndex1].row;
         uint8 randomCol1 = emptyTiles[randomIndex1].column;
@@ -129,21 +132,24 @@ contract Web3Game2048 {
     }
 
     function placeNewTile() internal returns (bool) {
-        TileLocation[] memory emptyTiles = new TileLocation[](0);
+        TileLocation[] memory emptyTiles = new TileLocation[](16);
 
+        uint emptyTilesCount = 0;
         for (uint8 i = 0; i < 4; i++) {
             for (uint8 j = 0; j < 4; j++) {
-                if (gameBoard[i][j] == 0)
-                    emptyTiles[emptyTiles.length] = TileLocation(i, j);
+                if (gameBoard[i][j] == 0) {
+                    emptyTiles[emptyTilesCount] = TileLocation(i, j);
+                    emptyTilesCount++;
+                }
             }
         }
 
-        if (emptyTiles.length == 0) return false;
+        if (emptyTilesCount == 0) return false;
 
         // Add Tile 2 to a random empty tile
         uint256 randomIndex = uint256(
             keccak256(abi.encodePacked(block.timestamp, block.prevrandao))
-        ) % emptyTiles.length;
+        ) % emptyTilesCount;
         uint8 randomRow = emptyTiles[randomIndex].row;
         uint8 randomCol = emptyTiles[randomIndex].column;
         gameBoard[randomRow][randomCol] = 2;
