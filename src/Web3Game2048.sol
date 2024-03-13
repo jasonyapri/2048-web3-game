@@ -7,8 +7,22 @@
 pragma solidity ^0.8.24;
 
 contract Web3Game2048 {
-    address public owner;
-    uint256 public prizePool;
+    uint256 public prizePool; // 32 bytes | slot 1
+    uint256 public prizePercentage; // 32 bytes | slot 2
+    uint256 public moveCount; // 32 bytes | slot 3
+    address public owner; // 20 bytes | slot 4
+    uint16[4][4] public gameBoard; // 2 bytes | slot 4
+    uint8 public commissionPercentage; // 1 byte | slot 4
+
+    string public constant AUTHOR_NAME = "Jason Yapri";
+    string public constant AUTHOR_WEBSITE = "https://jasonyapri.com";
+    string public constant AUTHOR_LINKEDIN =
+        "https://linkedin.com/in/jasonyapri";
+
+    struct TileLocation {
+        uint8 row;
+        uint8 column;
+    }
 
     enum Move {
         UP,
@@ -17,40 +31,18 @@ contract Web3Game2048 {
         RIGHT
     }
 
-    event Movement(address player, Move move);
-
-    uint16[4][4] public gameBoard;
-
-    string public constant AUTHOR_NAME = "Jason Yapri";
-    string public constant AUTHOR_WEBSITE = "https://jasonyapri.com";
-    string public constant AUTHOR_LINKEDIN =
-        "https://linkedin.com/in/jasonyapri";
-
-    event DonationReceived(
-        address indexed donator,
-        string name,
-        uint256 amount
-    );
-
-    struct TileLocation {
-        uint8 row;
-        uint8 column;
-    }
-
-    uint8 public commissionPercentage;
-    uint256 public prizePercentage;
-
-    uint256 public moveCount;
-
-    event Moved(uint16[4][4] updatedGameBoard);
-    event PrizePoolIncreased(uint256 addedValue, uint256 updatedPrizePool);
+    event Moved(address player, Move move);
     event YouHaveWonTheGame(
         address winner,
         uint256 moveCount,
         uint256 winnerPrize
     );
+    event DonationReceived(
+        address indexed donator,
+        string name,
+        uint256 amount
+    );
     event TilesReset();
-    event GameOver();
 
     error NoAmountSent();
     error TransferFailed(address recipient, uint256 amount);
@@ -61,8 +53,6 @@ contract Web3Game2048 {
         prizePool = msg.value;
         prizePercentage = 50; // 50% of the prize pool amount
         commissionPercentage = 10; // 10% commission of each transfer
-
-        resetTiles();
     }
 
     function resetTiles() internal {
@@ -194,16 +184,14 @@ contract Web3Game2048 {
         } else if (move == Move.RIGHT) {
             moveTilesRight();
         }
-        emit Movement({player: msg.sender, move: move});
         moveCount++;
-        emit Moved(gameBoard);
+        emit Moved({player: msg.sender, move: move});
 
         if (won()) {
             distributePrize(msg.sender);
             resetTiles();
         } else {
             if (!placeNewTile()) {
-                emit GameOver();
                 resetTiles();
             }
         }
