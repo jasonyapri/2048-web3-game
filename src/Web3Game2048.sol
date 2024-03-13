@@ -32,19 +32,17 @@ contract Web3Game2048 {
     string public constant AUTHOR_LINKEDIN =
         "https://linkedin.com/in/jasonyapri";
 
-    struct Donation {
-        address donator;
-        string name;
-        uint256 amount;
-        uint256 donatedAt;
-    }
+    event DonationReceived(
+        address indexed donator,
+        string name,
+        uint256 amount
+    );
 
     struct TileLocation {
         uint8 row;
         uint8 column;
     }
 
-    Donation[] public donations;
     mapping(address => uint256) public donatorsList;
 
     uint8 public commissionPercentage;
@@ -229,14 +227,11 @@ contract Web3Game2048 {
     function donateToPrizePool(string calldata name) external payable {
         if (msg.value == 0) revert NoAmountSent();
 
-        donations.push(
-            Donation({
-                donator: msg.sender,
-                name: name,
-                amount: msg.value,
-                donatedAt: block.timestamp
-            })
-        );
+        emit DonationReceived({
+            donator: msg.sender,
+            name: name,
+            amount: msg.value
+        });
 
         donatorsList[msg.sender] += msg.value;
         prizePool += msg.value;
