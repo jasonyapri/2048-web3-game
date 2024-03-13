@@ -27,11 +27,10 @@ contract Web3Game2048 {
 
     uint16[4][4] public gameBoard;
 
-    struct Author {
-        string name;
-        string website;
-        string linkedIn;
-    }
+    string public constant AUTHOR_NAME = "Jason Yapri";
+    string public constant AUTHOR_WEBSITE = "https://jasonyapri.com";
+    string public constant AUTHOR_LINKEDIN =
+        "https://linkedin.com/in/jasonyapri";
 
     struct Donation {
         address donator;
@@ -45,7 +44,6 @@ contract Web3Game2048 {
         uint8 column;
     }
 
-    Author public author;
     Donation[] public donations;
     mapping(address => uint256) public donatorsList;
 
@@ -75,10 +73,6 @@ contract Web3Game2048 {
         commissionPercentage = 10; // 10% commission of each transfer
 
         resetTiles();
-
-        author.name = "Jason Yapri";
-        author.website = "https://jasonyapri.com";
-        author.linkedIn = "https://linkedin.com/in/jasonyapri";
     }
 
     function resetTiles() internal {
