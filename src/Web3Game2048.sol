@@ -17,13 +17,7 @@ contract Web3Game2048 {
         RIGHT
     }
 
-    struct Movement {
-        address player;
-        Move move;
-        uint256 timestamp;
-    }
-
-    Movement[] public movements;
+    event Movement(address player, Move move);
 
     uint16[4][4] public gameBoard;
 
@@ -80,7 +74,6 @@ contract Web3Game2048 {
                 gameBoard[i][j] = 0;
             }
         }
-        delete movements;
         moveCount = 0;
 
         emit TilesReset();
@@ -203,13 +196,7 @@ contract Web3Game2048 {
         } else if (move == Move.RIGHT) {
             moveTilesRight();
         }
-        movements.push(
-            Movement({
-                player: msg.sender,
-                move: move,
-                timestamp: block.timestamp
-            })
-        );
+        emit Movement({player: msg.sender, move: move});
         moveCount++;
         emit Moved(gameBoard);
 
