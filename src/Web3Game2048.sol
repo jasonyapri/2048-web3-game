@@ -8,12 +8,12 @@ pragma solidity ^0.8.24;
 
 contract Web3Game2048 {
     uint256 public prizePool; // 32 bytes | slot 1
-    uint256 public prizePercentage; // 32 bytes | slot 2
-    uint256 public moveCount; // 32 bytes | slot 3
-    address public owner; // 20 bytes | slot 4
-    uint16[4][4] public gameBoard; // 2 bytes | slot 4
-    uint8 public commissionPercentage; // 1 byte | slot 4
+    uint256 public moveCount; // 32 bytes | slot 2
+    address public owner; // 20 bytes | slot 3
+    uint16[4][4] public gameBoard; // 2 bytes | slot 3
 
+    uint256 public constant prizePercentage = 50; // 50% of the prize pool amount;
+    uint8 public constant commissionPercentage = 10; // 10% commission of each transfer
     string public constant AUTHOR_NAME = "Jason Yapri";
     string public constant AUTHOR_WEBSITE = "https://jasonyapri.com";
     string public constant AUTHOR_LINKEDIN =
@@ -48,11 +48,9 @@ contract Web3Game2048 {
     error TransferFailed(address recipient, uint256 amount);
 
     constructor() payable {
-        // Set the deployer of the contract as owner and set the initial prize pool amount from the amount received during deployment
+        // Set the initial prize pool amount from the amount received during deployment
         owner = msg.sender;
         prizePool = msg.value;
-        prizePercentage = 50; // 50% of the prize pool amount
-        commissionPercentage = 10; // 10% commission of each transfer
     }
 
     function resetTiles() internal {
