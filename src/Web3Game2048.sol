@@ -37,8 +37,6 @@ contract Web3Game2048 {
         uint8 column;
     }
 
-    mapping(address => uint256) public donatorsList;
-
     uint8 public commissionPercentage;
     uint256 public prizePercentage;
 
@@ -220,7 +218,6 @@ contract Web3Game2048 {
             amount: msg.value
         });
 
-        donatorsList[msg.sender] += msg.value;
         prizePool += msg.value;
     }
 
