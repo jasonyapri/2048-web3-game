@@ -44,6 +44,7 @@ contract Web3Game2048 {
     );
     event TilesReset();
 
+    error NoValidMoveMade();
     error NoAmountSent();
     error TransferFailed(address recipient, uint256 amount);
 
@@ -51,6 +52,12 @@ contract Web3Game2048 {
         // Set the initial prize pool amount from the amount received during deployment
         owner = msg.sender;
         prizePool = msg.value;
+        placeNewTile();
+    }
+
+    function resetGame() internal {
+        resetTiles();
+        placeNewTile();
     }
 
     function resetTiles() internal {
@@ -60,6 +67,7 @@ contract Web3Game2048 {
                 gameBoard[i][j] = 0;
             }
         }
+
         moveCount = 0;
 
         emit TilesReset();
@@ -75,6 +83,8 @@ contract Web3Game2048 {
             }
         }
 
+        if (emptyTiles.length == 0) return false;
+
         // Add Tile 2 to a random empty tile
         uint256 randomIndex = uint256(
             keccak256(abi.encodePacked(block.timestamp, block.prevrandao))
@@ -83,12 +93,11 @@ contract Web3Game2048 {
         uint8 randomCol = emptyTiles[randomIndex].column;
         gameBoard[randomRow][randomCol] = 2;
 
-        if (emptyTiles.length == 1) return false;
-
         return true;
     }
 
-    function moveTilesUp() internal {
+    function moveTilesUp() internal returns (bool) {
+        bool moved = false;
         for (uint8 i = 0; i < 4; i++) {
             for (uint8 j = 0; j < 4; j++) {
                 if (gameBoard[i][j] != 0) {
@@ -98,18 +107,22 @@ contract Web3Game2048 {
                         gameBoard[k - 1][j] = gameBoard[k][j];
                         gameBoard[k][j] = 0;
                         k--;
+                        moved = true;
                     }
                     // Merge the value with the tile above if they have the same value
                     if (k > 0 && gameBoard[k - 1][j] == gameBoard[k][j]) {
                         gameBoard[k - 1][j] *= 2;
                         gameBoard[k][j] = 0;
+                        moved = true;
                     }
                 }
             }
         }
+        return moved;
     }
 
-    function moveTilesLeft() internal {
+    function moveTilesLeft() internal returns (bool) {
+        bool moved = false;
         for (uint8 i = 0; i < 4; i++) {
             for (uint8 j = 0; j < 4; j++) {
                 if (gameBoard[i][j] != 0) {
@@ -119,18 +132,22 @@ contract Web3Game2048 {
                         gameBoard[i][k - 1] = gameBoard[i][k];
                         gameBoard[i][k] = 0;
                         k--;
+                        moved = true;
                     }
                     // Merge the value with the tile on the left if they have the same value
                     if (k > 0 && gameBoard[i][k - 1] == gameBoard[i][k]) {
                         gameBoard[i][k - 1] *= 2;
                         gameBoard[i][k] = 0;
+                        moved = true;
                     }
                 }
             }
         }
+        return moved;
     }
 
-    function moveTilesDown() internal {
+    function moveTilesDown() internal returns (bool) {
+        bool moved = false;
         for (uint8 i = 3; i >= 0; i--) {
             for (uint8 j = 3; j >= 0; j--) {
                 if (gameBoard[i][j] != 0) {
@@ -140,18 +157,22 @@ contract Web3Game2048 {
                         gameBoard[k + 1][j] = gameBoard[k][j];
                         gameBoard[k][j] = 0;
                         k++;
+                        moved = true;
                     }
                     // Merge the value with the tile below if they have the same value
                     if (k < 3 && gameBoard[k + 1][j] == gameBoard[k][j]) {
                         gameBoard[k + 1][j] *= 2;
                         gameBoard[k][j] = 0;
+                        moved = true;
                     }
                 }
             }
         }
+        return moved;
     }
 
-    function moveTilesRight() internal {
+    function moveTilesRight() internal returns (bool) {
+        bool moved;
         for (uint8 i = 3; i >= 0; i--) {
             for (uint8 j = 3; j >= 0; j--) {
                 if (gameBoard[i][j] != 0) {
@@ -161,37 +182,65 @@ contract Web3Game2048 {
                         gameBoard[i][k + 1] = gameBoard[i][k];
                         gameBoard[i][k] = 0;
                         k++;
+                        moved = true;
                     }
                     // Merge the value with the tile on the right if they have the same value
                     if (k < 3 && gameBoard[i][k + 1] == gameBoard[i][k]) {
                         gameBoard[i][k + 1] *= 2;
                         gameBoard[i][k] = 0;
+                        moved = true;
                     }
                 }
             }
         }
+        return moved;
+    }
+
+    function checkForValidMove() internal view returns (bool) {
+        bool validMoveExists;
+        // check if there is any empty tile or two adjacent tiles with the same value
+        for (uint8 i = 0; i < 4; i++) {
+            for (uint8 j = 0; j < 4; j++) {
+                if (gameBoard[i][j] == 0) {
+                    validMoveExists = true;
+                    break;
+                }
+                if (
+                    (i < 3 && gameBoard[i][j] == gameBoard[i + 1][j]) ||
+                    (j < 3 && gameBoard[i][j] == gameBoard[i][j + 1])
+                ) {
+                    validMoveExists = true;
+                    break;
+                }
+            }
+            if (validMoveExists) {
+                break;
+            }
+        }
+        return validMoveExists;
     }
 
     function makeMove(Move move) external {
+        bool moved = false;
         if (move == Move.UP) {
-            moveTilesUp();
+            moved = moveTilesUp();
         } else if (move == Move.DOWN) {
-            moveTilesDown();
+            moved = moveTilesDown();
         } else if (move == Move.LEFT) {
-            moveTilesLeft();
+            moved = moveTilesLeft();
         } else if (move == Move.RIGHT) {
-            moveTilesRight();
+            moved = moveTilesRight();
         }
+        if (!moved) revert NoValidMoveMade();
         moveCount++;
         emit Moved({player: msg.sender, move: move});
 
         if (won()) {
             distributePrize(msg.sender);
-            resetTiles();
+            resetGame();
         } else {
-            if (!placeNewTile()) {
-                resetTiles();
-            }
+            placeNewTile();
+            if (!checkForValidMove()) resetGame();
         }
     }
 
