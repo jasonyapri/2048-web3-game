@@ -78,6 +78,13 @@ contract Web3Game2048 {
         thirdPrizeDistributed = false;
     }
 
+    function getGameBoardTile(
+        uint row,
+        uint col
+    ) external view returns (uint16) {
+        return gameBoard[row][col];
+    }
+
     function placeTwoNewTiles() internal returns (bool) {
         TileLocation[] memory emptyTiles = new TileLocation[](16);
 

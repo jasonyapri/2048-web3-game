@@ -7,6 +7,7 @@
 pragma solidity ^0.8.24;
 
 import {Test, console} from "forge-std/Test.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 import {Web3Game2048} from "../src/Web3Game2048.sol";
 
 contract Web3Game2048BaseTest is Test {
@@ -14,5 +15,21 @@ contract Web3Game2048BaseTest is Test {
 
     function setUp() public {
         web3Game = new Web3Game2048();
+    }
+
+    function _printGameBoard() public view {
+        console.log("Game Board:");
+        for (uint256 i = 0; i < 4; i++) {
+            string memory row;
+            for (uint256 j = 0; j < 4; j++) {
+                row = string.concat(
+                    row,
+                    Strings.toString(uint256(web3Game.getGameBoardTile(i, j))),
+                    " "
+                );
+            }
+            console.log(row);
+        }
+        console.log("End of Game Board");
     }
 }
