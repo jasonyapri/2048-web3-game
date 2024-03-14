@@ -2,7 +2,7 @@
 // @author: Jason Yapri
 // @website: https://jasonyapri.com
 // @linkedIn: https://linkedin.com/in/jasonyapri
-// @version: 0.2.1 (2024.03.13)
+// @version: 0.2.2 (2024.03.15)
 // Contract: Web3 Game - 2048
 pragma solidity ^0.8.24;
 
@@ -11,9 +11,9 @@ contract Web3Game2048 {
     uint256 public moveCount; // 32 bytes | slot 2
     address public owner; // 20 bytes | slot 3
     uint16[4][4] public gameBoard; // 2 bytes | slot 3
-    bool firstPrizeDistributed; // 1 byte | slot 3
-    bool secondPrizeDistributed; // 1 byte | slot 3
-    bool thirdPrizeDistributed; // 1 byte | slot 3
+    bool public firstPrizeDistributed; // 1 byte | slot 3
+    bool public secondPrizeDistributed; // 1 byte | slot 3
+    bool public thirdPrizeDistributed; // 1 byte | slot 3
 
     uint8 public constant GRAND_PRIZE_PERCENTAGE = 50; // 50% of the prize pool amount when reached 2048
     uint8 public constant FIRST_PRIZE_PERCENTAGE = 10; // 10% of the prize pool amount when reached 1024
