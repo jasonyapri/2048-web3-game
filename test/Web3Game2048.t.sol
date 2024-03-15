@@ -46,6 +46,8 @@ contract Web3Game2048BaseTest is Test {
         }
         return count;
     }
+
+    receive() external payable {}
 }
 
 contract Web3Game2048ConstructorTest is Web3Game2048BaseTest {
@@ -75,5 +77,30 @@ contract Web3Game2048ConstructorTest is Web3Game2048BaseTest {
         assertEq(web3Game.moveCount(), 0);
         assertEq(_getFilledTilesCount(), 2);
         _printGameBoard();
+    }
+}
+
+contract Web3Game2048EmergencyExitTest is Web3Game2048BaseTest {
+    error NotAuthorized(address sender);
+
+    function test_EmergencyExit() public {
+        uint contractBalanceBefore = address(web3Game).balance;
+        uint ownerBalanceBefore = address(this).balance;
+        web3Game.emergencyExit();
+        uint contractBalanceAfter = address(web3Game).balance;
+        uint ownerBalanceAfter = address(this).balance;
+        assertEq(
+            contractBalanceBefore - contractBalanceAfter,
+            STARTING_PRIZE_POOL
+        );
+        assertEq(ownerBalanceAfter - ownerBalanceBefore, STARTING_PRIZE_POOL);
+    }
+
+    function test_RevertIf_NotCalledByOwner() public {
+        vm.startPrank(address(1));
+        vm.expectRevert(
+            abi.encodeWithSelector(NotAuthorized.selector, address(1))
+        );
+        web3Game.emergencyExit();
     }
 }
