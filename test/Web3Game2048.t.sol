@@ -2,7 +2,7 @@
 // @author: Jason Yapri
 // @website: https://jasonyapri.com
 // @linkedIn: https://linkedin.com/in/jasonyapri
-// @version: 0.2.3 (2024.03.15)
+// @version: 0.2.4 (2024.03.15)
 // Contract: Web3 Game - 2048
 pragma solidity ^0.8.24;
 
@@ -104,13 +104,13 @@ contract Web3Game2048ConstructorTest is Web3Game2048BaseTest {
         assertEq(web3Game.owner(), address(this));
         assertEq(web3Game.moveCount(), 0);
         assertEq(_getFilledTilesCount(), 2);
-        _printGameBoard("");
+        // _printGameBoard("");
     }
 }
 
 contract Web3Game2048MakeMoveTest is Web3Game2048BaseTest {
     function test_MakeMoveUp() public {
-        _printGameBoard("BEFORE");
+        // _printGameBoard("BEFORE");
         /*
             Game Board - BEFORE:
             0 2 0 0
@@ -122,14 +122,42 @@ contract Web3Game2048MakeMoveTest is Web3Game2048BaseTest {
         web3Game.makeMove(Web3Game2048.Move.UP);
         assertEq(web3Game.moveCount(), 1); // First Move
         assertEq(_caclulateTilesSum(), 6); // 2 x 2 (Initial Tiles) + 2 (New Tile)
+        assertEq(web3Game.getGameBoardTile(0, 0), 2);
+        assertEq(web3Game.getGameBoardTile(0, 1), 2);
 
-        _printGameBoard("AFTER");
+        // _printGameBoard("AFTER");
         /*
             Game Board - AFTER:
             2 2 0 0
             0 0 0 0
             2 0 0 0
             0 0 0 0
+        */
+    }
+
+    function test_MakeMoveDown() public {
+        // _printGameBoard("BEFORE");
+        /*
+            Game Board - BEFORE:
+            0 2 0 0
+            2 0 0 0
+            0 0 0 0
+            0 0 0 0
+        */
+
+        web3Game.makeMove(Web3Game2048.Move.DOWN);
+        assertEq(web3Game.moveCount(), 1); // First Move
+        assertEq(_caclulateTilesSum(), 6); // 2 x 2 (Initial Tiles) + 2 (New Tile)
+        assertEq(web3Game.getGameBoardTile(3, 0), 2);
+        assertEq(web3Game.getGameBoardTile(3, 1), 2);
+
+        // _printGameBoard("AFTER");
+        /*
+            Game Board - AFTER:
+            0 0 0 0
+            0 0 2 0
+            0 0 0 0
+            2 2 0 0
         */
     }
 }
