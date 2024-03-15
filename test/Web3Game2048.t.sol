@@ -2,7 +2,7 @@
 // @author: Jason Yapri
 // @website: https://jasonyapri.com
 // @linkedIn: https://linkedin.com/in/jasonyapri
-// @version: 0.2.2 (2024.03.15)
+// @version: 0.2.3 (2024.03.15)
 // Contract: Web3 Game - 2048
 pragma solidity ^0.8.24;
 
@@ -15,12 +15,20 @@ contract Web3Game2048BaseTest is Test {
     uint internal constant STARTING_PRIZE_POOL = 1000000000000000000; // 1 Ether or 1e18 wei
 
     function setUp() public {
-        // vm.warp(1000);
+        vm.warp(1710490910); // set block.timestamp to Fri, Mar 15 2024 | 15:21:50 GMT+0700
         web3Game = new Web3Game2048{value: STARTING_PRIZE_POOL}();
     }
 
-    function _printGameBoard() public view {
-        console.log("Game Board:");
+    function _printGameBoard(string memory caption) internal view {
+        console.log(
+            string.concat(
+                "Game Board",
+                !_stringIsTheSame(caption, "")
+                    ? string.concat(" - ", caption)
+                    : "",
+                ":"
+            )
+        );
         for (uint256 i = 0; i < 4; i++) {
             string memory row;
             for (uint256 j = 0; j < 4; j++) {
@@ -32,10 +40,18 @@ contract Web3Game2048BaseTest is Test {
             }
             console.log(row);
         }
-        // console.log("End of Game Board");
+        console.log("");
     }
 
-    function _getFilledTilesCount() public view returns (uint256) {
+    function _stringIsTheSame(
+        string memory s1,
+        string memory s2
+    ) internal pure returns (bool) {
+        return
+            keccak256(abi.encodePacked(s1)) == keccak256(abi.encodePacked(s2));
+    }
+
+    function _getFilledTilesCount() internal view returns (uint256) {
         uint256 count = 0;
         for (uint256 i = 0; i < 4; i++) {
             for (uint256 j = 0; j < 4; j++) {
@@ -45,6 +61,18 @@ contract Web3Game2048BaseTest is Test {
             }
         }
         return count;
+    }
+
+    function _caclulateTilesSum() public view returns (uint256) {
+        uint256 sum = 0;
+        for (uint256 i = 0; i < 4; i++) {
+            for (uint256 j = 0; j < 4; j++) {
+                if (web3Game.getGameBoardTile(i, j) != 0) {
+                    sum += web3Game.getGameBoardTile(i, j);
+                }
+            }
+        }
+        return sum;
     }
 
     receive() external payable {}
@@ -76,7 +104,33 @@ contract Web3Game2048ConstructorTest is Web3Game2048BaseTest {
         assertEq(web3Game.owner(), address(this));
         assertEq(web3Game.moveCount(), 0);
         assertEq(_getFilledTilesCount(), 2);
-        _printGameBoard();
+        _printGameBoard("");
+    }
+}
+
+contract Web3Game2048MakeMoveTest is Web3Game2048BaseTest {
+    function test_MakeMoveUp() public {
+        _printGameBoard("BEFORE");
+        /*
+            Game Board - BEFORE:
+            0 2 0 0
+            2 0 0 0
+            0 0 0 0
+            0 0 0 0
+        */
+
+        web3Game.makeMove(Web3Game2048.Move.UP);
+        assertEq(web3Game.moveCount(), 1); // First Move
+        assertEq(_caclulateTilesSum(), 6); // 2 x 2 (Initial Tiles) + 2 (New Tile)
+
+        _printGameBoard("AFTER");
+        /*
+            Game Board - AFTER:
+            2 2 0 0
+            0 0 0 0
+            2 0 0 0
+            0 0 0 0
+        */
     }
 }
 

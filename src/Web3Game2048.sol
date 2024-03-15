@@ -2,7 +2,7 @@
 // @author: Jason Yapri
 // @website: https://jasonyapri.com
 // @linkedIn: https://linkedin.com/in/jasonyapri
-// @version: 0.2.2 (2024.03.15)
+// @version: 0.2.3 (2024.03.15)
 // Contract: Web3 Game - 2048
 pragma solidity ^0.8.24;
 
@@ -156,7 +156,9 @@ contract Web3Game2048 {
 
         // Add Tile 2 to a random empty tile
         uint256 randomIndex = uint256(
-            keccak256(abi.encodePacked(block.timestamp, block.prevrandao))
+            keccak256(
+                abi.encodePacked(block.timestamp, block.prevrandao, moveCount)
+            )
         ) % emptyTilesCount;
         uint8 randomRow = emptyTiles[randomIndex].row;
         uint8 randomCol = emptyTiles[randomIndex].column;
