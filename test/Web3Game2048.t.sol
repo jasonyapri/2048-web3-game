@@ -32,7 +32,7 @@ contract Web3Game2048BaseTest is Test {
             }
             console.log(row);
         }
-        console.log("End of Game Board");
+        // console.log("End of Game Board");
     }
 
     function _getFilledTilesCount() public view returns (uint256) {
@@ -80,15 +80,47 @@ contract Web3Game2048ConstructorTest is Web3Game2048BaseTest {
     }
 }
 
+contract Web3Game2048DonateToOwnerTest is Web3Game2048BaseTest {
+    error NoAmountSent();
+
+    function test_DonateToOwner() public {
+        deal(address(1), 2 ether);
+        vm.startPrank(address(1));
+
+        uint contractBalanceBefore = address(web3Game).balance;
+        uint ownerBalanceBefore = address(this).balance;
+        uint donatorBalanceBefore = address(1).balance;
+
+        web3Game.donateToOwner{value: 1 ether}();
+
+        uint contractBalanceAfter = address(web3Game).balance;
+        uint ownerBalanceAfter = address(this).balance;
+        uint donatorBalanceAfter = address(1).balance;
+
+        assertEq(contractBalanceBefore, contractBalanceAfter);
+        assertEq(ownerBalanceBefore + 1 ether, ownerBalanceAfter);
+        assertEq(donatorBalanceBefore > donatorBalanceAfter, true);
+    }
+
+    function test_RevertIf_NoAmountSent() public {
+        vm.prank(address(1));
+        vm.expectRevert(abi.encodeWithSelector(NoAmountSent.selector));
+        web3Game.donateToOwner();
+    }
+}
+
 contract Web3Game2048EmergencyExitTest is Web3Game2048BaseTest {
     error NotAuthorized(address sender);
 
     function test_EmergencyExit() public {
         uint contractBalanceBefore = address(web3Game).balance;
         uint ownerBalanceBefore = address(this).balance;
+
         web3Game.emergencyExit();
+
         uint contractBalanceAfter = address(web3Game).balance;
         uint ownerBalanceAfter = address(this).balance;
+
         assertEq(
             contractBalanceBefore - contractBalanceAfter,
             STARTING_PRIZE_POOL
