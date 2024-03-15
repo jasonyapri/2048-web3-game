@@ -2,7 +2,7 @@
 // @author: Jason Yapri
 // @website: https://jasonyapri.com
 // @linkedIn: https://linkedin.com/in/jasonyapri
-// @version: 0.2.4 (2024.03.15)
+// @version: 0.2.5 (2024.03.15)
 // Contract: Web3 Game - 2048
 pragma solidity ^0.8.24;
 
@@ -158,6 +158,58 @@ contract Web3Game2048MakeMoveTest is Web3Game2048BaseTest {
             0 0 2 0
             0 0 0 0
             2 2 0 0
+        */
+    }
+
+    function test_MakeMoveLeft() public {
+        // _printGameBoard("BEFORE");
+        /*
+            Game Board - BEFORE:
+            0 2 0 0
+            2 0 0 0
+            0 0 0 0
+            0 0 0 0
+        */
+
+        web3Game.makeMove(Web3Game2048.Move.LEFT);
+        assertEq(web3Game.moveCount(), 1); // First Move
+        assertEq(_caclulateTilesSum(), 6); // 2 x 2 (Initial Tiles) + 2 (New Tile)
+        assertEq(web3Game.getGameBoardTile(0, 0), 2);
+        assertEq(web3Game.getGameBoardTile(1, 0), 2);
+
+        // _printGameBoard("AFTER");
+        /*
+            Game Board - AFTER:
+            2 0 0 0
+            2 0 0 0
+            2 0 0 0
+            0 0 0 0
+        */
+    }
+
+    function test_MakeMoveRight() public {
+        // _printGameBoard("BEFORE");
+        /*
+            Game Board - BEFORE:
+            0 2 0 0
+            2 0 0 0
+            0 0 0 0
+            0 0 0 0
+        */
+
+        web3Game.makeMove(Web3Game2048.Move.RIGHT);
+        assertEq(web3Game.moveCount(), 1); // First Move
+        assertEq(_caclulateTilesSum(), 6); // 2 x 2 (Initial Tiles) + 2 (New Tile)
+        assertEq(web3Game.getGameBoardTile(0, 3), 2);
+        assertEq(web3Game.getGameBoardTile(1, 3), 2);
+
+        // _printGameBoard("AFTER");
+        /*
+            Game Board - AFTER:
+            0 0 0 2
+            0 0 0 2
+            2 0 0 0
+            0 0 0 0
         */
     }
 }

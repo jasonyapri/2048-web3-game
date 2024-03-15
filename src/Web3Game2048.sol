@@ -2,7 +2,7 @@
 // @author: Jason Yapri
 // @website: https://jasonyapri.com
 // @linkedIn: https://linkedin.com/in/jasonyapri
-// @version: 0.2.4 (2024.03.15)
+// @version: 0.2.5 (2024.03.15)
 // Contract: Web3 Game - 2048
 pragma solidity ^0.8.24;
 
@@ -246,21 +246,23 @@ contract Web3Game2048 {
 
     function moveTilesRight() internal returns (bool) {
         bool moved;
-        for (uint8 i = 3; i >= 0; i--) {
-            for (uint8 j = 3; j >= 0; j--) {
-                if (gameBoard[i][j] != 0) {
-                    uint8 k = j;
+        for (int8 i = 3; i >= 0; i--) {
+            uint8 p = uint8(i);
+            for (int8 j = 3; j >= 0; j--) {
+                uint8 q = uint8(j);
+                if (gameBoard[p][q] != 0) {
+                    uint8 k = q;
                     // Move the value to the right until it reaches the rightmost column or another tile with a different value
-                    while (k < 3 && gameBoard[i][k + 1] == 0) {
-                        gameBoard[i][k + 1] = gameBoard[i][k];
-                        gameBoard[i][k] = 0;
+                    while (k < 3 && gameBoard[p][k + 1] == 0) {
+                        gameBoard[p][k + 1] = gameBoard[p][k];
+                        gameBoard[p][k] = 0;
                         k++;
                         moved = true;
                     }
                     // Merge the value with the tile on the right if they have the same value
-                    if (k < 3 && gameBoard[i][k + 1] == gameBoard[i][k]) {
-                        gameBoard[i][k + 1] *= 2;
-                        gameBoard[i][k] = 0;
+                    if (k < 3 && gameBoard[p][k + 1] == gameBoard[p][k]) {
+                        gameBoard[p][k + 1] *= 2;
+                        gameBoard[p][k] = 0;
                         moved = true;
                     }
                 }
