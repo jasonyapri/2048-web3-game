@@ -1,0 +1,25 @@
+TEST CASES
+
+MakeMove
+-- happy path: move up
+-- happy path: move down
+-- happy path: move left
+-- happy path: move right
+-- happy path: receive third prize (move until it reaches 256)
+-- happy path: receive second prize (move until it reaches 512)
+-- happy path: receive first prize (move until it reaches 1024)
+-- happy path: receive grand prize (move until it reaches 2048) & game reset
+-- happy path: game over (no more valid moves after making last move) & game reset
+-- unhappy path: no valid move made
+
+DonateToPrizePool
+-- happy path
+-- unhappy path: no amount sent
+
+DonateToOwner
+-- happy path
+-- unhappy path: no amount sent
+
+EmergencyExit
+-- happy path
+-- unhappy path: not authorized since it's not the owner calling the function

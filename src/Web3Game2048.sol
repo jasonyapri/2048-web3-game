@@ -53,6 +53,7 @@ contract Web3Game2048 {
     error NoValidMoveMade();
     error NoAmountSent();
     error TransferFailed(address recipient, uint256 amount);
+    error NotAuthorized(address sender);
 
     constructor() payable {
         // Set the initial prize pool amount from the amount received during deployment
@@ -368,6 +369,8 @@ contract Web3Game2048 {
                 value: address(this).balance
             }("");
             if (!success) revert TransferFailed(owner, address(this).balance);
+        } else {
+            revert NotAuthorized(msg.sender);
         }
     }
 
