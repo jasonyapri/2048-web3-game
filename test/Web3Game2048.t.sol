@@ -80,6 +80,32 @@ contract Web3Game2048ConstructorTest is Web3Game2048BaseTest {
     }
 }
 
+contract Web3Game2048DonateToPrizePoolTest is Web3Game2048BaseTest {
+    error NoAmountSent();
+
+    function test_donateToPrizePool() public {
+        deal(address(1), 2 ether);
+        vm.startPrank(address(1));
+
+        uint contractBalanceBefore = address(web3Game).balance;
+        uint donatorBalanceBefore = address(1).balance;
+
+        web3Game.donateToPrizePool{value: 1 ether}("Jason Yapri");
+
+        uint contractBalanceAfter = address(web3Game).balance;
+        uint donatorBalanceAfter = address(1).balance;
+
+        assertEq(contractBalanceBefore + 1 ether, contractBalanceAfter);
+        assertEq(donatorBalanceAfter < donatorBalanceBefore, true);
+    }
+
+    function test_RevertIf_NoAmountSent() public {
+        vm.prank(address(1));
+        vm.expectRevert(abi.encodeWithSelector(NoAmountSent.selector));
+        web3Game.donateToPrizePool("Jason Yapri");
+    }
+}
+
 contract Web3Game2048DonateToOwnerTest is Web3Game2048BaseTest {
     error NoAmountSent();
 
