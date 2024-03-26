@@ -2,7 +2,7 @@
 // @author: Jason Yapri
 // @website: https://jasonyapri.com
 // @linkedIn: https://linkedin.com/in/jasonyapri
-// @version: 0.4.1 (2024.03.26)
+// @version: 0.4.2 (2024.03.26)
 // Contract: Web3 Game - 2048
 pragma solidity ^0.8.24;
 
@@ -67,6 +67,7 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
     error NoValidMoveMade();
     error NoAmountSent();
     error NotAuthorized(address sender);
+    error InvalidPercentage();
 
     constructor(address owner) payable Ownable(owner) {
         // Set the initial prize pool amount from the amount received during deployment
@@ -92,8 +93,8 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
     }
 
     function getGameBoardTile(
-        uint row,
-        uint col
+        uint256 row,
+        uint256 col
     ) external view returns (uint16) {
         return gameBoard[row][col];
     }
@@ -101,7 +102,7 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
     function placeTwoNewTiles() internal returns (bool) {
         TileLocation[] memory emptyTiles = new TileLocation[](16);
 
-        uint emptyTilesCount = 0;
+        uint256 emptyTilesCount = 0;
         for (uint8 i = 0; i < 4; i++) {
             for (uint8 j = 0; j < 4; j++) {
                 if (gameBoard[i][j] == 0) {
@@ -154,7 +155,7 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
     function placeNewTile() internal returns (bool) {
         TileLocation[] memory emptyTiles = new TileLocation[](16);
 
-        uint emptyTilesCount = 0;
+        uint256 emptyTilesCount = 0;
         for (uint8 i = 0; i < 4; i++) {
             for (uint8 j = 0; j < 4; j++) {
                 if (gameBoard[i][j] == 0) {
@@ -349,13 +350,13 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
     function donateToPrizePool(string calldata name) external payable {
         if (msg.value == 0) revert NoAmountSent();
 
+        prizePool += msg.value;
+
         emit DonationToPrizePoolReceived({
             donator: msg.sender,
             name: name,
             amount: msg.value
         });
-
-        prizePool += msg.value;
     }
 
     function donateToAuthor(
@@ -400,8 +401,10 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
 
     receive() external payable {}
 
-    function emergencyExit() external onlyOwner nonReentrant {
-        payable(owner()).sendValue(address(this).balance);
+    function emergencyExit(uint256 percentage) external onlyOwner nonReentrant {
+        if (percentage < 1 || percentage > 100) revert InvalidPercentage();
+        uint256 amount = (address(this).balance * percentage) / 100;
+        payable(owner()).sendValue(amount);
     }
 
     function distributePrize(

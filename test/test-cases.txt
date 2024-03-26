@@ -27,3 +27,4 @@ DonateToOwner
 EmergencyExit
 -- happy path
 -- unhappy path: not authorized since it's not the owner calling the function
+-- unhappy path: invalid percentage parameter

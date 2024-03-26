@@ -377,12 +377,13 @@ contract Web3Game2048DonateToAuthorTest is Web3Game2048BaseTest {
 
 contract Web3Game2048EmergencyExitTest is Web3Game2048BaseTest {
     error NotAuthorized(address sender);
+    error InvalidPercentage();
 
-    function test_EmergencyExit() public {
+    function test_EmergencyExit_100() public {
         uint contractBalanceBefore = address(web3Game).balance;
         uint ownerBalanceBefore = address(this).balance;
 
-        web3Game.emergencyExit();
+        web3Game.emergencyExit(100);
 
         uint contractBalanceAfter = address(web3Game).balance;
         uint ownerBalanceAfter = address(this).balance;
@@ -394,9 +395,36 @@ contract Web3Game2048EmergencyExitTest is Web3Game2048BaseTest {
         assertEq(ownerBalanceAfter - ownerBalanceBefore, STARTING_PRIZE_POOL);
     }
 
+    function test_EmergencyExit_50() public {
+        uint contractBalanceBefore = address(web3Game).balance;
+        uint ownerBalanceBefore = address(this).balance;
+
+        web3Game.emergencyExit(50);
+
+        uint contractBalanceAfter = address(web3Game).balance;
+        uint ownerBalanceAfter = address(this).balance;
+
+        assertEq(
+            contractBalanceBefore - contractBalanceAfter,
+            STARTING_PRIZE_POOL / 2
+        );
+        assertEq(
+            ownerBalanceAfter - ownerBalanceBefore,
+            STARTING_PRIZE_POOL / 2
+        );
+    }
+
+    function test_RevertIf_InvalidPercentage() public {
+        vm.startPrank(address(1));
+        vm.expectRevert();
+        web3Game.emergencyExit(101);
+        vm.expectRevert();
+        web3Game.emergencyExit(0);
+    }
+
     function test_RevertIf_NotCalledByOwner() public {
         vm.startPrank(address(1));
         vm.expectRevert();
-        web3Game.emergencyExit();
+        web3Game.emergencyExit(50);
     }
 }
