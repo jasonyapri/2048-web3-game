@@ -2,9 +2,11 @@
 // @author: Jason Yapri
 // @website: https://jasonyapri.com
 // @linkedIn: https://linkedin.com/in/jasonyapri
-// @version: 0.2.5 (2024.03.15)
+// @version: 0.3.0 (2024.03.26)
 // Contract: Web3 Game - 2048
 pragma solidity ^0.8.24;
+
+import {console} from "forge-std/Test.sol";
 
 contract Web3Game2048 {
     uint256 public prizePool; // 32 bytes | slot 1
@@ -19,7 +21,7 @@ contract Web3Game2048 {
     uint8 public constant FIRST_PRIZE_PERCENTAGE = 10; // 10% of the prize pool amount when reached 1024
     uint8 public constant SECOND_PRIZE_PERCENTAGE = 5; // 5% of the prize pool amount when reached 512
     uint8 public constant THIRD_PRIZE_PERCENTAGE = 3; // 3% of the prize pool amount when reached 256
-    uint8 public constant COMMISSION_PERCENTAGE = 10; // 10% commission on every prize distribution
+    uint8 public constant COMMISSION_PERCENTAGE = 5; // 5% commission on every prize distribution
     string public constant AUTHOR_NAME = "Jason Yapri";
     string public constant AUTHOR_WEBSITE = "https://jasonyapri.com";
     string public constant AUTHOR_LINKEDIN =
@@ -38,11 +40,14 @@ contract Web3Game2048 {
     }
 
     event Moved(address player, Move move);
-    event YouHaveWonTheGame(
+    event YouHaveWonTheGame(address indexed winner, uint256 moveCount);
+    event YouWonAPrize(
         address winner,
+        int8 prizeWon,
         uint256 moveCount,
         uint256 winnerPrize
     );
+    event GameOver(uint256 moveCount);
     event DonationReceived(
         address indexed donator,
         string name,
@@ -312,13 +317,25 @@ contract Web3Game2048 {
 
         int8 prizeWon = checkIfPlayerWonPrize();
         if (prizeWon == 0) {
+            // Player won the grand prize!
             distributePrize(msg.sender, prizeWon);
+            emit YouHaveWonTheGame(msg.sender, moveCount);
             resetGame();
         } else if (prizeWon > 0) {
+            // Player won other prizes
             distributePrize(msg.sender, prizeWon);
-        } else {
             placeNewTile();
-            if (!checkForValidMove()) resetGame();
+            if (!checkForValidMove()) {
+                emit GameOver(moveCount);
+                resetGame();
+            }
+        } else {
+            // Game continues as usual
+            placeNewTile();
+            if (!checkForValidMove()) {
+                emit GameOver(moveCount);
+                resetGame();
+            }
         }
     }
 
@@ -404,6 +421,6 @@ contract Web3Game2048 {
         (bool s2, ) = payable(winner).call{value: winnerPrize}("");
         if (!s2) revert TransferFailed(winner, winnerPrize);
 
-        emit YouHaveWonTheGame(winner, moveCount, winnerPrize);
+        emit YouWonAPrize(winner, prizeWon, moveCount, winnerPrize);
     }
 }

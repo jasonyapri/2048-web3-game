@@ -2,21 +2,27 @@
 // @author: Jason Yapri
 // @website: https://jasonyapri.com
 // @linkedIn: https://linkedin.com/in/jasonyapri
-// @version: 0.2.5 (2024.03.15)
+// @version: 0.3.0 (2024.03.26)
 // Contract: Web3 Game - 2048
 pragma solidity ^0.8.24;
 
 import {Test, console} from "forge-std/Test.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import {Web3Game2048} from "../src/Web3Game2048.sol";
+import {ModifiedWeb3Game2048} from "../src/ModifiedWeb3Game2048.sol";
 
 contract Web3Game2048BaseTest is Test {
     Web3Game2048 public web3Game;
-    uint internal constant STARTING_PRIZE_POOL = 1000000000000000000; // 1 Ether or 1e18 wei
+    ModifiedWeb3Game2048 public modifiedWeb3Game;
+    uint internal constant STARTING_PRIZE_POOL = 1 ether; // 1 Ether or 1e18 wei
+    uint internal constant TIMESTAMP = 1710490910; // Fri, Mar 15 2024 | 15:21:50 GMT+0700
 
     function setUp() public {
-        vm.warp(1710490910); // set block.timestamp to Fri, Mar 15 2024 | 15:21:50 GMT+0700
+        vm.warp(TIMESTAMP); // set block.timestamp
         web3Game = new Web3Game2048{value: STARTING_PRIZE_POOL}();
+        modifiedWeb3Game = new ModifiedWeb3Game2048{
+            value: STARTING_PRIZE_POOL
+        }();
     }
 
     function _printGameBoard(string memory caption) internal view {
@@ -35,6 +41,32 @@ contract Web3Game2048BaseTest is Test {
                 row = string.concat(
                     row,
                     Strings.toString(uint256(web3Game.getGameBoardTile(i, j))),
+                    " "
+                );
+            }
+            console.log(row);
+        }
+        console.log("");
+    }
+
+    function _printModifiedGameBoard(string memory caption) internal view {
+        console.log(
+            string.concat(
+                "Game Board",
+                !_stringIsTheSame(caption, "")
+                    ? string.concat(" - ", caption)
+                    : "",
+                ":"
+            )
+        );
+        for (uint256 i = 0; i < 4; i++) {
+            string memory row;
+            for (uint256 j = 0; j < 4; j++) {
+                row = string.concat(
+                    row,
+                    Strings.toString(
+                        uint256(modifiedWeb3Game.getGameBoardTile(i, j))
+                    ),
                     " "
                 );
             }
@@ -73,6 +105,20 @@ contract Web3Game2048BaseTest is Test {
             }
         }
         return sum;
+    }
+
+    function _tileExists(uint16 tileNumber) public view returns (bool) {
+        bool found = false;
+        for (uint256 i = 0; i < 4; i++) {
+            for (uint256 j = 0; j < 4; j++) {
+                if (web3Game.getGameBoardTile(i, j) == tileNumber) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found) break;
+        }
+        return found;
     }
 
     receive() external payable {}
@@ -242,6 +288,35 @@ contract Web3Game2048MakeMoveTest is Web3Game2048BaseTest {
 
         vm.expectRevert(abi.encodeWithSelector(NoValidMoveMade.selector));
         web3Game.makeMove(Web3Game2048.Move.LEFT);
+    }
+}
+
+contract Web3Game2048ResetGameTest is Web3Game2048BaseTest {
+    function test_ResetGame() public {
+        // no more valid moves after making last move, so game should be reset
+        modifiedWeb3Game.hackGameBoard_ResetGame();
+        _printModifiedGameBoard("BEFORE");
+        /*
+            Game Board - BEFORE:
+            0 32 64 32
+            4 2 8 64
+            64 32 16 8
+            128 256 512 1024
+        */
+
+        modifiedWeb3Game.makeMove(Web3Game2048.Move.LEFT);
+
+        _printModifiedGameBoard("AFTER");
+        /*
+            Game Board - AFTER:
+            0 2 0 0
+            2 0 0 0
+            0 0 0 0
+            0 0 0 0
+        */
+
+        assertEq(web3Game.moveCount(), 0); // No move has been made after game is reset
+        assertEq(_caclulateTilesSum(), 4); // 2 x 2 (Initial Tiles)
     }
 }
 
