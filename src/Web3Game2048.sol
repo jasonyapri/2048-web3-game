@@ -2,16 +2,20 @@
 // @author: Jason Yapri
 // @website: https://jasonyapri.com
 // @linkedIn: https://linkedin.com/in/jasonyapri
-// @version: 0.3.0 (2024.03.26)
+// @version: 0.4.0 (2024.03.26)
 // Contract: Web3 Game - 2048
 pragma solidity ^0.8.24;
 
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import {console} from "forge-std/Test.sol";
 
-contract Web3Game2048 {
+contract Web3Game2048 is Ownable, ReentrancyGuard {
+    using Address for address payable;
+
     uint256 public prizePool; // 32 bytes | slot 1
     uint256 public moveCount; // 32 bytes | slot 2
-    address public owner; // 20 bytes | slot 3
     uint16[4][4] public gameBoard; // 2 bytes | slot 3
     bool public firstPrizeDistributed; // 1 byte | slot 3
     bool public secondPrizeDistributed; // 1 byte | slot 3
@@ -57,12 +61,10 @@ contract Web3Game2048 {
 
     error NoValidMoveMade();
     error NoAmountSent();
-    error TransferFailed(address recipient, uint256 amount);
     error NotAuthorized(address sender);
 
-    constructor() payable {
+    constructor(address owner) payable Ownable(owner) {
         // Set the initial prize pool amount from the amount received during deployment
-        owner = msg.sender;
         prizePool = msg.value;
         placeTwoNewTiles();
     }
@@ -351,11 +353,10 @@ contract Web3Game2048 {
         prizePool += msg.value;
     }
 
-    function donateToOwner() external payable {
+    function donateToOwner() external payable nonReentrant {
         if (msg.value == 0) revert NoAmountSent();
 
-        (bool success, ) = payable(owner).call{value: msg.value}("");
-        if (!success) revert TransferFailed(owner, msg.value);
+        payable(owner()).sendValue(msg.value);
     }
 
     function checkIfPlayerWonPrize() internal returns (int8) {
@@ -386,18 +387,14 @@ contract Web3Game2048 {
 
     receive() external payable {}
 
-    function emergencyExit() external {
-        if (msg.sender == owner) {
-            (bool success, ) = payable(owner).call{
-                value: address(this).balance
-            }("");
-            if (!success) revert TransferFailed(owner, address(this).balance);
-        } else {
-            revert NotAuthorized(msg.sender);
-        }
+    function emergencyExit() external onlyOwner nonReentrant {
+        payable(owner()).sendValue(address(this).balance);
     }
 
-    function distributePrize(address winner, int8 prizeWon) internal {
+    function distributePrize(
+        address winner,
+        int8 prizeWon
+    ) internal nonReentrant {
         uint8 prizePercentage;
         if (prizeWon == 0) {
             prizePercentage = GRAND_PRIZE_PERCENTAGE;
@@ -415,11 +412,8 @@ contract Web3Game2048 {
         uint256 winnerPrize = totalPrize - commission;
 
         prizePool -= totalPrize;
-        (bool s1, ) = payable(owner).call{value: commission}("");
-        if (!s1) revert TransferFailed(owner, commission);
-
-        (bool s2, ) = payable(winner).call{value: winnerPrize}("");
-        if (!s2) revert TransferFailed(winner, winnerPrize);
+        payable(owner()).sendValue(commission);
+        payable(winner).sendValue(winnerPrize);
 
         emit YouWonAPrize(winner, prizeWon, moveCount, winnerPrize);
     }

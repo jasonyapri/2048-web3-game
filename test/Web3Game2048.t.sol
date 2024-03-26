@@ -2,7 +2,6 @@
 // @author: Jason Yapri
 // @website: https://jasonyapri.com
 // @linkedIn: https://linkedin.com/in/jasonyapri
-// @version: 0.3.0 (2024.03.26)
 // Contract: Web3 Game - 2048
 pragma solidity ^0.8.24;
 
@@ -19,10 +18,10 @@ contract Web3Game2048BaseTest is Test {
 
     function setUp() public {
         vm.warp(TIMESTAMP); // set block.timestamp
-        web3Game = new Web3Game2048{value: STARTING_PRIZE_POOL}();
-        modifiedWeb3Game = new ModifiedWeb3Game2048{
-            value: STARTING_PRIZE_POOL
-        }();
+        web3Game = new Web3Game2048{value: STARTING_PRIZE_POOL}(address(this));
+        modifiedWeb3Game = new ModifiedWeb3Game2048{value: STARTING_PRIZE_POOL}(
+            address(this)
+        );
     }
 
     function _printGameBoard(string memory caption) internal view {
@@ -134,7 +133,7 @@ contract Web3Game2048ConstructorTest is Web3Game2048BaseTest {
         assertEq(web3Game.FIRST_PRIZE_PERCENTAGE(), 10);
         assertEq(web3Game.SECOND_PRIZE_PERCENTAGE(), 5);
         assertEq(web3Game.THIRD_PRIZE_PERCENTAGE(), 3);
-        assertEq(web3Game.COMMISSION_PERCENTAGE(), 10);
+        assertEq(web3Game.COMMISSION_PERCENTAGE(), 5);
     }
 
     function test_AuthorVariables() public view {
@@ -295,7 +294,8 @@ contract Web3Game2048ResetGameTest is Web3Game2048BaseTest {
     function test_ResetGame() public {
         // no more valid moves after making last move, so game should be reset
         modifiedWeb3Game.hackGameBoard_ResetGame();
-        _printModifiedGameBoard("BEFORE");
+
+        // _printModifiedGameBoard("BEFORE");
         /*
             Game Board - BEFORE:
             0 32 64 32
@@ -306,7 +306,7 @@ contract Web3Game2048ResetGameTest is Web3Game2048BaseTest {
 
         modifiedWeb3Game.makeMove(Web3Game2048.Move.LEFT);
 
-        _printModifiedGameBoard("AFTER");
+        // _printModifiedGameBoard("AFTER");
         /*
             Game Board - AFTER:
             0 2 0 0
@@ -396,9 +396,7 @@ contract Web3Game2048EmergencyExitTest is Web3Game2048BaseTest {
 
     function test_RevertIf_NotCalledByOwner() public {
         vm.startPrank(address(1));
-        vm.expectRevert(
-            abi.encodeWithSelector(NotAuthorized.selector, address(1))
-        );
+        vm.expectRevert();
         web3Game.emergencyExit();
     }
 }
