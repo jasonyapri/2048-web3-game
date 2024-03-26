@@ -2,7 +2,7 @@
 // @author: Jason Yapri
 // @website: https://jasonyapri.com
 // @linkedIn: https://linkedin.com/in/jasonyapri
-// @version: 0.4.0 (2024.03.26)
+// @version: 0.4.1 (2024.03.26)
 // Contract: Web3 Game - 2048
 pragma solidity ^0.8.24;
 
@@ -52,7 +52,12 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
         uint256 winnerPrize
     );
     event GameOver(uint256 moveCount);
-    event DonationReceived(
+    event DonationToPrizePoolReceived(
+        address indexed donator,
+        string name,
+        uint256 amount
+    );
+    event DonationToAuthorReceived(
         address indexed donator,
         string name,
         uint256 amount
@@ -344,7 +349,7 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
     function donateToPrizePool(string calldata name) external payable {
         if (msg.value == 0) revert NoAmountSent();
 
-        emit DonationReceived({
+        emit DonationToPrizePoolReceived({
             donator: msg.sender,
             name: name,
             amount: msg.value
@@ -353,10 +358,18 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
         prizePool += msg.value;
     }
 
-    function donateToOwner() external payable nonReentrant {
+    function donateToAuthor(
+        string calldata name
+    ) external payable nonReentrant {
         if (msg.value == 0) revert NoAmountSent();
 
         payable(owner()).sendValue(msg.value);
+
+        emit DonationToAuthorReceived({
+            donator: msg.sender,
+            name: name,
+            amount: msg.value
+        });
     }
 
     function checkIfPlayerWonPrize() internal returns (int8) {
