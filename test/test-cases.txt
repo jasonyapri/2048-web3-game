@@ -8,10 +8,10 @@ MakeMove
 -- unhappy path: no valid move made
 
 ReceivePrize
--- happy path: receive third prize (move until it reaches 256)
--- happy path: receive second prize (move until it reaches 512)
--- happy path: receive first prize (move until it reaches 1024)
--- happy path: receive grand prize (move until it reaches 2048) & game reset
+-- happy path: receive third prize (reach the first 256)
+-- happy path: receive second prize (reach the first 512)
+-- happy path: receive first prize (reach the first 1024)
+-- happy path: receive grand prize (reach 2048) & game reset
 
 ResetGame
 -- happy path: game over (no more valid moves after making last move) & game reset

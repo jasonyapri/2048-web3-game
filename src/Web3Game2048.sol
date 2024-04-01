@@ -2,7 +2,7 @@
 // @author: Jason Yapri
 // @website: https://jasonyapri.com
 // @linkedIn: https://linkedin.com/in/jasonyapri
-// @version: 0.5.0 (2024.04.01)
+// @version: 0.5.1 (2024.04.01)
 // Contract: Web3 Game - 2048
 pragma solidity ^0.8.24;
 
@@ -64,6 +64,7 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
         uint256 amount
     );
     event TilesReset();
+    event CircuitBreakerToggled(bool stopped);
 
     error NoValidMoveMade();
     error NoAmountSent();
@@ -85,6 +86,7 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
 
     function toggleCircuitBreaker() external onlyOwner {
         stopped = !stopped;
+        emit CircuitBreakerToggled(stopped);
     }
 
     function resetGame() internal {
