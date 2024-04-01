@@ -288,6 +288,13 @@ contract Web3Game2048MakeMoveTest is Web3Game2048BaseTest {
         vm.expectRevert(abi.encodeWithSelector(NoValidMoveMade.selector));
         web3Game.makeMove(Web3Game2048.Move.LEFT);
     }
+
+    function test_RevertIf_CircuitBreakerActivated() public {
+        web3Game.toggleCircuitBreaker();
+
+        vm.expectRevert();
+        web3Game.makeMove(Web3Game2048.Move.LEFT);
+    }
 }
 
 contract Web3Game2048ResetGameTest is Web3Game2048BaseTest {
@@ -344,6 +351,16 @@ contract Web3Game2048DonateToPrizePoolTest is Web3Game2048BaseTest {
         vm.expectRevert(abi.encodeWithSelector(NoAmountSent.selector));
         web3Game.donateToPrizePool("Jason Yapri");
     }
+
+    function test_RevertIf_CircuitBreakerActivated() public {
+        web3Game.toggleCircuitBreaker();
+
+        deal(address(1), 2 ether);
+        vm.startPrank(address(1));
+
+        vm.expectRevert();
+        web3Game.donateToPrizePool{value: 1 ether}("Jason Yapri");
+    }
 }
 
 contract Web3Game2048DonateToAuthorTest is Web3Game2048BaseTest {
@@ -372,6 +389,16 @@ contract Web3Game2048DonateToAuthorTest is Web3Game2048BaseTest {
         vm.prank(address(1));
         vm.expectRevert(abi.encodeWithSelector(NoAmountSent.selector));
         web3Game.donateToAuthor("Theodora");
+    }
+
+    function test_RevertIf_CircuitBreakerActivated() public {
+        web3Game.toggleCircuitBreaker();
+
+        deal(address(1), 2 ether);
+        vm.startPrank(address(1));
+
+        vm.expectRevert();
+        web3Game.donateToAuthor{value: 1 ether}("Theodora");
     }
 }
 
@@ -426,5 +453,27 @@ contract Web3Game2048EmergencyExitTest is Web3Game2048BaseTest {
         vm.startPrank(address(1));
         vm.expectRevert();
         web3Game.emergencyExit(50);
+    }
+
+    function test_RevertIf_CircuitBreakerActivated() public {
+        web3Game.toggleCircuitBreaker();
+        vm.expectRevert();
+        web3Game.emergencyExit(50);
+    }
+}
+
+contract Web3Game2048CircuitBreakerTest is Web3Game2048BaseTest {
+    function test_toggleCircuitBreaker() public {
+        assertEq(web3Game.stopped(), false);
+        web3Game.toggleCircuitBreaker();
+        assertEq(web3Game.stopped(), true);
+        web3Game.toggleCircuitBreaker();
+        assertEq(web3Game.stopped(), false);
+    }
+
+    function test_RevertIf_NotCalledByOwner() public {
+        vm.startPrank(address(1));
+        vm.expectRevert();
+        web3Game.toggleCircuitBreaker();
     }
 }

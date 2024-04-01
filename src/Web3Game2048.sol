@@ -2,7 +2,7 @@
 // @author: Jason Yapri
 // @website: https://jasonyapri.com
 // @linkedIn: https://linkedin.com/in/jasonyapri
-// @version: 0.4.2 (2024.03.26)
+// @version: 0.5.0 (2024.04.01)
 // Contract: Web3 Game - 2048
 pragma solidity ^0.8.24;
 
@@ -20,6 +20,7 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
     bool public firstPrizeDistributed; // 1 byte | slot 3
     bool public secondPrizeDistributed; // 1 byte | slot 3
     bool public thirdPrizeDistributed; // 1 byte | slot 3
+    bool public stopped; // 1 byte | slot 3
 
     uint8 public constant GRAND_PRIZE_PERCENTAGE = 50; // 50% of the prize pool amount when reached 2048
     uint8 public constant FIRST_PRIZE_PERCENTAGE = 10; // 10% of the prize pool amount when reached 1024
@@ -68,11 +69,22 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
     error NoAmountSent();
     error NotAuthorized(address sender);
     error InvalidPercentage();
+    error EmergencyLockIsActivated();
 
     constructor(address owner) payable Ownable(owner) {
         // Set the initial prize pool amount from the amount received during deployment
         prizePool = msg.value;
         placeTwoNewTiles();
+    }
+
+    // Modifier to check if the circuit breaker is active
+    modifier stopInEmergency() {
+        if (stopped) revert EmergencyLockIsActivated();
+        _;
+    }
+
+    function toggleCircuitBreaker() external onlyOwner {
+        stopped = !stopped;
     }
 
     function resetGame() internal {
@@ -308,7 +320,7 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
         return validMoveExists;
     }
 
-    function makeMove(Move move) external {
+    function makeMove(Move move) external stopInEmergency {
         bool moved = false;
         if (move == Move.UP) {
             moved = moveTilesUp();
@@ -347,7 +359,9 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
         }
     }
 
-    function donateToPrizePool(string calldata name) external payable {
+    function donateToPrizePool(
+        string calldata name
+    ) external payable stopInEmergency {
         if (msg.value == 0) revert NoAmountSent();
 
         prizePool += msg.value;
@@ -361,7 +375,7 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
 
     function donateToAuthor(
         string calldata name
-    ) external payable nonReentrant {
+    ) external payable nonReentrant stopInEmergency {
         if (msg.value == 0) revert NoAmountSent();
 
         payable(owner()).sendValue(msg.value);
@@ -401,7 +415,9 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
 
     receive() external payable {}
 
-    function emergencyExit(uint256 percentage) external onlyOwner nonReentrant {
+    function emergencyExit(
+        uint256 percentage
+    ) external onlyOwner nonReentrant stopInEmergency {
         if (percentage < 1 || percentage > 100) revert InvalidPercentage();
         uint256 amount = (address(this).balance * percentage) / 100;
         payable(owner()).sendValue(amount);

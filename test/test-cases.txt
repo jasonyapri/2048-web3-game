@@ -20,7 +20,7 @@ DonateToPrizePool
 -- happy path
 -- unhappy path: no amount sent
 
-DonateToOwner
+DonateToAuthor
 -- happy path
 -- unhappy path: no amount sent
 
@@ -28,3 +28,7 @@ EmergencyExit
 -- happy path
 -- unhappy path: not authorized since it's not the owner calling the function
 -- unhappy path: invalid percentage parameter
+
+CircuitBreaker
+-- happy path
+-- unhappy path: not authorized since it's not the owner calling the function
