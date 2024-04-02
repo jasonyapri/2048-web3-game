@@ -2,7 +2,7 @@
 // @author: Jason Yapri
 // @website: https://jasonyapri.com
 // @linkedIn: https://linkedin.com/in/jasonyapri
-// @version: 0.7.0 (2024.04.02)
+// @version: 0.8.0 (2024.04.02)
 // Contract: Web3 Game - 2048
 pragma solidity ^0.8.24;
 
@@ -96,6 +96,68 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
     function toggleCircuitBreaker() external onlyOwner {
         stopped = !stopped;
         emit CircuitBreakerToggled(stopped);
+    }
+
+    function calculateWinnerPrize(
+        uint256 _remainingPrizePool,
+        uint256 _prizePercentage
+    ) internal pure returns (uint256 winnerPrize, uint256 remainingPrizePool) {
+        uint256 totalPrize = (_remainingPrizePool * _prizePercentage) / 100;
+        uint256 commission = (totalPrize * COMMISSION_PERCENTAGE) / 100;
+        winnerPrize = totalPrize - commission;
+        remainingPrizePool = _remainingPrizePool - totalPrize;
+    }
+
+    function calculatePrizesProjection()
+        external
+        view
+        returns (
+            uint256 sixthWinnerPrize,
+            uint256 fifthWinnerPrize,
+            uint256 fourthWinnerPrize,
+            uint256 thirdWinnerPrize,
+            uint256 secondWinnerPrize,
+            uint256 firstWinnerPrize,
+            uint256 grandWinnerPrize,
+            uint256 finalRemainingPrizePool
+        )
+    {
+        uint256 remainingPrizePool = prizePool;
+
+        (sixthWinnerPrize, remainingPrizePool) = calculateWinnerPrize(
+            remainingPrizePool,
+            SIXTH_PRIZE_PERCENTAGE
+        );
+
+        (fifthWinnerPrize, remainingPrizePool) = calculateWinnerPrize(
+            remainingPrizePool,
+            FIFTH_PRIZE_PERCENTAGE
+        );
+
+        (fourthWinnerPrize, remainingPrizePool) = calculateWinnerPrize(
+            remainingPrizePool,
+            FOURTH_PRIZE_PERCENTAGE
+        );
+
+        (thirdWinnerPrize, remainingPrizePool) = calculateWinnerPrize(
+            remainingPrizePool,
+            THIRD_PRIZE_PERCENTAGE
+        );
+
+        (secondWinnerPrize, remainingPrizePool) = calculateWinnerPrize(
+            remainingPrizePool,
+            SECOND_PRIZE_PERCENTAGE
+        );
+
+        (firstWinnerPrize, remainingPrizePool) = calculateWinnerPrize(
+            remainingPrizePool,
+            FIRST_PRIZE_PERCENTAGE
+        );
+
+        (grandWinnerPrize, finalRemainingPrizePool) = calculateWinnerPrize(
+            remainingPrizePool,
+            GRAND_PRIZE_PERCENTAGE
+        );
     }
 
     function resetGame() internal {

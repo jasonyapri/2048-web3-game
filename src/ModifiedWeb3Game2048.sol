@@ -81,4 +81,8 @@ contract ModifiedWeb3Game2048 is Web3Game2048 {
         fifthPrizeDistributed = true;
         sixthPrizeDistributed = true;
     }
+
+    function hackPrizePool(uint256 newPrizePool) external {
+        prizePool = newPrizePool;
+    }
 }

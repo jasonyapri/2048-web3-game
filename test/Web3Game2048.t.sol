@@ -1044,3 +1044,37 @@ contract Web3Game2048WithdrawWinnerPrizeTest is Web3Game2048BaseTest {
         modifiedWeb3Game.withdrawWinnerPrize();
     }
 }
+
+contract Web3Game2048CalculatePrizesProjectionTest is Web3Game2048BaseTest {
+    function test_CalculatePrizesProjection() public {
+        modifiedWeb3Game.hackPrizePool(300000);
+        (
+            uint256 sixthWinnerPrize,
+            uint256 fifthWinnerPrize,
+            uint256 fourthWinnerPrize,
+            uint256 thirdWinnerPrize,
+            uint256 secondWinnerPrize,
+            uint256 firstWinnerPrize,
+            uint256 grandWinnerPrize,
+            uint256 remainingPrizePool
+        ) = modifiedWeb3Game.calculatePrizesProjection();
+
+        // console.log("sixthWinnerPrize: ", sixthWinnerPrize);
+        // console.log("fifthWinnerPrize: ", fifthWinnerPrize);
+        // console.log("fourthWinnerPrize: ", fourthWinnerPrize);
+        // console.log("thirdWinnerPrize: ", thirdWinnerPrize);
+        // console.log("secondWinnerPrize: ", secondWinnerPrize);
+        // console.log("firstWinnerPrize: ", firstWinnerPrize);
+        // console.log("grandWinnerPrize: ", grandWinnerPrize);
+        // console.log("remainingPrizePool: ", remainingPrizePool);
+
+        assertEq(sixthWinnerPrize, 2850);
+        assertEq(fifthWinnerPrize, 5643);
+        assertEq(fourthWinnerPrize, 8295);
+        assertEq(thirdWinnerPrize, 13411);
+        assertEq(secondWinnerPrize, 25480);
+        assertEq(firstWinnerPrize, 45865);
+        assertEq(grandWinnerPrize, 91730);
+        assertEq(remainingPrizePool, 96557);
+    }
+}
