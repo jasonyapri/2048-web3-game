@@ -2,7 +2,7 @@
 // @author: Jason Yapri
 // @website: https://jasonyapri.com
 // @linkedIn: https://linkedin.com/in/jasonyapri
-// @version: 0.5.1 (2024.04.01)
+// @version: 0.6.1 (2024.04.02)
 // Contract: Web3 Game - 2048
 pragma solidity ^0.8.24;
 
@@ -14,13 +14,15 @@ import {console} from "forge-std/Test.sol";
 contract Web3Game2048 is Ownable, ReentrancyGuard {
     using Address for address payable;
 
+    mapping(address => uint256) public winnerPrizeBalance;
     uint256 public prizePool; // 32 bytes | slot 1
-    uint256 public moveCount; // 32 bytes | slot 2
-    uint16[4][4] public gameBoard; // 2 bytes | slot 3
-    bool public firstPrizeDistributed; // 1 byte | slot 3
-    bool public secondPrizeDistributed; // 1 byte | slot 3
-    bool public thirdPrizeDistributed; // 1 byte | slot 3
-    bool public stopped; // 1 byte | slot 3
+    uint256 private commissionPool; // 32 bytes | slot 2
+    uint256 public moveCount; // 32 bytes | slot 3
+    uint16[4][4] public gameBoard; // 2 bytes | slot 4
+    bool public firstPrizeDistributed; // 1 byte | slot 4
+    bool public secondPrizeDistributed; // 1 byte | slot 4
+    bool public thirdPrizeDistributed; // 1 byte | slot 4
+    bool public stopped; // 1 byte | slot 4
 
     uint8 public constant GRAND_PRIZE_PERCENTAGE = 50; // 50% of the prize pool amount when reached 2048
     uint8 public constant FIRST_PRIZE_PERCENTAGE = 10; // 10% of the prize pool amount when reached 1024
@@ -71,6 +73,7 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
     error NotAuthorized(address sender);
     error InvalidPercentage();
     error EmergencyLockIsActivated();
+    error NoUnclaimedPrizeFound();
 
     constructor(address owner) payable Ownable(owner) {
         // Set the initial prize pool amount from the amount received during deployment
@@ -446,9 +449,26 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
         uint256 winnerPrize = totalPrize - commission;
 
         prizePool -= totalPrize;
-        payable(owner()).sendValue(commission);
-        payable(winner).sendValue(winnerPrize);
+        commissionPool += commission;
+        winnerPrizeBalance[winner] += winnerPrize;
 
         emit YouWonAPrize(winner, prizeWon, moveCount, winnerPrize);
+    }
+
+    function getCommissionPool() external view onlyOwner returns (uint256) {
+        return commissionPool;
+    }
+
+    function withdrawCommission() external onlyOwner nonReentrant {
+        uint256 amount = commissionPool;
+        commissionPool = 0;
+        payable(owner()).sendValue(amount);
+    }
+
+    function withdrawWinnerPrize() external nonReentrant {
+        if (winnerPrizeBalance[msg.sender] == 0) revert NoUnclaimedPrizeFound();
+        uint256 amount = winnerPrizeBalance[msg.sender];
+        winnerPrizeBalance[msg.sender] = 0;
+        payable(msg.sender).sendValue(amount);
     }
 }

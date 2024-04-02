@@ -477,3 +477,65 @@ contract Web3Game2048CircuitBreakerTest is Web3Game2048BaseTest {
         web3Game.toggleCircuitBreaker();
     }
 }
+
+contract Web3Game2048ReceivePrizeTest is Web3Game2048BaseTest {
+    function test_ReceiveGrandPrize() public {
+        vm.startPrank(address(1));
+        deal(address(1), 1 ether);
+
+        uint256 prizePool = web3Game.prizePool();
+        uint256 totalPrize = (prizePool *
+            modifiedWeb3Game.GRAND_PRIZE_PERCENTAGE()) / 100;
+        uint256 commission = (totalPrize *
+            modifiedWeb3Game.COMMISSION_PERCENTAGE()) / 100;
+        uint256 winnerPrize = totalPrize - commission;
+
+        modifiedWeb3Game.hackGameBoard_PriorToReceiveGrandPrize();
+
+        // _printModifiedGameBoard("BEFORE");
+        /*
+            Game Board - BEFORE:
+            0 0 0 0
+            0 2 0 0
+            0 0 0 0
+            0 0 1024 1024
+        */
+
+        modifiedWeb3Game.makeMove(Web3Game2048.Move.RIGHT);
+
+        // _printModifiedGameBoard("AFTER");
+        /*
+            Game Board - AFTER:
+            0 2 0 0
+            2 0 0 0
+            0 0 0 0
+            0 0 0 0
+        */
+
+        assertEq(modifiedWeb3Game.moveCount(), 0); // No move has been made after game is reset
+        assertEq(_caclulateTilesSum(), 4); // 2 x 2 (Initial Tiles)
+        assertEq(modifiedWeb3Game.firstPrizeDistributed(), false);
+        assertEq(modifiedWeb3Game.secondPrizeDistributed(), false);
+        assertEq(modifiedWeb3Game.thirdPrizeDistributed(), false);
+        assertEq(modifiedWeb3Game.winnerPrizeBalance(address(1)), winnerPrize);
+
+        uint256 startingPlayerWalletBalance = address(1).balance;
+        modifiedWeb3Game.withdrawWinnerPrize();
+        uint256 endingPlayerWalletBalance = address(1).balance;
+        assertEq(modifiedWeb3Game.winnerPrizeBalance(address(1)), 0);
+        assertEq(
+            endingPlayerWalletBalance,
+            startingPlayerWalletBalance + winnerPrize
+        );
+
+        vm.stopPrank();
+        assertEq(modifiedWeb3Game.getCommissionPool(), commission);
+        uint256 startingOwnerWalletBalance = address(this).balance;
+        modifiedWeb3Game.withdrawCommission();
+        uint256 endingOwnerWalletBalance = address(this).balance;
+        assertEq(
+            endingOwnerWalletBalance,
+            startingOwnerWalletBalance + commission
+        );
+    }
+}
