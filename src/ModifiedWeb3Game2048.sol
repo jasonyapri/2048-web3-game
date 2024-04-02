@@ -34,7 +34,7 @@ contract ModifiedWeb3Game2048 is Web3Game2048 {
         gameBoard[0] = [0, 0, 0, 0];
         gameBoard[1] = [0, 2, 0, 0];
         gameBoard[2] = [0, 0, 0, 0];
-        gameBoard[3] = [0, 0, 256, 256];
+        gameBoard[3] = [0, 0, 512, 512];
     }
 
     function hackGameBoard_PriorToReceiveGrandPrize() external {
