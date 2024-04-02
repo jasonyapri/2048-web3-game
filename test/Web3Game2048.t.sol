@@ -704,4 +704,105 @@ contract Web3Game2048ReceivePrizeTest is Web3Game2048BaseTest {
         assertEq(modifiedWeb3Game.thirdPrizeDistributed(), false);
         assertEq(modifiedWeb3Game.winnerPrizeBalance(address(1)), 0);
     }
+
+    function test_ReceiveThirdPrize() public {
+        vm.startPrank(address(1));
+        deal(address(1), 1 ether);
+
+        uint256 prizePool = web3Game.prizePool();
+        uint256 totalPrize = (prizePool *
+            modifiedWeb3Game.THIRD_PRIZE_PERCENTAGE()) / 100;
+        uint256 commission = (totalPrize *
+            modifiedWeb3Game.COMMISSION_PERCENTAGE()) / 100;
+        uint256 winnerPrize = totalPrize - commission;
+
+        modifiedWeb3Game.hackGameBoard_PriorToReceiveThirdPrize();
+
+        // _printModifiedGameBoard("BEFORE");
+        /*
+            Game Board - BEFORE:
+            0 0 0 0
+            0 2 0 0
+            0 0 0 0
+            0 0 128 128
+        */
+
+        modifiedWeb3Game.makeMove(Web3Game2048.Move.RIGHT);
+
+        // _printModifiedGameBoard("AFTER");
+        /*
+            Game Board - AFTER:
+            0 0 0 0
+            0 0 2 2
+            0 0 0 0
+            0 0 0 256
+        */
+
+        assertEq(_modifiedGameTileExists(256), true);
+        assertEq(modifiedWeb3Game.moveCount(), 1); // No move has been made after game is reset
+        assertEq(_caclulateModifiedGameTilesSum(), 260); // 2 x 2 (Initial Tiles)
+        assertEq(modifiedWeb3Game.firstPrizeDistributed(), false);
+        assertEq(modifiedWeb3Game.secondPrizeDistributed(), false);
+        assertEq(modifiedWeb3Game.thirdPrizeDistributed(), true);
+        assertEq(modifiedWeb3Game.winnerPrizeBalance(address(1)), winnerPrize);
+
+        uint256 startingPlayerWalletBalance = address(1).balance;
+        modifiedWeb3Game.withdrawWinnerPrize();
+        uint256 endingPlayerWalletBalance = address(1).balance;
+        assertEq(modifiedWeb3Game.winnerPrizeBalance(address(1)), 0);
+        assertEq(
+            endingPlayerWalletBalance,
+            startingPlayerWalletBalance + winnerPrize
+        );
+
+        vm.stopPrank();
+        assertEq(modifiedWeb3Game.getCommissionPool(), commission);
+        uint256 startingOwnerWalletBalance = address(this).balance;
+        modifiedWeb3Game.withdrawCommission();
+        uint256 endingOwnerWalletBalance = address(this).balance;
+        assertEq(
+            endingOwnerWalletBalance,
+            startingOwnerWalletBalance + commission
+        );
+
+        modifiedWeb3Game.hackGameBoard_PriorToReceiveThirdPrize();
+        modifiedWeb3Game.makeMove(Web3Game2048.Move.RIGHT);
+
+        assertEq(_modifiedGameTileExists(256), true);
+        assertEq(modifiedWeb3Game.firstPrizeDistributed(), false);
+        assertEq(modifiedWeb3Game.secondPrizeDistributed(), false);
+        assertEq(modifiedWeb3Game.thirdPrizeDistributed(), true);
+        assertEq(modifiedWeb3Game.winnerPrizeBalance(address(1)), 0);
+    }
+}
+
+contract Web3Game2048WithdrawCommissionTest is Web3Game2048BaseTest {
+    error CommissionPoolEmpty();
+
+    function test_WithdrawComission() public {
+        modifiedWeb3Game.hackCommissionPool(1 ether);
+        deal(address(modifiedWeb3Game), 1 ether);
+
+        uint256 startingOwnerWalletBalance = address(this).balance;
+        modifiedWeb3Game.withdrawCommission();
+        uint256 endingOwnerWalletBalance = address(this).balance;
+        assertEq(
+            endingOwnerWalletBalance,
+            startingOwnerWalletBalance + 1 ether
+        );
+    }
+
+    function test_RevertIf_NotCalledByOwner() public {
+        modifiedWeb3Game.hackCommissionPool(1 ether);
+        deal(address(modifiedWeb3Game), 1 ether);
+
+        vm.startPrank(address(1));
+        vm.expectRevert();
+        modifiedWeb3Game.withdrawCommission();
+    }
+
+    function test_RevertIf_CommissionPoolEmpty() public {
+        vm.expectRevert(abi.encodeWithSelector(CommissionPoolEmpty.selector));
+        modifiedWeb3Game.withdrawCommission();
+    }
 }

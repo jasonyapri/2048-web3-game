@@ -32,3 +32,12 @@ EmergencyExit
 CircuitBreaker
 -- happy path
 -- unhappy path: not authorized since it's not the owner calling the function
+
+Withdraw Commission
+-- happy path
+-- unhappy path: not authorized since it's not the owner calling the function
+-- unhappy path: commission pool empty
+
+Withdraw Winner Prize
+-- happy path
+-- unhappy path: no unclaimed prize found
