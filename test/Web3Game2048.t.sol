@@ -806,3 +806,27 @@ contract Web3Game2048WithdrawCommissionTest is Web3Game2048BaseTest {
         modifiedWeb3Game.withdrawCommission();
     }
 }
+
+contract Web3Game2048WithdrawWinnerPrizeTest is Web3Game2048BaseTest {
+    error NoUnclaimedPrizeFound();
+
+    function test_WithdrawPrize() public {
+        vm.startPrank(address(1));
+        modifiedWeb3Game.hackWinnerPrizeBalance(1 ether);
+        deal(address(modifiedWeb3Game), 1 ether);
+
+        uint256 startingOwnerWalletBalance = address(1).balance;
+        modifiedWeb3Game.withdrawWinnerPrize();
+        uint256 endingOwnerWalletBalance = address(1).balance;
+        assertEq(
+            endingOwnerWalletBalance,
+            startingOwnerWalletBalance + 1 ether
+        );
+    }
+
+    function test_RevertIf_NoUnclaimedPrizeFound() public {
+        vm.startPrank(address(1));
+        vm.expectRevert(abi.encodeWithSelector(NoUnclaimedPrizeFound.selector));
+        modifiedWeb3Game.withdrawWinnerPrize();
+    }
+}

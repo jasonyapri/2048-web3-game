@@ -48,7 +48,7 @@ contract ModifiedWeb3Game2048 is Web3Game2048 {
         commissionPool = commission;
     }
 
-    function hackWinnerPrizeBalance() external {
-        winnerPrizeBalance[msg.sender] = 1 ether;
+    function hackWinnerPrizeBalance(uint256 prize) external {
+        winnerPrizeBalance[msg.sender] = prize;
     }
 }
