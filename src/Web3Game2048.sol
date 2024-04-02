@@ -2,14 +2,13 @@
 // @author: Jason Yapri
 // @website: https://jasonyapri.com
 // @linkedIn: https://linkedin.com/in/jasonyapri
-// @version: 0.6.2 (2024.04.02)
+// @version: 0.6.3 (2024.04.02)
 // Contract: Web3 Game - 2048
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import {console} from "forge-std/Test.sol";
 
 contract Web3Game2048 is Ownable, ReentrancyGuard {
     using Address for address payable;
