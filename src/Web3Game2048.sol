@@ -2,7 +2,7 @@
 // @author: Jason Yapri
 // @website: https://jasonyapri.com
 // @linkedIn: https://linkedin.com/in/jasonyapri
-// @version: 0.6.3 (2024.04.02)
+// @version: 0.7.0 (2024.04.02)
 // Contract: Web3 Game - 2048
 pragma solidity ^0.8.24;
 
@@ -21,12 +21,18 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
     bool public firstPrizeDistributed; // 1 byte | slot 4
     bool public secondPrizeDistributed; // 1 byte | slot 4
     bool public thirdPrizeDistributed; // 1 byte | slot 4
+    bool public fourthPrizeDistributed; // 1 byte | slot 4
+    bool public fifthPrizeDistributed; // 1 byte | slot 4
+    bool public sixthPrizeDistributed; // 1 byte | slot 4
     bool public stopped; // 1 byte | slot 4
 
     uint8 public constant GRAND_PRIZE_PERCENTAGE = 50; // 50% of the prize pool amount when reached 2048
-    uint8 public constant FIRST_PRIZE_PERCENTAGE = 10; // 10% of the prize pool amount when reached 1024
-    uint8 public constant SECOND_PRIZE_PERCENTAGE = 5; // 5% of the prize pool amount when reached 512
-    uint8 public constant THIRD_PRIZE_PERCENTAGE = 3; // 3% of the prize pool amount when reached 256
+    uint8 public constant FIRST_PRIZE_PERCENTAGE = 20; // 20% of the prize pool amount when reached 1024
+    uint8 public constant SECOND_PRIZE_PERCENTAGE = 10; // 10% of the prize pool amount when reached 512
+    uint8 public constant THIRD_PRIZE_PERCENTAGE = 5; // 5% of the prize pool amount when reached 256
+    uint8 public constant FOURTH_PRIZE_PERCENTAGE = 3; // 3% of the prize pool amount when reached 128
+    uint8 public constant FIFTH_PRIZE_PERCENTAGE = 2; // 2% of the prize pool amount when reached 64
+    uint8 public constant SIXTH_PRIZE_PERCENTAGE = 1; // 1% of the prize pool amount when reached 32
     uint8 public constant COMMISSION_PERCENTAGE = 5; // 5% commission on every prize distribution
     string public constant AUTHOR_NAME = "Jason Yapri";
     string public constant AUTHOR_WEBSITE = "https://jasonyapri.com";
@@ -107,6 +113,9 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
         firstPrizeDistributed = false;
         secondPrizeDistributed = false;
         thirdPrizeDistributed = false;
+        fourthPrizeDistributed = false;
+        fifthPrizeDistributed = false;
+        sixthPrizeDistributed = false;
     }
 
     function getGameBoardTile(
@@ -399,6 +408,9 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
         // 1 -> 1024
         // 2 -> 512
         // 3 -> 256
+        // 4 -> 128
+        // 5 -> 64
+        // 6 -> 32
         for (uint8 i = 0; i < 4; i++) {
             for (uint8 j = 0; j < 4; j++) {
                 if (gameBoard[i][j] == 2048) {
@@ -412,6 +424,15 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
                 } else if (gameBoard[i][j] == 256 && !thirdPrizeDistributed) {
                     thirdPrizeDistributed = true;
                     return 3;
+                } else if (gameBoard[i][j] == 128 && !fourthPrizeDistributed) {
+                    fourthPrizeDistributed = true;
+                    return 4;
+                } else if (gameBoard[i][j] == 64 && !fifthPrizeDistributed) {
+                    fifthPrizeDistributed = true;
+                    return 5;
+                } else if (gameBoard[i][j] == 32 && !sixthPrizeDistributed) {
+                    sixthPrizeDistributed = true;
+                    return 6;
                 }
             }
         }
@@ -441,6 +462,12 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
             prizePercentage = SECOND_PRIZE_PERCENTAGE;
         } else if (prizeWon == 3) {
             prizePercentage = THIRD_PRIZE_PERCENTAGE;
+        } else if (prizeWon == 4) {
+            prizePercentage = FOURTH_PRIZE_PERCENTAGE;
+        } else if (prizeWon == 5) {
+            prizePercentage = FIFTH_PRIZE_PERCENTAGE;
+        } else if (prizeWon == 6) {
+            prizePercentage = SIXTH_PRIZE_PERCENTAGE;
         }
 
         // Transfer certain percentage of the prize pool amount to the winner's wallet address
