@@ -4,4 +4,9 @@ out = "out"
 libs = ["lib"]
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
+
 gas_reports = ["Web3Game2048"]
+
+[rpc_endpoints]
+optimism_sepolia = "${OPTIMISM_SEPOLIA_RPC_URL}"
+optimism_mainnet = "${OPTIMISM_MAINNET_RPC_URL}"

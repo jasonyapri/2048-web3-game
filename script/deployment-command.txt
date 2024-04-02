@@ -1,0 +1,13 @@
+DEPLOYMENT COMMAND
+
+# Deploy and Verify Smart Contract
+forge script script/Web3Game2048.s.sol:Web3Game2048Script --broadcast --verify
+
+# Manually Verify Deployed Contract after deployed to Optimism Sepolia (previously the API Key is Invalid)
+forge verify-contract --chain-id 11155420 --compiler-version 0.8.24 0xe4EE33F790f790950E0064E0E5aC474BE36d577F src/Web3Game2048.sol:Web3Game2048 --constructor-args 0x00000000000000000000000047331edc7220ad93d62130ce64c10f7166f4c947
+
+##### optimism-sepolia
+✅  [Success]Hash: 0xcff7bc5f8da4333447aabd8cd580795177169b79fcaeab3619db903c64ab9498
+Contract Address: 0xe4EE33F790f790950E0064E0E5aC474BE36d577F
+Block: 10131878
+Paid: 0.008101149680496516 ETH (2700383 gas * 3.000000252 gwei)
