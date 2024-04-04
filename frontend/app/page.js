@@ -15,7 +15,10 @@ export default function Home() {
         <img src="/img/optimism.png" className="optimism-logo" />
       </header>
       <main className="game-main">
-        <div className="title">2048</div>
+        <div className="title-group">
+          <div className="subtitle">Web3 Game</div>
+          <div className="title">2048</div>
+        </div>
         <div className="game-info">
           <div className="move-count">Move Count: 2</div>
           <div className="prize-pool">Prize Pool: 0.001 ETH</div>
