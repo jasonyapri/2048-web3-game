@@ -161,12 +161,53 @@ body {
       }
     }
 
-    .game-instructions {
+    .game-buttons {
+      @apply flex w-full space-x-3 justify-center;
+
+      margin-top: 50px !important;
+      margin-bottom: 50px !important;
+  
+      .game-button {
+        @apply text-white border-1 space-x-2 border-black rounded-md flex items-center justify-center duration-200;
+        padding: 8px 17.5px;
+        height: 37px;
+        background: #D7DEDC;
+      
+        &:hover {
+          @apply transform scale-90;
+        }
+
+        img {
+          height: 25px;
+        }
+      }
+    }
+
+    .game-instruction {
       font-size: 20px;
 
       .title {
         @apply text-theme-secondary font-black;
       }
+
+      .highlighted {
+        @apply text-theme-secondary font-black;
+      }
+
+      a.list-prizes-button {
+        @apply text-theme-secondary font-black underline;
+
+        &:hover {
+          @apply text-theme-primary;
+        }
+      }
+    }
+
+    .line {
+      height: 1px;
+      background: #D7D4D0;
+      margin-top: 20px !important;
+      margin-bottom: 10px !important;
     }
 
     .game-footer {
