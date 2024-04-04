@@ -32,40 +32,161 @@ body {
   }
 }
 
-.game-header {
-  @apply bg-theme-red flex h-20 items-center justify-center border-b-1 space-x-3;
+.game-container {
+  @apply flex flex-col items-center;
 
-  .wallet-balance {
-    @apply w-44 h-12 flex flex-col items-center justify-center text-theme-red px-wallet-balance-horizontal pt-wallet-balance-top pb-wallet-balance-bottom rounded-md border-1 border-black;
-    background: #F8DFDF;
-
-    .wallet-balance-title {
-      @apply font-black;
-      font-size: 12px;
-      margin-top: 10px;
-      line-height: 10px;
+  .wallet-header {
+    @apply bg-theme-red flex h-20 items-center justify-center border-b-1 space-x-3 w-full;
+  
+    .wallet-balance {
+      @apply w-44 h-12 flex flex-col items-center justify-center text-theme-red px-wallet-balance-horizontal pt-wallet-balance-top pb-wallet-balance-bottom rounded-md border-1 border-black;
+      background: #F8DFDF;
+  
+      .wallet-balance-title {
+        @apply font-black;
+        font-size: 12px;
+        margin-top: 10px;
+        line-height: 10px;
+      }
+      
+      .wallet-balance-amount {
+        font-size: 16px;
+      }
+    }
+  
+    .connect-wallet-button {
+      @apply bg-white text-theme-red border-1 space-x-2 border-black rounded-md flex items-center justify-center duration-200 text-black;
+      padding: 8px 16px;
+      height: 46.667px;
+    
+      &:hover {
+        @apply transform scale-95;
+      }
+    
+      .wallet-logo {
+        height: 29px;
+      }
     }
     
-    .wallet-balance-amount {
-      font-size: 16px;
+    .optimism-logo {
+      height: 46.667px;
     }
   }
+  
+  main.game-main {
+    @apply flex flex-col space-y-3;
+    
+    width: 600px;
+    margin-top: 40px;
+  
+    .game-header {
+      @apply flex justify-between w-full items-center;
+  
+      .title-group {
+        .subtitle {
+          @apply flex items-center justify-center w-20 h-6 font-black rounded-md;
+  
+          font-size: 14px;
+          color: black;
+          background: linear-gradient(
+              to top right,
+              #FDC801,
+              #977701
+            );
+            margin-bottom: 3px;
+            box-shadow: 0 0 8px rgba(253, 200, 1, 0.4);
+        }
+  
+        .title-logo {
+          height: 73px;
+        }
+  
+        .title {
+          font-size: 80px;
+          font-weight: extra-black;
+          background: linear-gradient(to right, #3E9CF4, #1D6EBB);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+      }
+      
+      .game-info {
+        @apply flex space-x-3;
+  
+        .move-count {
+          @apply w-44 flex flex-col items-center justify-center text-theme-primary-background px-wallet-balance-horizontal pt-wallet-balance-top pb-wallet-balance-bottom rounded-md border-1 border-black font-black;
+          
+          height: 60px;
+          background: linear-gradient(
+              to top right,
+              #FDC801,
+              #977701
+            );
+            box-shadow: 0 0 8px rgba(253, 200, 1, 0.4);
+      
+          .move-count-title {
+            font-size: 12px;
+            margin-top: 10px;
+            line-height: 10px;
+            font-size: 14px;
+          }
+          
+          .move-count-number {
+            font-size: 23px;
+          }
+        }
+  
+        .prize-pool {
+          @apply w-44 flex flex-col items-center justify-center text-theme-primary-background px-wallet-balance-horizontal pt-wallet-balance-top pb-wallet-balance-bottom rounded-md border-1 border-black font-black;
+          
+          height: 60px;
+          background: linear-gradient(
+              to top right,
+              #FDC801,
+              #977701
+            );
+            box-shadow: 0 0 8px rgba(253, 200, 1, 0.4);
+      
+          .prize-pool-title {
+            font-size: 12px;
+            margin-top: 10px;
+            line-height: 10px;
+            font-size: 14px;
+          }
+          
+          .prize-pool-amount {
+            font-size: 23px;
+          }
+        }
+      }
+    }
 
-  .connect-wallet-button {
-    @apply bg-white text-theme-red border-1 space-x-2 border-black rounded-md flex items-center justify-center duration-200;
-    padding: 8px 16px;
-    height: 46.667px;
-  
-    &:hover {
-      @apply transform scale-95;
+    .game-instructions {
+      font-size: 20px;
+
+      .title {
+        @apply text-theme-secondary font-black;
+      }
     }
-  
-    .wallet-logo {
-      height: 29px;
+
+    .game-footer {
+      font-size: 20px;
+
+      a.author {
+        @apply text-theme-secondary font-black underline;
+
+        &:hover {
+          @apply text-theme-primary;
+        }
+      }
+
+      a.indonesia {
+        /* @apply text-theme-secondary font-black underline; */
+
+        &:hover {
+          @apply text-theme-red;
+        }
+      }
     }
-  }
-  
-  .optimism-logo {
-    height: 46.667px;
   }
 }
