@@ -11,3 +11,23 @@ forge verify-contract --chain-id 11155420 --compiler-version 0.8.24 0xe4EE33F790
 Contract Address: 0xe4EE33F790f790950E0064E0E5aC474BE36d577F
 Block: 10131878
 Paid: 0.008101149680496516 ETH (2700383 gas * 3.000000252 gwei)
+
+Game Board
+-----
+Before:
+0	0	2	0
+0	0	0	0
+0	0	0	0
+2	0	0	0
+
+After makeMove(Move.DOWN):
+0	0	0	0
+0	0	0	0
+0	0	0	0
+2	2	2	0
+
+After makeMove(Move.RIGHT):
+0	0	0	0
+0	0	0	0
+0	0	0	0
+0	2	2	4
