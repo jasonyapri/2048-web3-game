@@ -3,9 +3,16 @@ import Image from "next/image";
 export default function Home() {
   return (
     <div className="game-container">
-      <header className="game-header bg-theme-red flex items-center justify-center h-20 border-b-1">
-        <div className="wallet-balance">Wallet Balance: 0.35 ETH</div>
-        <button className="connect-wallet-button">CONNECT WALLET</button>
+      <header className="game-header">
+        <div className="wallet-balance">
+          <span className="wallet-balance-title">WALLET BALANCE</span>
+          <div className="wallet-balance-amount">0.35 ETH</div>
+        </div>
+        <button className="connect-wallet-button">
+          <img src="/img/wallet.png" className="wallet-logo" />
+          <span>CONNECT WALLET</span>
+        </button>
+        <img src="/img/optimism.png" className="optimism-logo" />
       </header>
       <main className="game-main">
         <div className="title">2048</div>

@@ -12,6 +12,11 @@ module.exports = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      padding: {
+        'wallet-balance-bottom': '8px',
+        'wallet-balance-horizontal': '22.5px',
+        'wallet-balance-top': '5px',
+      },
       colors: {
         'theme-primary-background': '#0A0F1B',
         'theme-primary': '#1486F2',
