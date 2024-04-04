@@ -31,12 +31,33 @@ export default function Home() {
             </div>
           </div>
         </div>
+        <div className="game-instructions instruction-1">
+          <p>Join the tiles, get to <span className="title">2048</span>!</p>
+        </div>
         <div className="game-board">
-          <div className="row-1">
-            <div className="tile tile-0-0">2</div>
-            <div className="tile tile-0-1">4</div>
-            <div className="tile tile-0-2">8</div>
-            <div className="tile tile-0-3">16</div>
+          <div className="row row-0">
+            <div className="tile tile-0-0"></div>
+            <div className="tile tile-0-1"></div>
+            <div className="tile tile-0-2"></div>
+            <div className="tile tile-0-3"></div>
+          </div>
+          <div className="row row-1">
+            <div className="tile tile-1-0"></div>
+            <div className="tile tile-1-1"></div>
+            <div className="tile tile-1-2"></div>
+            <div className="tile tile-1-3"></div>
+          </div>
+          <div className="row row-2">
+            <div className="tile tile-2-0"></div>
+            <div className="tile tile-2-1"></div>
+            <div className="tile tile-2-2"></div>
+            <div className="tile tile-2-3"></div>
+          </div>
+          <div className="row row-3">
+            <div className="tile tile-3-0"></div>
+            <div className="tile tile-3-1"></div>
+            <div className="tile tile-3-2"></div>
+            <div className="tile tile-3-3 tile-2048"></div>
           </div>
         </div>
         <div className="game-buttons">
@@ -53,15 +74,11 @@ export default function Home() {
             <img src="/img/right-arrow.png" className="game-button-icon" />
           </button>
         </div>
-        <div className="game-instruction">
-          <p>Join the tiles, get to <span className="title">2048</span>!</p>
-        </div>
-        <div className="line"></div>
-        <div className="game-instruction">
+        <div className="game-instructions instruction-2">
           <p><span className="highlighted">HOW TO PLAY:</span> Use the arrow buttons above to move the tiles. Tiles with the same number merge into one when they touch. Add them up to reach 2048!</p>
         </div>
         <div className="line"></div>
-        <div className="game-instruction">
+        <div className="game-instructions instruction-3">
           <p>You’re playing the web3 version of 2048 where the board is shared among all players worldwide. Everyone have the chance to win ETH from the Prize Pool once you reach a certain number for the first time!</p>
           <span>See <a href="#" className="list-prizes-button">List of Prizes</a>.</span>
         </div>
