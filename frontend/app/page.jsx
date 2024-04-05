@@ -1,5 +1,5 @@
 import Image from "next/image";
-const {ethers} = require("ethers");
+const { ethers } = require("ethers");
 
 export default function Home() {
 
