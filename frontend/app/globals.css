@@ -182,6 +182,182 @@ body {
           border-radius: 10px;
           background: radial-gradient(circle, #CAC1B5, #b1a89e);
           box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+
+          &.tile-2 {
+            @apply flex justify-center items-center;
+            background: linear-gradient(
+              to top right,
+              #FFF1D0,
+              #99917D
+            );
+
+            &::before {
+              content: '2';
+              font-size: 55px;
+              font-weight: bold;
+              color: #1C2A4A;
+            };
+          }
+
+          &.tile-4 {
+            @apply flex justify-center items-center;
+            background: linear-gradient(
+              to top right,
+              #E9EBF8,
+              #898A92
+            );
+
+            &::before {
+              content: '4';
+              font-size: 55px;
+              font-weight: bold;
+              color: #1C2A4A;
+            };
+          }
+
+          &.tile-8 {
+            @apply flex justify-center items-center;
+            background: linear-gradient(
+              to top right,
+              #A5F8D3,
+              #61927C
+            );
+
+            &::before {
+              content: '8';
+              font-size: 55px;
+              font-weight: bold;
+              color: #1C2A4A;
+            };
+          }
+
+          &.tile-16 {
+            @apply flex justify-center items-center;
+            background: linear-gradient(
+              to top right,
+              #FFB997,
+              #996F5B
+            );
+
+            &::before {
+              content: '16';
+              font-size: 48px;
+              font-weight: bold;
+              color: #1C2A4A;
+            };
+          }
+
+          &.tile-32 {
+            @apply flex justify-center items-center;
+            background: linear-gradient(
+              to top right,
+              #F06543,
+              #8A3A27
+            );
+
+            &::before {
+              content: '32';
+              font-size: 48px;
+              font-weight: bold;
+              color: #FFFFFF;
+            };
+          }
+
+          &.tile-64 {
+            @apply flex justify-center items-center;
+            background: linear-gradient(
+              to top right,
+              #BD320F,
+              #571707
+            );
+
+            &::before {
+              content: '64';
+              font-size: 48px;
+              font-weight: bold;
+              color: #FFFFFF;
+            };
+          }
+
+          &.tile-128 {
+            @apply flex justify-center items-center;
+            background: linear-gradient(
+              to top right,
+              #95B8D1,
+              #4C5E6B
+            );
+
+            &::before {
+              content: '128';
+              font-size: 36px;
+              font-weight: bold;
+              color: #FFFFFF;
+            };
+          }
+
+          &.tile-256 {
+            @apply flex justify-center items-center;
+            background: linear-gradient(
+              to top right,
+              #2B2D42,
+              #6D73A8
+            );
+
+            &::before {
+              content: '256';
+              font-size: 36px;
+              font-weight: bold;
+              color: #FFFFFF;
+            };
+          }
+
+          &.tile-512 {
+            @apply flex justify-center items-center;
+            background: linear-gradient(
+              to top right,
+              #977390,
+              #31252F
+            );
+
+            &::before {
+              content: '512';
+              font-size: 40px;
+              font-weight: bold;
+              color: #FFFFFF;
+            };
+          }
+
+          &.tile-1024 {
+            @apply flex justify-center items-center;
+            background: linear-gradient(
+              to top right,
+              #A54657,
+              #3F1B21
+            );
+
+            &::before {
+              content: '1024';
+              font-size: 36px;
+              font-weight: bold;
+              color: #FFFFFF;
+            };
+          }
+
+          &.tile-2048 {
+            @apply flex justify-center items-center;
+            background: linear-gradient(
+              to top right,
+              #FDC801,
+              #977701
+            );
+
+            &::before {
+              content: '2048';
+              font-size: 36px;
+              font-weight: bold;
+              color: #0A0F1B;
+            };
+          }
         }
       }
     }

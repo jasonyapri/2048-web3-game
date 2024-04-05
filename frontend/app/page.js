@@ -43,20 +43,20 @@ export default function Home() {
           </div>
           <div className="row row-1">
             <div className="tile tile-1-0"></div>
-            <div className="tile tile-1-1"></div>
-            <div className="tile tile-1-2"></div>
-            <div className="tile tile-1-3"></div>
+            <div className="tile tile-1-1 tile-2"></div>
+            <div className="tile tile-1-2 tile-4"></div>
+            <div className="tile tile-1-3 tile-8"></div>
           </div>
           <div className="row row-2">
-            <div className="tile tile-2-0"></div>
-            <div className="tile tile-2-1"></div>
-            <div className="tile tile-2-2"></div>
-            <div className="tile tile-2-3"></div>
+            <div className="tile tile-2-0 tile-16"></div>
+            <div className="tile tile-2-1 tile-32"></div>
+            <div className="tile tile-2-2 tile-64"></div>
+            <div className="tile tile-2-3 tile-128"></div>
           </div>
           <div className="row row-3">
-            <div className="tile tile-3-0"></div>
-            <div className="tile tile-3-1"></div>
-            <div className="tile tile-3-2"></div>
+            <div className="tile tile-3-0 tile-256"></div>
+            <div className="tile tile-3-1 tile-512"></div>
+            <div className="tile tile-3-2 tile-1024"></div>
             <div className="tile tile-3-3 tile-2048"></div>
           </div>
         </div>
