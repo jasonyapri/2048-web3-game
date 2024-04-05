@@ -1,21 +1,35 @@
+"use client";
+
 import Image from "next/image";
 const { ethers } = require("ethers");
+import { React, useState } from 'react'; 0
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Home() {
 
+  const notify = () => {
+    toast("Default Message!");
+    // toast.success("Success Message!");
+    // toast.info("Info Message!");
+    // toast.error("Error Message!");
+    // toast.warning("Warning Message!");
+  };
+
   // Connect to the optimism OP network and smart contract
-  const OPTIMISM_SEPOLIA_RPC_URL = process.env.OPTIMISM_SEPOLIA_RPC_URL;
-  const provider = new ethers.providers.JsonRpcProvider(`${OPTIMISM_SEPOLIA_RPC_URL}`);
-  const contractAddress = process.env.SMART_CONTRACT_ADDRESS;
+  // const OPTIMISM_SEPOLIA_RPC_URL = process.env.OPTIMISM_SEPOLIA_RPC_URL;
+  // const provider = new ethers.providers.JsonRpcProvider(`${OPTIMISM_SEPOLIA_RPC_URL}`);
+  // const contractAddress = process.env.SMART_CONTRACT_ADDRESS;
 
   return (
     <div className="game-container">
+      <ToastContainer />
       <header className="wallet-header">
         <div className="wallet-balance">
           <span className="wallet-balance-title">WALLET BALANCE</span>
           <div className="wallet-balance-amount">0.35 ETH</div>
         </div>
-        <button className="connect-wallet-button">
+        <button className="connect-wallet-button" onClick={notify}>
           <img src="/img/wallet.png" className="wallet-logo" />
           <span>CONNECT WALLET</span>
         </button>
