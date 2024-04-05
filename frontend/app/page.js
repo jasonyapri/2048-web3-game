@@ -1,6 +1,13 @@
 import Image from "next/image";
+const {ethers} = require("ethers");
 
 export default function Home() {
+
+  // Connect to the optimism OP network and smart contract
+  const OPTIMISM_SEPOLIA_RPC_URL = process.env.OPTIMISM_SEPOLIA_RPC_URL;
+  const provider = new ethers.providers.JsonRpcProvider(`${OPTIMISM_SEPOLIA_RPC_URL}`);
+  const contractAddress = process.env.SMART_CONTRACT_ADDRESS;
+
   return (
     <div className="game-container">
       <header className="wallet-header">
