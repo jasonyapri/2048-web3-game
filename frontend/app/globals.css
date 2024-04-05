@@ -121,7 +121,7 @@ body {
           
           height: 60px;
           background: linear-gradient(
-            to top right,
+            to bottom,
             #FDC801,
             #977701
           );
@@ -144,7 +144,7 @@ body {
           
           height: 60px;
           background: linear-gradient(
-            to top right,
+            to bottom,
             #FDC801,
             #977701
           );
@@ -186,7 +186,7 @@ body {
           &.tile-2 {
             @apply flex justify-center items-center;
             background: linear-gradient(
-              to top right,
+              to bottom left,
               #FFF1D0,
               #99917D
             );
@@ -196,13 +196,14 @@ body {
               font-size: 55px;
               font-weight: bold;
               color: #1C2A4A;
+              text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
             };
           }
 
           &.tile-4 {
             @apply flex justify-center items-center;
             background: linear-gradient(
-              to top right,
+              to bottom left,
               #E9EBF8,
               #898A92
             );
@@ -212,13 +213,14 @@ body {
               font-size: 55px;
               font-weight: bold;
               color: #1C2A4A;
+              text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
             };
           }
 
           &.tile-8 {
             @apply flex justify-center items-center;
             background: linear-gradient(
-              to top right,
+              to bottom left,
               #A5F8D3,
               #61927C
             );
@@ -228,13 +230,14 @@ body {
               font-size: 55px;
               font-weight: bold;
               color: #1C2A4A;
+              text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
             };
           }
 
           &.tile-16 {
             @apply flex justify-center items-center;
             background: linear-gradient(
-              to top right,
+              to bottom left,
               #FFB997,
               #996F5B
             );
@@ -244,13 +247,14 @@ body {
               font-size: 48px;
               font-weight: bold;
               color: #1C2A4A;
+              text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
             };
           }
 
           &.tile-32 {
             @apply flex justify-center items-center;
             background: linear-gradient(
-              to top right,
+              to bottom left,
               #F06543,
               #8A3A27
             );
@@ -260,13 +264,14 @@ body {
               font-size: 48px;
               font-weight: bold;
               color: #FFFFFF;
+              text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
             };
           }
 
           &.tile-64 {
             @apply flex justify-center items-center;
             background: linear-gradient(
-              to top right,
+              to bottom left,
               #BD320F,
               #571707
             );
@@ -276,13 +281,14 @@ body {
               font-size: 48px;
               font-weight: bold;
               color: #FFFFFF;
+              text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
             };
           }
 
           &.tile-128 {
             @apply flex justify-center items-center;
             background: linear-gradient(
-              to top right,
+              to bottom left,
               #95B8D1,
               #4C5E6B
             );
@@ -292,13 +298,14 @@ body {
               font-size: 36px;
               font-weight: bold;
               color: #FFFFFF;
+              text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
             };
           }
 
           &.tile-256 {
             @apply flex justify-center items-center;
             background: linear-gradient(
-              to top right,
+              to bottom left,
               #2B2D42,
               #6D73A8
             );
@@ -308,13 +315,14 @@ body {
               font-size: 36px;
               font-weight: bold;
               color: #FFFFFF;
+              text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
             };
           }
 
           &.tile-512 {
             @apply flex justify-center items-center;
             background: linear-gradient(
-              to top right,
+              to bottom left,
               #977390,
               #31252F
             );
@@ -324,13 +332,14 @@ body {
               font-size: 40px;
               font-weight: bold;
               color: #FFFFFF;
+              text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
             };
           }
 
           &.tile-1024 {
             @apply flex justify-center items-center;
             background: linear-gradient(
-              to top right,
+              to bottom left,
               #A54657,
               #3F1B21
             );
@@ -340,13 +349,14 @@ body {
               font-size: 36px;
               font-weight: bold;
               color: #FFFFFF;
+              text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
             };
           }
 
           &.tile-2048 {
             @apply flex justify-center items-center;
             background: linear-gradient(
-              to top right,
+              to bottom left,
               #FDC801,
               #977701
             );
@@ -356,6 +366,7 @@ body {
               font-size: 36px;
               font-weight: bold;
               color: #0A0F1B;
+              text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
             };
           }
         }
