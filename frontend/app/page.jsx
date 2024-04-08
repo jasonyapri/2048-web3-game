@@ -183,19 +183,22 @@ export default function Home() {
             <div className="tile tile-3-3 tile-2048"></div>
           </div> */}
         </div>
-        <div className="game-buttons">
-          <button className="game-button left" disabled={makeMoveLeftIsLoading} onClick={() => makeMoveLeft()}>
-            <img src="/img/left-arrow.png" className="game-button-icon" />
-          </button>
-          <button className="game-button up" disabled={makeMoveUpIsLoading} onClick={() => makeMoveUp()}>
-            <img src="/img/up-arrow.png" className="game-button-icon" />
-          </button>
-          <button className="game-button down" disabled={makeMoveDownIsLoading} onClick={() => makeMoveDown()}>
-            <img src="/img/down-arrow.png" className="game-button-icon" />
-          </button>
-          <button className="game-button right" disabled={makeMoveRightIsLoading} onClick={() => makeMoveRight()}>
-            <img src="/img/right-arrow.png" className="game-button-icon" />
-          </button>
+        <div className="game-actions">
+          <div className="game-buttons">
+            <button className="game-button left" disabled={makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading} onClick={() => makeMoveLeft()}>
+              <img src="/img/left-arrow.png" className="game-button-icon" />
+            </button>
+            <button className="game-button up" disabled={makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading} onClick={() => makeMoveUp()}>
+              <img src="/img/up-arrow.png" className="game-button-icon" />
+            </button>
+            <button className="game-button down" disabled={makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading} onClick={() => makeMoveDown()}>
+              <img src="/img/down-arrow.png" className="game-button-icon" />
+            </button>
+            <button className="game-button right" disabled={makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading} onClick={() => makeMoveRight()}>
+              <img src="/img/right-arrow.png" className="game-button-icon" />
+            </button>
+          </div>
+          <div className={`game-buttons-loading${(makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading) ? "" : " hide"}`}>Loading Web3 Wallet...</div>
         </div>
         <div className="game-instructions instruction-2">
           <p><span className="highlighted">HOW TO PLAY:</span> Use the arrow buttons above to move the tiles. Tiles with the same number merge into one when they touch. Add them up to reach 2048!</p>

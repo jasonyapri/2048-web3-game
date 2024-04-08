@@ -375,31 +375,44 @@ body {
       }
     }
 
-    .game-buttons {
-      @apply flex w-full space-x-3 justify-center;
-
+    .game-actions {
       margin-top: 30px !important;
       margin-bottom: 30px !important;
+
+      .game-buttons {
+        @apply flex w-full space-x-3 justify-center;
+    
+        .game-button {
+          @apply text-white border-1 space-x-2 border-black rounded-md flex items-center justify-center duration-200;
+          padding: 8px 17.5px;
+          height: 37px;
+          background: #D7DEDC;
+        
+          &:not(:disabled):hover {
+            @apply transform scale-90;
+          }
   
-      .game-button {
-        @apply text-white border-1 space-x-2 border-black rounded-md flex items-center justify-center duration-200;
-        padding: 8px 17.5px;
-        height: 37px;
-        background: #D7DEDC;
-      
-        &:not(:disabled):hover {
-          @apply transform scale-90;
+          &:disabled {
+            @apply bg-theme-primary-background;
+          }
+  
+          img {
+            height: 25px;
+          }
         }
-
-        &:disabled {
-          @apply bg-theme-primary-background;
-        }
-
-        img {
-          height: 25px;
+      }
+  
+      .game-buttons-loading {
+        @apply flex w-full justify-center;
+  
+        margin-top: 8px !important;
+  
+        &.hide {
+          display: none;
         }
       }
     }
+    
 
     .game-instructions {
       font-size: 20px;
