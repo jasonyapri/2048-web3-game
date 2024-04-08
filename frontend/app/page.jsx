@@ -4,9 +4,9 @@ import Image from "next/image";
 import { React, useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Web3Game2048Abi from '@/abi/Web3Game2048Abi';
-import { useWeb3Modal } from '@web3modal/wagmi/react'
-import { useAccount, useContractRead } from 'wagmi'
+import Web3Game2048ContractData from '@/contracts/Web3Game2048ContractData';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { useAccount, useContractRead, useContractWrite, usePrepareContractWrite, useContractReads } from 'wagmi';
 const ethers = require('ethers');
 
 export default function Home() {
@@ -20,56 +20,61 @@ export default function Home() {
   };
 
   // const { open } = useWeb3Modal();
-  const { address, isConnecting, isDisconnected } = useAccount()
-  const Web3Game204Address = "0xe4EE33F790f790950E0064E0E5aC474BE36d577F";
-
-  const handleClick = () => {
-    console.log();
-  };
+  const { address, isConnecting, isDisconnected } = useAccount();
 
   const { data: authorName, isError: fetchAuthorNameIsError, isLoading: fetchAuthorNameIsLoading } = useContractRead({
-    address: Web3Game204Address,
-    abi: Web3Game2048Abi,
+    ...Web3Game2048ContractData,
     functionName: 'AUTHOR_NAME',
-  })
-
-  const { data: rawPrizePool, isError: fetchPrizePoolIsError, isLoading: fetchPrizePoolIsLoading } = useContractRead({
-    address: Web3Game204Address,
-    abi: Web3Game2048Abi,
-    functionName: 'prizePool',
-    watch: true
-  })
-
-  const { data: rawMoveCount, isError: fetchMoveCountIsError, isLoading: fetchMoveCountIsLoading } = useContractRead({
-    address: Web3Game204Address,
-    abi: Web3Game2048Abi,
-    functionName: 'moveCount',
-    watch: true
-  })
-
-  const { data: tile00, isError: fetchTile00IsError, isLoading: fetchTile00IsLoading } = useContractRead({
-    address: Web3Game204Address,
-    abi: Web3Game2048Abi,
-    functionName: 'getGameBoardTile',
-    watch: true,
-    args: [0, 0]
   });
 
-  const tiles = Array.from({ length: 16 }, (_, i) => ({
-    row: Math.floor(i / 4),
-    col: i % 4,
-  }));
+  const { data: rawPrizePool, isError: fetchPrizePoolIsError, isLoading: fetchPrizePoolIsLoading } = useContractRead({
+    ...Web3Game2048ContractData,
+    functionName: 'prizePool',
+    watch: true
+  });
 
-  const tileData = tiles.map(({ row, col }) => {
-    const { data, isError, isLoading } = useContractRead({
-      address: Web3Game204Address,
-      abi: Web3Game2048Abi,
-      functionName: 'getGameBoardTile',
-      watch: true,
-      args: [row, col],
-    });
+  const { data: rawMoveCount, isError: fetchMoveCountIsError, isLoading: fetchMoveCountIsLoading } = useContractRead({
+    ...Web3Game2048ContractData,
+    functionName: 'moveCount',
+    watch: true
+  });
 
-    return { data, isError, isLoading, row, col };
+  const { data: rawTile00Pool, isError: frawTile00IsError, isLoading: rawTile00IsLoading } = useContractRead({
+    ...Web3Game2048ContractData,
+    functionName: 'getGameBoardTile',
+    args: [0, 0],
+    watch: true
+  });
+
+  const [gameBoardTiles, setGameBoardTiles] = useState(null);
+
+  const gameBoardTileContracts = [];
+  for (let row = 0; row < 4; row++) {
+    for (let col = 0; col < 4; col++) {
+      gameBoardTileContracts.push({
+        ...Web3Game2048ContractData,
+        functionName: 'getGameBoardTile',
+        args: [row, col],
+      });
+    }
+  }
+
+  const { data: rawGameBoardData, isError: gameBoardIsError, isLoading: gameBoardIsLoading } = useContractReads({
+    contracts: gameBoardTileContracts,
+  });
+
+  useEffect(() => {
+    if (rawGameBoardData) {
+      const cleanGameBoardTiles = rawGameBoardData.map(item => item.result);
+      setGameBoardTiles(cleanGameBoardTiles);
+      console.log(cleanGameBoardTiles);
+    }
+  }, [rawGameBoardData]);
+
+  const { data, isLoading, isSuccess, write } = useContractWrite({
+    ...Web3Game2048ContractData,
+    functionName: 'makeMove',
+    args: [3]
   });
 
   const [prizePoolInEth, setPrizePoolInEth] = useState(0);
@@ -83,11 +88,6 @@ export default function Home() {
   useEffect(() => {
     setMoveCount(rawMoveCount);
   }, rawMoveCount);
-
-  useEffect(() => {
-    // console.log(typeof moveCount);
-    console.log(tileData);
-  }, []);
 
   return (
     <div className="game-container">
@@ -133,7 +133,7 @@ export default function Home() {
               <div className={`row row-${rowIndex}`} key={rowIndex}>
                 {
                   Array.from({ length: 4 }, (_, colIndex) => (
-                    <div className={`tile tile-${rowIndex}-${colIndex} tile-${tileData[rowIndex * 4 + colIndex].data}`} key={`${rowIndex}-${colIndex}`}></div>
+                    <div className={`tile tile-${rowIndex}-${colIndex} tile-${gameBoardTiles ? (gameBoardTiles[(rowIndex * 4) + colIndex]) : ""}`} key={`${rowIndex}-${colIndex}`}></div>
                   ))
                 }
               </div>
@@ -166,7 +166,7 @@ export default function Home() {
           </div> */}
         </div>
         <div className="game-buttons">
-          <button className="game-button left" onClick={() => handleClick()}>
+          <button className="game-button left" disabled={isLoading} onClick={() => write()}>
             <img src="/img/left-arrow.png" className="game-button-icon" />
           </button>
           <button className="game-button up">

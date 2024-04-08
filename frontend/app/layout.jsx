@@ -1,6 +1,6 @@
 import { Inria_Sans } from "next/font/google";
 import "./globals.css";
-import { Web3Modal } from '@/context/web3modal';
+import { Web3Modal } from '@/context/Web3Modal';
 
 const inriaSans = Inria_Sans({ subsets: ["latin"], weight: ["300", "400", "700"] });
 
