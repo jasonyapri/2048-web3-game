@@ -6,7 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Web3Game2048ContractData from '@/contracts/Web3Game2048ContractData';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { useAccount, useContractRead, useContractWrite, usePrepareContractWrite, useContractReads } from 'wagmi';
+import { useAccount, useContractRead, useContractWrite, useContractReads } from 'wagmi';
 const ethers = require('ethers');
 
 export default function Home() {
@@ -36,13 +36,6 @@ export default function Home() {
   const { data: rawMoveCount, isError: fetchMoveCountIsError, isLoading: fetchMoveCountIsLoading } = useContractRead({
     ...Web3Game2048ContractData,
     functionName: 'moveCount',
-    watch: true
-  });
-
-  const { data: rawTile00Pool, isError: frawTile00IsError, isLoading: rawTile00IsLoading } = useContractRead({
-    ...Web3Game2048ContractData,
-    functionName: 'getGameBoardTile',
-    args: [0, 0],
     watch: true
   });
 
@@ -102,11 +95,11 @@ export default function Home() {
   useEffect(() => {
     const prizePoolInWei = ethers.BigNumber.from(rawPrizePool);
     setPrizePoolInEth(ethers.utils.formatEther(prizePoolInWei));
-  }, rawPrizePool);
+  }, [rawPrizePool]);
 
   useEffect(() => {
     setMoveCount(rawMoveCount);
-  }, rawMoveCount);
+  }, [rawMoveCount]);
 
   return (
     <div className="game-container">
@@ -133,10 +126,10 @@ export default function Home() {
             <img src="/img/title.png" className="title-logo" />
           </div>
           <div className="game-info">
-            <div className="move-count">
+            <button className="move-count">
               <span className="move-count-title">MOVE COUNT</span>
               <div className="move-count-number">{moveCount.toString()}</div>
-            </div>
+            </button>
             <div className="prize-pool">
               <span className="prize-pool-title">PRIZE POOL</span>
               <div className="prize-pool-amount">{prizePoolInEth.toString()} ETH</div>
