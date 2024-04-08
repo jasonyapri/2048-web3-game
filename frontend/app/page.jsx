@@ -61,6 +61,7 @@ export default function Home() {
 
   const { data: rawGameBoardData, isError: gameBoardIsError, isLoading: gameBoardIsLoading } = useContractReads({
     contracts: gameBoardTileContracts,
+    watch: true
   });
 
   useEffect(() => {
