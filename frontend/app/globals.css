@@ -387,8 +387,12 @@ body {
         height: 37px;
         background: #D7DEDC;
       
-        &:hover {
+        &:not(:disabled):hover {
           @apply transform scale-90;
+        }
+
+        &:disabled {
+          @apply bg-theme-primary-background;
         }
 
         img {

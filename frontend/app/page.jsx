@@ -71,7 +71,25 @@ export default function Home() {
     }
   }, [rawGameBoardData]);
 
-  const { data, isLoading, isSuccess, write } = useContractWrite({
+  const { data: makeMoveUpData, isLoading: makeMoveUpIsLoading, isSuccess: makeMoveUpIsSuccess, write: makeMoveUp } = useContractWrite({
+    ...Web3Game2048ContractData,
+    functionName: 'makeMove',
+    args: [0]
+  });
+
+  const { data: makeMoveDownData, isLoading: makeMoveDownIsLoading, isSuccess: makeMoveDownIsSuccess, write: makeMoveDown } = useContractWrite({
+    ...Web3Game2048ContractData,
+    functionName: 'makeMove',
+    args: [1]
+  });
+
+  const { data: makeMoveLeftData, isLoading: makeMoveLeftIsLoading, isSuccess: makeMoveLeftIsSuccess, write: makeMoveLeft } = useContractWrite({
+    ...Web3Game2048ContractData,
+    functionName: 'makeMove',
+    args: [2]
+  });
+
+  const { data: makeMoveRightData, isLoading: makeMoveRightIsLoading, isSuccess: makeMoveRightIsSuccess, write: makeMoveRight } = useContractWrite({
     ...Web3Game2048ContractData,
     functionName: 'makeMove',
     args: [3]
@@ -166,16 +184,16 @@ export default function Home() {
           </div> */}
         </div>
         <div className="game-buttons">
-          <button className="game-button left" disabled={isLoading} onClick={() => write()}>
+          <button className="game-button left" disabled={makeMoveLeftIsLoading} onClick={() => makeMoveLeft()}>
             <img src="/img/left-arrow.png" className="game-button-icon" />
           </button>
-          <button className="game-button up">
+          <button className="game-button up" disabled={makeMoveUpIsLoading} onClick={() => makeMoveUp()}>
             <img src="/img/up-arrow.png" className="game-button-icon" />
           </button>
-          <button className="game-button down">
+          <button className="game-button down" disabled={makeMoveDownIsLoading} onClick={() => makeMoveDown()}>
             <img src="/img/down-arrow.png" className="game-button-icon" />
           </button>
-          <button className="game-button right">
+          <button className="game-button right" disabled={makeMoveRightIsLoading} onClick={() => makeMoveRight()}>
             <img src="/img/right-arrow.png" className="game-button-icon" />
           </button>
         </div>
