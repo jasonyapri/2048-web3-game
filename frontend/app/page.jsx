@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Web3Game2048Abi from '@/abi/Web3Game2048Abi';
 import { useWeb3Modal } from '@web3modal/wagmi/react'
 import { useAccount, useContractRead } from 'wagmi'
+const ethers = require('ethers');
 
 export default function Home() {
 
@@ -23,7 +24,7 @@ export default function Home() {
   const Web3Game204Address = "0xe4EE33F790f790950E0064E0E5aC474BE36d577F";
 
   const handleClick = () => {
-    // console.log(data);
+    console.log();
   };
 
   const { data: authorName, isError: fetchAuthorNameIsError, isLoading: fetchAuthorNameIsLoading } = useContractRead({
@@ -32,8 +33,35 @@ export default function Home() {
     functionName: 'AUTHOR_NAME',
   })
 
+  const { data: rawPrizePool, isError: fetchPrizePoolIsError, isLoading: fetchPrizePoolIsLoading } = useContractRead({
+    address: Web3Game204Address,
+    abi: Web3Game2048Abi,
+    functionName: 'prizePool',
+    watch: true
+  })
+
+  const { data: rawMoveCount, isError: fetchMoveCountIsError, isLoading: fetchMoveCountIsLoading } = useContractRead({
+    address: Web3Game204Address,
+    abi: Web3Game2048Abi,
+    functionName: 'moveCount',
+    watch: true
+  })
+
+  const [prizePoolInEth, setPrizePoolInEth] = useState(0);
+  const [moveCount, setMoveCount] = useState(0);
+
   useEffect(() => {
-    // console.log(authorName);
+    const prizePoolInWei = ethers.BigNumber.from(rawPrizePool);
+    setPrizePoolInEth(ethers.utils.formatEther(prizePoolInWei));
+  }, rawPrizePool);
+
+  useEffect(() => {
+    setMoveCount(rawMoveCount);
+  }, rawMoveCount);
+
+  useEffect(() => {
+    // console.log(typeof moveCount);
+    // console.log(moveCount);
   }, []);
 
   return (
@@ -63,11 +91,11 @@ export default function Home() {
           <div className="game-info">
             <div className="move-count">
               <span className="move-count-title">MOVE COUNT</span>
-              <div className="move-count-number">2</div>
+              <div className="move-count-number">{moveCount.toString()}</div>
             </div>
             <div className="prize-pool">
               <span className="prize-pool-title">PRIZE POOL</span>
-              <div className="prize-pool-amount">0.001 ETH</div>
+              <div className="prize-pool-amount">{prizePoolInEth.toString()} ETH</div>
             </div>
           </div>
         </div>
