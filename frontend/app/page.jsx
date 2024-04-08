@@ -1,10 +1,12 @@
 "use client";
 
 import Image from "next/image";
-const { ethers } = require("ethers");
-import { React, useState } from 'react'; 0
+import { React, useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Web3Game2048Abi from '@/abi/Web3Game2048Abi';
+import { useWeb3Modal } from '@web3modal/wagmi/react'
+import { useAccount, useContractRead } from 'wagmi'
 
 export default function Home() {
 
@@ -16,23 +18,40 @@ export default function Home() {
     // toast.warning("Warning Message!");
   };
 
-  // Connect to the optimism OP network and smart contract
-  // const OPTIMISM_SEPOLIA_RPC_URL = process.env.OPTIMISM_SEPOLIA_RPC_URL;
-  // const provider = new ethers.providers.JsonRpcProvider(`${OPTIMISM_SEPOLIA_RPC_URL}`);
-  // const contractAddress = process.env.SMART_CONTRACT_ADDRESS;
+  // const { open } = useWeb3Modal();
+  const { address, isConnecting, isDisconnected } = useAccount()
+  const Web3Game204Address = "0xe4EE33F790f790950E0064E0E5aC474BE36d577F";
+
+  const handleClick = () => {
+    // console.log(data);
+  };
+
+  const { data: authorName, isError: fetchAuthorNameIsError, isLoading: fetchAuthorNameIsLoading } = useContractRead({
+    address: Web3Game204Address,
+    abi: Web3Game2048Abi,
+    functionName: 'AUTHOR_NAME',
+  })
+
+  useEffect(() => {
+    // console.log(authorName);
+  }, []);
 
   return (
     <div className="game-container">
       <ToastContainer />
       <header className="wallet-header">
-        <div className="wallet-balance">
+        {/* <w3m-button /> */}
+        <w3m-account-button />
+        {/* <w3m-connect-button /> */}
+        <w3m-network-button />
+        {/* <div className="wallet-balance">
           <span className="wallet-balance-title">WALLET BALANCE</span>
           <div className="wallet-balance-amount">0.35 ETH</div>
         </div>
-        <button className="connect-wallet-button" onClick={notify}>
+        <button className="connect-wallet-button" onClick={open}>
           <img src="/img/wallet.png" className="wallet-logo" />
           <span>CONNECT WALLET</span>
-        </button>
+        </button> */}
         <img src="/img/optimism.png" className="optimism-logo" />
       </header>
       <main className="game-main">
@@ -82,7 +101,7 @@ export default function Home() {
           </div>
         </div>
         <div className="game-buttons">
-          <button className="game-button left">
+          <button className="game-button left" onClick={() => handleClick()}>
             <img src="/img/left-arrow.png" className="game-button-icon" />
           </button>
           <button className="game-button up">
@@ -107,7 +126,7 @@ export default function Home() {
         <footer className="game-footer">
           Created by <a href="https://jasonyapri.com" className="author" target="_blank">Jason Yapri</a>. Proudly made in <a href="https://www.google.com/search?q=indonesia" className="indonesia" target="_blank">Indonesia</a>.
         </footer>
-      </main>
-    </div>
+      </main >
+    </div >
   );
 }

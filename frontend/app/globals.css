@@ -37,7 +37,9 @@ body {
   @apply flex flex-col items-center;
 
   .wallet-header {
-    @apply bg-theme-red flex h-20 items-center justify-center border-b-1 space-x-3 w-full;
+    @apply bg-theme-primary-background flex h-20 items-center justify-center border-b-1 space-x-3 w-full;
+    border-bottom: 1px solid #bab1a6;
+    background-color: #11172C;
   
     .wallet-balance {
       @apply w-44 h-12 flex flex-col items-center justify-center text-theme-red px-wallet-balance-horizontal pt-wallet-balance-top pb-wallet-balance-bottom rounded-md border-1 border-black;
@@ -117,9 +119,10 @@ body {
         @apply flex space-x-3;
   
         .move-count {
-          @apply w-32 flex flex-col items-center justify-center text-theme-primary-background px-wallet-balance-horizontal pt-wallet-balance-top pb-wallet-balance-bottom rounded-md border-1 border-black font-black;
+          @apply flex flex-col items-center justify-center text-theme-primary-background px-wallet-balance-horizontal pt-wallet-balance-top pb-wallet-balance-bottom rounded-md border-1 border-black font-black;
           
           height: 60px;
+          width: 130px;
           background: linear-gradient(
             to bottom,
             #FDC801,
@@ -128,10 +131,9 @@ body {
           box-shadow: 0 0 8px rgba(253, 200, 1, 0.4);
       
           .move-count-title {
-            font-size: 12px;
+            font-size: 14px;
             margin-top: 10px;
             line-height: 10px;
-            font-size: 14px;
           }
           
           .move-count-number {
@@ -295,7 +297,7 @@ body {
 
             &::before {
               content: '128';
-              font-size: 36px;
+              font-size: 40px;
               font-weight: bold;
               color: #FFFFFF;
               text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -312,7 +314,7 @@ body {
 
             &::before {
               content: '256';
-              font-size: 36px;
+              font-size: 40px;
               font-weight: bold;
               color: #FFFFFF;
               text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
