@@ -47,6 +47,31 @@ export default function Home() {
     watch: true
   })
 
+  const { data: tile00, isError: fetchTile00IsError, isLoading: fetchTile00IsLoading } = useContractRead({
+    address: Web3Game204Address,
+    abi: Web3Game2048Abi,
+    functionName: 'getGameBoardTile',
+    watch: true,
+    args: [0, 0]
+  });
+
+  const tiles = Array.from({ length: 16 }, (_, i) => ({
+    row: Math.floor(i / 4),
+    col: i % 4,
+  }));
+
+  const tileData = tiles.map(({ row, col }) => {
+    const { data, isError, isLoading } = useContractRead({
+      address: Web3Game204Address,
+      abi: Web3Game2048Abi,
+      functionName: 'getGameBoardTile',
+      watch: true,
+      args: [row, col],
+    });
+
+    return { data, isError, isLoading, row, col };
+  });
+
   const [prizePoolInEth, setPrizePoolInEth] = useState(0);
   const [moveCount, setMoveCount] = useState(0);
 
@@ -61,7 +86,7 @@ export default function Home() {
 
   useEffect(() => {
     // console.log(typeof moveCount);
-    // console.log(moveCount);
+    console.log(tileData);
   }, []);
 
   return (
@@ -103,6 +128,18 @@ export default function Home() {
           <p>Join the tiles, get to <span className="title">2048</span>!</p>
         </div>
         <div className="game-board">
+          {
+            Array.from({ length: 4 }, (_, rowIndex) => (
+              <div className={`row row-${rowIndex}`} key={rowIndex}>
+                {
+                  Array.from({ length: 4 }, (_, colIndex) => (
+                    <div className={`tile tile-${rowIndex}-${colIndex} tile-${tileData[rowIndex * 4 + colIndex].data}`} key={`${rowIndex}-${colIndex}`}></div>
+                  ))
+                }
+              </div>
+            ))
+          }
+          {/* Placeholder Board
           <div className="row row-0">
             <div className="tile tile-0-0"></div>
             <div className="tile tile-0-1"></div>
@@ -126,7 +163,7 @@ export default function Home() {
             <div className="tile tile-3-1 tile-512"></div>
             <div className="tile tile-3-2 tile-1024"></div>
             <div className="tile tile-3-3 tile-2048"></div>
-          </div>
+          </div> */}
         </div>
         <div className="game-buttons">
           <button className="game-button left" onClick={() => handleClick()}>
