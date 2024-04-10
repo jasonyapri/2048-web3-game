@@ -58,6 +58,12 @@ export default function Home() {
     watch: true
   });
 
+  const [actionIsAllowed, setActionIsAllowed] = useState(false);
+
+  useEffect(() => {
+    setActionIsAllowed(isConnected);
+  }, [isConnected]);
+
   useEffect(() => {
     if (rawGameBoardData) {
       const cleanGameBoardTiles = rawGameBoardData.map(item => item.result);
@@ -178,21 +184,21 @@ export default function Home() {
         </div>
         <div className="game-actions">
           <div className="game-buttons">
-            <button className="game-button left" disabled={!isConnected || makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading} onClick={() => makeMoveLeft()}>
+            <button className="game-button left" disabled={!actionIsAllowed || makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading} onClick={() => makeMoveLeft()}>
               <img src="/img/left-arrow.png" className="game-button-icon" />
             </button>
-            <button className="game-button up" disabled={!isConnected || makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading} onClick={() => makeMoveUp()}>
+            <button className="game-button up" disabled={!actionIsAllowed || makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading} onClick={() => makeMoveUp()}>
               <img src="/img/up-arrow.png" className="game-button-icon" />
             </button>
-            <button className="game-button down" disabled={!isConnected || makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading} onClick={() => makeMoveDown()}>
+            <button className="game-button down" disabled={!actionIsAllowed || makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading} onClick={() => makeMoveDown()}>
               <img src="/img/down-arrow.png" className="game-button-icon" />
             </button>
-            <button className="game-button right" disabled={!isConnected || makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading} onClick={() => makeMoveRight()}>
+            <button className="game-button right" disabled={!actionIsAllowed || makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading} onClick={() => makeMoveRight()}>
               <img src="/img/right-arrow.png" className="game-button-icon" />
             </button>
           </div>
           <div className={`game-buttons-loading${(makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading) ? "" : " hide"}`}>Loading Web3 Wallet...</div>
-          <div className={`game-buttons-loading${(!isConnected) ? "" : " hide"}`}>Please connect to your Web3 Wallet of choice...</div>
+          <div className={`game-buttons-loading${(!actionIsAllowed) ? "" : " hide"}`}>Please connect to your Web3 Wallet of choice...</div>
         </div>
         <div className="game-instructions instruction-2">
           <p><span className="highlighted">HOW TO PLAY:</span> Use the arrow buttons above to move the tiles. Tiles with the same number merge into one when they touch. Add them up to reach 2048!</p>
