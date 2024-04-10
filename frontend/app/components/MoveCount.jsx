@@ -56,13 +56,19 @@ const MoveCount = ({ moveCount }) => {
                                         ))}
                                     </TableHeader>
                                     <TableBody>
-                                        {rows.map((row, index) => (
+                                        {rows.length > 0 ? (rows.map((row, index) => (
                                             <TableRow key={index} onPress={openModal}>
                                                 {columns.map((column) => (
                                                     <TableCell key={column.key}>{getKeyValue(row, column.key)}</TableCell>
                                                 ))}
                                             </TableRow>
-                                        ))}
+                                        ))) : (
+                                            <TableRow>
+                                                <TableCell colSpan={columns.length}>No data found</TableCell>
+                                                <TableCell className="hidden"> </TableCell>
+                                                <TableCell className="hidden"> </TableCell>
+                                            </TableRow>
+                                        )}
                                     </TableBody>
                                 </Table>
                             </ModalBody>
