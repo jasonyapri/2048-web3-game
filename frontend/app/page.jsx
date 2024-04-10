@@ -6,11 +6,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Web3Game2048ContractData from '@/contracts/Web3Game2048ContractData';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { useAccount, useContractRead, useContractWrite, useContractReads, useContractEvent, usePublicClient } from 'wagmi';
-// import { watchContractEvent } from '@wagmi/core'
+import { useAccount, useContractRead, useContractWrite, useContractReads, useContractEvent } from 'wagmi';
 import MoveCount from './components/MoveCount';
-
-const ethers = require('ethers');
+import { ethers } from 'ethers';
 
 export default function Home() {
 
@@ -19,6 +17,7 @@ export default function Home() {
     eventName: 'Moved',
     listener(log) {
       console.log(log);
+      const blockNumber = log.blockNumber;
     },
   });
 
