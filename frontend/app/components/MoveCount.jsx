@@ -3,7 +3,7 @@
 import { React, useEffect, useState, useMemo } from "react";
 import { toast } from 'react-toastify';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination, getKeyValue } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination } from "@nextui-org/react";
 import { ethers } from 'ethers';
 import Web3Game2048ContractData from '@/contracts/Web3Game2048ContractData';
 import moment from 'moment';
@@ -141,6 +141,7 @@ const MoveCount = ({ moveCount }) => {
                             <ModalHeader className="flex flex-col gap-1">Move History</ModalHeader>
                             <ModalBody>
                                 <Table
+                                    isStriped={true}
                                     color="danger"
                                     bottomContent={
                                         pages > 0 ? (

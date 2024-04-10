@@ -8,6 +8,7 @@ import Web3Game2048ContractData from '@/contracts/Web3Game2048ContractData';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useAccount, useContractRead, useContractWrite, useContractReads, useContractEvent } from 'wagmi';
 import MoveCount from './components/MoveCount';
+import PrizePool from './components/PrizePool';
 import { ethers } from 'ethers';
 
 export default function Home() {
@@ -133,10 +134,7 @@ export default function Home() {
           </div>
           <div className="game-info">
             <MoveCount moveCount={moveCount} />
-            <div className="prize-pool">
-              <span className="prize-pool-title">PRIZE POOL</span>
-              <div className="prize-pool-amount">{prizePoolInEth.toString()} ETH</div>
-            </div>
+            <PrizePool prizePoolInEth={prizePoolInEth}></PrizePool>
           </div>
         </div>
         <div className="game-instructions instruction-1">
