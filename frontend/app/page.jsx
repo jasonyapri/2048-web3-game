@@ -12,13 +12,7 @@ import { ethers } from 'ethers';
 
 export default function Home() {
 
-  const notify = () => {
-    toast("Default Message!");
-    // toast.success("Success Message!");
-    // toast.info("Info Message!");
-    // toast.error("Error Message!");
-    // toast.warning("Warning Message!");
-  };
+  const MAKE_MOVE_GAS_LIMIT = 150000n;
 
   // const { open } = useWeb3Modal();
   const { address, isConnected, isConnecting, isDisconnected } = useAccount();
@@ -74,25 +68,29 @@ export default function Home() {
   const { data: makeMoveUpData, isLoading: makeMoveUpIsLoading, isSuccess: makeMoveUpIsSuccess, write: makeMoveUp } = useContractWrite({
     ...Web3Game2048ContractData,
     functionName: 'makeMove',
-    args: [0]
+    args: [0],
+    gas: MAKE_MOVE_GAS_LIMIT,
   });
 
   const { data: makeMoveDownData, isLoading: makeMoveDownIsLoading, isSuccess: makeMoveDownIsSuccess, write: makeMoveDown } = useContractWrite({
     ...Web3Game2048ContractData,
     functionName: 'makeMove',
-    args: [1]
+    args: [1],
+    gas: MAKE_MOVE_GAS_LIMIT,
   });
 
   const { data: makeMoveLeftData, isLoading: makeMoveLeftIsLoading, isSuccess: makeMoveLeftIsSuccess, write: makeMoveLeft } = useContractWrite({
     ...Web3Game2048ContractData,
     functionName: 'makeMove',
-    args: [2]
+    args: [2],
+    gas: MAKE_MOVE_GAS_LIMIT,
   });
 
   const { data: makeMoveRightData, isLoading: makeMoveRightIsLoading, isSuccess: makeMoveRightIsSuccess, write: makeMoveRight } = useContractWrite({
     ...Web3Game2048ContractData,
     functionName: 'makeMove',
-    args: [3]
+    args: [3],
+    gas: MAKE_MOVE_GAS_LIMIT,
   });
 
   const [prizePoolInEth, setPrizePoolInEth] = useState(0);
