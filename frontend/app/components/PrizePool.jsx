@@ -2,7 +2,7 @@
 
 import { React, useEffect, useState, useMemo } from "react";
 import { toast } from 'react-toastify';
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Tooltip, Badge } from "@nextui-org/react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination } from "@nextui-org/react";
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
 import { ethers } from 'ethers';
@@ -20,6 +20,48 @@ const PrizePool = ({ prizePoolInEth }) => {
         functionName: 'calculatePrizesProjection',
         watch: true
     });
+
+    const prizePercentageContracts = [
+        {
+            ...Web3Game2048ContractData,
+            functionName: 'SIXTH_PRIZE_PERCENTAGE',
+        },
+        {
+            ...Web3Game2048ContractData,
+            functionName: 'FIFTH_PRIZE_PERCENTAGE',
+        },
+        {
+            ...Web3Game2048ContractData,
+            functionName: 'FOURTH_PRIZE_PERCENTAGE',
+        },
+        {
+            ...Web3Game2048ContractData,
+            functionName: 'THIRD_PRIZE_PERCENTAGE',
+        },
+        {
+            ...Web3Game2048ContractData,
+            functionName: 'SECOND_PRIZE_PERCENTAGE',
+        },
+        {
+            ...Web3Game2048ContractData,
+            functionName: 'FIRST_PRIZE_PERCENTAGE',
+        },
+        {
+            ...Web3Game2048ContractData,
+            functionName: 'GRAND_PRIZE_PERCENTAGE',
+        },
+    ];
+
+    const { data: rawPrizePercentage, isError: fetchPrizePercentageIsError, isLoading: fetchPrizePercentageIsLoading } = useContractReads({
+        contracts: prizePercentageContracts,
+        watch: false
+    });
+
+    const [prizePercentage, setPrizePercentage] = useState([0, 0, 0, 0, 0, 0, 0]);
+
+    useEffect(() => {
+        setPrizePercentage(rawPrizePercentage.map(item => item.result));
+    }, [rawPrizePercentage]);
 
     const prizeDistributedContracts = [
         {
@@ -136,13 +178,15 @@ const PrizePool = ({ prizePoolInEth }) => {
                                     {prizeList.map((item, index) => (
                                         <Card shadow="sm" key={index}>
                                             <CardBody className="overflow-visible p-1">
-                                                <Image
-                                                    shadow="sm"
-                                                    width="100%"
-                                                    alt={item.title}
-                                                    className="w-full object-cover"
-                                                    src={item.img}
-                                                />
+                                                <Tooltip showArrow={true} content={`${prizePercentage[index]}% of Prize Pool`} key="secondary" color="secondary">
+                                                    <Image
+                                                        shadow="sm"
+                                                        width="100%"
+                                                        alt={item.title}
+                                                        className="w-full object-cover"
+                                                        src={item.img}
+                                                    />
+                                                </Tooltip>
                                             </CardBody>
                                             <CardFooter className="text-small justify-center">
                                                 <p>{item.prize}</p>
