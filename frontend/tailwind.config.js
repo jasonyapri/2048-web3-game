@@ -1,9 +1,12 @@
+import {nextui} from "@nextui-org/react";
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
     extend: {
@@ -18,6 +21,7 @@ module.exports = {
         'wallet-balance-top': '5px',
       },
       colors: {
+        'theme-header': '#12172a',
         'theme-primary-background': '#0A0F1B',
         'theme-primary': '#1486F2',
         'theme-primary-light': '#79BAF8',
@@ -30,7 +34,8 @@ module.exports = {
       }
     },
   },
+  darkMode: "class",
   plugins: [
-    require('@tailwindcss/nesting'),
+    nextui(),
   ],
 };

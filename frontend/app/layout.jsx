@@ -1,6 +1,7 @@
 import { Inria_Sans } from "next/font/google";
 import "./globals.css";
 import { Web3Modal } from '@/context/Web3Modal';
+import { Providers } from "./providers";
 
 const inriaSans = Inria_Sans({ subsets: ["latin"], weight: ["300", "400", "700"] });
 
@@ -13,7 +14,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inriaSans.className}>
-        <Web3Modal>{children}</Web3Modal>
+        <Providers>
+          <Web3Modal>{children}</Web3Modal>
+        </Providers>
       </body>
     </html>
   );

@@ -8,7 +8,7 @@ import Web3Game2048ContractData from '@/contracts/Web3Game2048ContractData';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useAccount, useContractRead, useContractWrite, useContractReads, useContractEvent, usePublicClient } from 'wagmi';
 // import { watchContractEvent } from '@wagmi/core'
-import MoveModal from './components/MoveModal';
+import MoveCount from './components/MoveCount';
 
 const ethers = require('ethers');
 
@@ -136,7 +136,7 @@ export default function Home() {
             <img src="/img/title.png" className="title-logo" />
           </div>
           <div className="game-info">
-            <MoveModal moveCount={moveCount} />
+            <MoveCount moveCount={moveCount} />
             <div className="prize-pool">
               <span className="prize-pool-title">PRIZE POOL</span>
               <div className="prize-pool-amount">{prizePoolInEth.toString()} ETH</div>
