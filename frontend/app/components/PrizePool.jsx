@@ -21,6 +21,38 @@ const PrizePool = ({ prizePoolInEth }) => {
         watch: true
     });
 
+    const prizeDistributedContracts = [
+        {
+            ...Web3Game2048ContractData,
+            functionName: 'firstPrizeDistributed',
+        },
+        {
+            ...Web3Game2048ContractData,
+            functionName: 'secondPrizeDistributed',
+        },
+        {
+            ...Web3Game2048ContractData,
+            functionName: 'thirdPrizeDistributed',
+        },
+        {
+            ...Web3Game2048ContractData,
+            functionName: 'fourthPrizeDistributed',
+        },
+        {
+            ...Web3Game2048ContractData,
+            functionName: 'fifthPrizeDistributed',
+        },
+        {
+            ...Web3Game2048ContractData,
+            functionName: 'sixthPrizeDistributed',
+        },
+    ];
+
+    const { data: rawPrizeDistributedFlags, isError: fetchPrizeDistributedFlagsIsError, isLoading: fetchPrizeDistributedFlagsIsLoading } = useContractReads({
+        contracts: prizeDistributedContracts,
+        watch: true
+    });
+
     const placeholderPrizeList = [
         {
             title: "32",
@@ -62,12 +94,21 @@ const PrizePool = ({ prizePoolInEth }) => {
     const [prizeList, setPrizeList] = useState(placeholderPrizeList);
 
     useEffect(() => {
-        let currentPrizeList = prizeList;
-        for (let i = 0; i < prizeList.length; i++) {
-            currentPrizeList[i].prize = parseFloat(ethers.utils.formatEther(rawPrizesProjection[i])).toFixed(6).toString() + " ETH";
+
+        if (rawPrizeDistributedFlags && rawPrizesProjection) {
+            const prizeDistributedFlags = [...rawPrizeDistributedFlags.map(item => item.result).reverse(), false];
+
+            let currentPrizeList = prizeList;
+            for (let i = 0; i < prizeList.length; i++) {
+                if (prizeDistributedFlags[i]) {
+                    currentPrizeList[i].prize = "✅ Won!"
+                } else {
+                    currentPrizeList[i].prize = parseFloat(ethers.utils.formatEther(rawPrizesProjection[i])).toFixed(6).toString() + " ETH";
+                }
+            }
+            setPrizeList(currentPrizeList);
         }
-        setPrizeList(currentPrizeList);
-    }, [rawPrizesProjection]);
+    }, [rawPrizesProjection, rawPrizeDistributedFlags]);
 
     return (
         <>
