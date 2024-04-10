@@ -67,26 +67,32 @@ const PrizePool = ({ prizePoolInEth }) => {
         {
             ...Web3Game2048ContractData,
             functionName: 'firstPrizeDistributed',
+            watch: true,
         },
         {
             ...Web3Game2048ContractData,
             functionName: 'secondPrizeDistributed',
+            watch: true,
         },
         {
             ...Web3Game2048ContractData,
             functionName: 'thirdPrizeDistributed',
+            watch: true,
         },
         {
             ...Web3Game2048ContractData,
             functionName: 'fourthPrizeDistributed',
+            watch: true,
         },
         {
             ...Web3Game2048ContractData,
             functionName: 'fifthPrizeDistributed',
+            watch: true,
         },
         {
             ...Web3Game2048ContractData,
             functionName: 'sixthPrizeDistributed',
+            watch: true,
         },
     ];
 
