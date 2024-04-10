@@ -6,10 +6,21 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Web3Game2048ContractData from '@/contracts/Web3Game2048ContractData';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { useAccount, useContractRead, useContractWrite, useContractReads } from 'wagmi';
+import { useAccount, useContractRead, useContractWrite, useContractReads, useContractEvent, usePublicClient } from 'wagmi';
+// import { watchContractEvent } from '@wagmi/core'
+import MoveModal from './components/MoveModal';
+
 const ethers = require('ethers');
 
 export default function Home() {
+
+  useContractEvent({
+    ...Web3Game2048ContractData,
+    eventName: 'Moved',
+    listener(log) {
+      console.log(log);
+    },
+  });
 
   const notify = () => {
     toast("Default Message!");
@@ -20,7 +31,7 @@ export default function Home() {
   };
 
   // const { open } = useWeb3Modal();
-  const { address, isConnecting, isDisconnected } = useAccount();
+  const { address, isConnected, isConnecting, isDisconnected } = useAccount();
 
   const { data: authorName, isError: fetchAuthorNameIsError, isLoading: fetchAuthorNameIsLoading } = useContractRead({
     ...Web3Game2048ContractData,
@@ -61,7 +72,6 @@ export default function Home() {
     if (rawGameBoardData) {
       const cleanGameBoardTiles = rawGameBoardData.map(item => item.result);
       setGameBoardTiles(cleanGameBoardTiles);
-      console.log(cleanGameBoardTiles);
     }
   }, [rawGameBoardData]);
 
@@ -126,10 +136,7 @@ export default function Home() {
             <img src="/img/title.png" className="title-logo" />
           </div>
           <div className="game-info">
-            <button className="move-count">
-              <span className="move-count-title">MOVE COUNT</span>
-              <div className="move-count-number">{moveCount.toString()}</div>
-            </button>
+            <MoveModal moveCount={moveCount} />
             <div className="prize-pool">
               <span className="prize-pool-title">PRIZE POOL</span>
               <div className="prize-pool-amount">{prizePoolInEth.toString()} ETH</div>
@@ -179,20 +186,21 @@ export default function Home() {
         </div>
         <div className="game-actions">
           <div className="game-buttons">
-            <button className="game-button left" disabled={makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading} onClick={() => makeMoveLeft()}>
+            <button className="game-button left" disabled={!isConnected || makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading} onClick={() => makeMoveLeft()}>
               <img src="/img/left-arrow.png" className="game-button-icon" />
             </button>
-            <button className="game-button up" disabled={makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading} onClick={() => makeMoveUp()}>
+            <button className="game-button up" disabled={!isConnected || makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading} onClick={() => makeMoveUp()}>
               <img src="/img/up-arrow.png" className="game-button-icon" />
             </button>
-            <button className="game-button down" disabled={makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading} onClick={() => makeMoveDown()}>
+            <button className="game-button down" disabled={!isConnected || makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading} onClick={() => makeMoveDown()}>
               <img src="/img/down-arrow.png" className="game-button-icon" />
             </button>
-            <button className="game-button right" disabled={makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading} onClick={() => makeMoveRight()}>
+            <button className="game-button right" disabled={!isConnected || makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading} onClick={() => makeMoveRight()}>
               <img src="/img/right-arrow.png" className="game-button-icon" />
             </button>
           </div>
           <div className={`game-buttons-loading${(makeMoveLeftIsLoading || makeMoveUpIsLoading || makeMoveDownIsLoading || makeMoveRightIsLoading) ? "" : " hide"}`}>Loading Web3 Wallet...</div>
+          <div className={`game-buttons-loading${(!isConnected) ? "" : " hide"}`}>Please connect to your Web3 Wallet of choice...</div>
         </div>
         <div className="game-instructions instruction-2">
           <p><span className="highlighted">HOW TO PLAY:</span> Use the arrow buttons above to move the tiles. Tiles with the same number merge into one when they touch. Add them up to reach 2048!</p>
