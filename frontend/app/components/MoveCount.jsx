@@ -1,11 +1,15 @@
 'use client';
 
 import { React, useEffect, useState, useMemo } from "react";
+import { toast } from 'react-toastify';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination, getKeyValue } from "@nextui-org/react";
 import { ethers } from 'ethers';
 import Web3Game2048ContractData from '@/contracts/Web3Game2048ContractData';
 import moment from 'moment';
+import { useContractEvent } from 'wagmi';
+
+const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_OPTIMISM_SEPOLIA_RPC_URL);
 
 const MoveCount = ({ moveCount }) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -16,8 +20,6 @@ const MoveCount = ({ moveCount }) => {
     useEffect(() => {
         const fetchMoveHistory = async () => {
             setIsFetchingMoveHistory(true);
-            // Connect to the provider
-            let provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_OPTIMISM_SEPOLIA_RPC_URL);
 
             // Connect to the contract
             let contract = new ethers.Contract(Web3Game2048ContractData.address, Web3Game2048ContractData.abi, provider);
@@ -66,6 +68,32 @@ const MoveCount = ({ moveCount }) => {
                 return 'Unknown';
         }
     };
+
+    const notify = () => {
+        toast("Default Message!");
+        // toast.success("Success Message!");
+        // toast.info("Info Message!");
+        // toast.error("Error Message!");
+        // toast.warning("Warning Message!");
+    };
+
+    useContractEvent({
+        ...Web3Game2048ContractData,
+        eventName: 'Moved',
+        async listener(newMoveEvents) {
+            for (let newMoveEvent of newMoveEvents) {
+                let block = await provider.getBlock(parseInt(newMoveEvent.blockNumber));
+                const newMove = {
+                    timestamp: block.timestamp,
+                    player: newMoveEvent.args.player,
+                    blockNumber: newMoveEvent.blockNumber,
+                    move: newMoveEvent.args.move,
+                }
+                toast.success(`Someone moved the tiles ${getMoveLabel(newMove.move)}.`);
+                setMoveHistory([newMove, ...moveHistory]);
+            }
+        },
+    });
 
     const dummyMoveHistory = [
         { timestamp: 'April 10, 2024 | 17:00', player: '0x123456', move: 'Up' },

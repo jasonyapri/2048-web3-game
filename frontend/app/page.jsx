@@ -12,15 +12,6 @@ import { ethers } from 'ethers';
 
 export default function Home() {
 
-  useContractEvent({
-    ...Web3Game2048ContractData,
-    eventName: 'Moved',
-    listener(log) {
-      console.log(log);
-      const blockNumber = log.blockNumber;
-    },
-  });
-
   const notify = () => {
     toast("Default Message!");
     // toast.success("Success Message!");
@@ -102,8 +93,10 @@ export default function Home() {
   const [moveCount, setMoveCount] = useState(0);
 
   useEffect(() => {
-    const prizePoolInWei = ethers.BigNumber.from(rawPrizePool);
-    setPrizePoolInEth(ethers.utils.formatEther(prizePoolInWei));
+    if (rawPrizePool) {
+      const prizePoolInWei = ethers.BigNumber.from(rawPrizePool);
+      setPrizePoolInEth(ethers.utils.formatEther(prizePoolInWei));
+    }
   }, [rawPrizePool]);
 
   useEffect(() => {
