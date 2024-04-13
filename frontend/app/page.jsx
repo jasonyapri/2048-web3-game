@@ -133,8 +133,8 @@ export default function Home() {
             <img src="/img/title.png" className="title-logo" />
           </div>
           <div className="game-info">
-            <MoveCount moveCount={moveCount} />
-            <PrizePool prizePoolInEth={prizePoolInEth}></PrizePool>
+            {/* <MoveCount moveCount={moveCount} /> */}
+            <PrizePool prizePoolInEth={prizePoolInEth} address={address}></PrizePool>
           </div>
         </div>
         <div className="game-instructions instruction-1">

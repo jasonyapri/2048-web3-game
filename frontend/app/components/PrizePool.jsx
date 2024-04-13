@@ -2,18 +2,42 @@
 
 import { React, useEffect, useState, useMemo } from "react";
 import { toast } from 'react-toastify';
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Tooltip, Badge } from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Tooltip, Kbd, Divider } from "@nextui-org/react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination } from "@nextui-org/react";
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
-import { ethers } from 'ethers';
+import { ethers, BigNumber } from 'ethers';
 import Web3Game2048ContractData from '@/contracts/Web3Game2048ContractData';
 import moment from 'moment';
-import { useContractEvent, useContractRead, useContractReads } from 'wagmi';
+import { useContractEvent, useContractRead, useContractReads, useContractWrite } from 'wagmi';
 
 const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_OPTIMISM_SEPOLIA_RPC_URL);
 
-const PrizePool = ({ prizePoolInEth }) => {
+const PrizePool = ({ prizePoolInEth, address }) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+    const { data: rawWinnerPrizeBalance, isError: fetchWinnerPrizeBalanceIsError, isLoading: fetchWinnerPrizeBalanceIsLoading, refetch: refetchWinnerPrizeBalance } = useContractRead({
+        ...Web3Game2048ContractData,
+        functionName: 'winnerPrizeBalance',
+        args: [address]
+    });
+
+    useEffect(() => {
+        if (address) {
+            refetchWinnerPrizeBalance();
+        }
+    }, [address]);
+
+    const [winnerPrizeBalance, setWinnerPrizeBalance] = useState(0);
+
+    useEffect(() => {
+        if (address && rawWinnerPrizeBalance !== undefined) {
+            if (rawWinnerPrizeBalance == BigInt(0)) {
+                setWinnerPrizeBalance(0);
+            } else {
+                setWinnerPrizeBalance(parseFloat(ethers.utils.formatEther(rawWinnerPrizeBalance)).toFixed(6));
+            }
+        }
+    }, [rawWinnerPrizeBalance]);
 
     const { data: rawPrizesProjection, isError: fetchPrizesProjectionIsError, isLoading: fetchPrizesProjectionIsLoading } = useContractRead({
         ...Web3Game2048ContractData,
@@ -158,6 +182,11 @@ const PrizePool = ({ prizePoolInEth }) => {
         }
     }, [rawPrizesProjection, rawPrizeDistributedFlags]);
 
+    const { data: withdrawWinnerPrizeData, isLoading: withdrawWinnerPrizeIsLoading, isSuccess: withdrawWinnerPrizeIsSuccess, write: withdrawWinnerPrize } = useContractWrite({
+        ...Web3Game2048ContractData,
+        functionName: 'withdrawWinnerPrize',
+    });
+
     return (
         <>
             <Button className="prize-pool" onPress={onOpen}>
@@ -199,6 +228,15 @@ const PrizePool = ({ prizePoolInEth }) => {
                                             </CardFooter>
                                         </Card>
                                     ))}
+                                </div>
+                                <Divider className="my-2" />
+                                <div className="flex justify-center align-center flex-col">
+                                    <div className="mb-3">
+                                        You have <Kbd className="font-semibold">{winnerPrizeBalance + " ETH"}</Kbd> to claim!
+                                    </div>
+                                    <Button color="success" className="w-28" size="sm" isDisabled={withdrawWinnerPrizeIsLoading || winnerPrizeBalance == 0} onClick={() => withdrawWinnerPrize()}>
+                                        {withdrawWinnerPrizeIsLoading ? "Loading..." : "Claim"}
+                                    </Button>
                                 </div>
                             </ModalBody>
                             <ModalFooter />
