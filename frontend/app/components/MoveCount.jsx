@@ -19,69 +19,69 @@ const MoveCount = ({ moveCount, address }) => {
 
     const [showConfetti, setShowConfetti] = useState(false);
 
-    // useContractEvent({
-    //     ...Web3Game2048ContractData,
-    //     eventName: 'GameOver',
-    //     listener(gameOverEvents) {
-    //         for (let gameOverEvent of gameOverEvents) {
-    //             toast.danger(`Game Over after ${newMoveEvent.args.moveCount} moves.`);
-    //         }
-    //     },
-    // });
+    useContractEvent({
+        ...Web3Game2048ContractData,
+        eventName: 'GameOver',
+        listener(gameOverEvents) {
+            for (let gameOverEvent of gameOverEvents) {
+                toast.danger(`Game Over after ${newMoveEvent.args.moveCount} moves.`);
+            }
+        },
+    });
 
-    // useContractEvent({
-    //     ...Web3Game2048ContractData,
-    //     eventName: 'YouHaveWonTheGame',
-    //     async listener(gameWonEvents) {
-    //         for (let gameWonEvent of gameWonEvents) {
-    //             toast(`Someone has won the game!`);
-    //         }
-    //     },
-    // });
+    useContractEvent({
+        ...Web3Game2048ContractData,
+        eventName: 'YouHaveWonTheGame',
+        async listener(gameWonEvents) {
+            for (let gameWonEvent of gameWonEvents) {
+                toast(`Someone has won the game!`);
+            }
+        },
+    });
 
-    // useContractEvent({
-    //     ...Web3Game2048ContractData,
-    //     eventName: 'YouWonAPrize',
-    //     async listener(prizeWonEvents) {
-    //         for (let prizeWonEvent of prizeWonEvents) {
+    useContractEvent({
+        ...Web3Game2048ContractData,
+        eventName: 'YouWonAPrize',
+        async listener(prizeWonEvents) {
+            for (let prizeWonEvent of prizeWonEvents) {
 
-    //             setShowConfetti(true);
-    //             setTimeout(() => {
-    //                 setShowConfetti(false);
-    //             }, 10000);
+                setShowConfetti(true);
+                setTimeout(() => {
+                    setShowConfetti(false);
+                }, 10000);
 
-    //             const prizeWon = prizeWonEvent.args.prizeWon;
-    //             let prizeLabel;
-    //             switch (prizeWon) {
-    //                 case 0:
-    //                     prizeLabel = 'grand prize! (2048)';
-    //                     break;
-    //                 case 1:
-    //                     prizeLabel = '1st prize! (1024)';
-    //                     break;
-    //                 case 2:
-    //                     prizeLabel = '2nd prize! (512)';
-    //                     break;
-    //                 case 3:
-    //                     prizeLabel = '3rd prize! (256)';
-    //                     break;
-    //                 case 4:
-    //                     prizeLabel = '4th prize! (128)';
-    //                     break;
-    //                 case 5:
-    //                     prizeLabel = '5th prize! (64)';
-    //                     break;
-    //                 case 6:
-    //                     prizeLabel = '6th prize! (32)';
-    //                     break;
-    //                 default:
-    //                     prizeLabel = 'unknown prize! (?)';
-    //             }
+                const prizeWon = prizeWonEvent.args.prizeWon;
+                let prizeLabel;
+                switch (prizeWon) {
+                    case 0:
+                        prizeLabel = 'grand prize! (2048)';
+                        break;
+                    case 1:
+                        prizeLabel = '1st prize! (1024)';
+                        break;
+                    case 2:
+                        prizeLabel = '2nd prize! (512)';
+                        break;
+                    case 3:
+                        prizeLabel = '3rd prize! (256)';
+                        break;
+                    case 4:
+                        prizeLabel = '4th prize! (128)';
+                        break;
+                    case 5:
+                        prizeLabel = '5th prize! (64)';
+                        break;
+                    case 6:
+                        prizeLabel = '6th prize! (32)';
+                        break;
+                    default:
+                        prizeLabel = 'unknown prize! (?)';
+                }
 
-    //             toast(`Someone won the ${prizeLabel}`);
-    //         }
-    //     },
-    // });
+                toast(`Someone won the ${prizeLabel}`);
+            }
+        },
+    });
 
     const [moveHistory, setMoveHistory] = useState([]);
     const [isFetchingMoveHistory, setIsFetchingMoveHistory] = useState(false);
@@ -138,24 +138,24 @@ const MoveCount = ({ moveCount, address }) => {
         }
     };
 
-    // useContractEvent({
-    //     ...Web3Game2048ContractData,
-    //     eventName: 'Moved',
-    //     listener(newMoveEvents) {
-    //         console.log(newMoveEvents);
-    //         for (let newMoveEvent of newMoveEvents) {
-    //             let block = provider.getBlock(parseInt(newMoveEvent.blockNumber));
-    //             const newMove = {
-    //                 timestamp: block.timestamp,
-    //                 player: newMoveEvent.args.player,
-    //                 blockNumber: newMoveEvent.blockNumber,
-    //                 move: newMoveEvent.args.move,
-    //             }
-    //             toast.success(`Someone moved the tiles ${getMoveLabel(newMove.move)}.`);
-    //             setMoveHistory([newMove, ...moveHistory]);
-    //         }
-    //     },
-    // });
+    useContractEvent({
+        ...Web3Game2048ContractData,
+        eventName: 'Moved',
+        listener(newMoveEvents) {
+            console.log(newMoveEvents);
+            for (let newMoveEvent of newMoveEvents) {
+                let block = provider.getBlock(parseInt(newMoveEvent.blockNumber));
+                const newMove = {
+                    timestamp: block.timestamp,
+                    player: newMoveEvent.args.player,
+                    blockNumber: newMoveEvent.blockNumber,
+                    move: newMoveEvent.args.move,
+                }
+                toast.success(`Someone moved the tiles ${getMoveLabel(newMove.move)}.`);
+                setMoveHistory([newMove, ...moveHistory]);
+            }
+        },
+    });
 
     const dummyMoveHistory = [
         { timestamp: 'April 10, 2024 | 17:00', player: '0x123456', move: 'Up' },
