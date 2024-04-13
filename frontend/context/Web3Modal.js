@@ -1,14 +1,15 @@
-'use client'
+'use client';
 
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
 
-import { WagmiConfig } from 'wagmi';
-import { optimism, optimismSepolia } from 'viem/chains';
+import { WagmiConfig, configureChains, createConfig } from 'wagmi';
+import { optimism, optimismSepolia, chain } from 'viem/chains';
+import { infuraProvider } from 'wagmi/providers/infura';
+import { alchemyProvider } from 'wagmi/providers/alchemy';
 
 // 1. Get projectId at https://cloud.walletconnect.com
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
 
-// 2. Create wagmiConfig
 const metadata = {
     name: process.env.APP_NAME,
     description: process.env.APP_DESCRIPTION,
@@ -16,8 +17,24 @@ const metadata = {
     icons: [process.env.APP_ICON]
 };
 
-const chains = [optimismSepolia];
-const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
+// Default Wagmi Config with Public RPC
+// const chains = [optimismSepolia];
+// const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
+
+// Custom Config with Alchemy and Infura RPC
+const { chains, publicClient } = configureChains(
+    [optimismSepolia],
+    [
+        alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY }),
+        // infuraProvider({ apiKey: process.env.INFURA_API_KEY }),
+    ],
+);
+
+const wagmiConfig = createConfig({
+    autoConnect: true,
+    publicClient,
+    metadata,
+})
 
 // 3. Create modal
 createWeb3Modal({

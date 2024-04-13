@@ -13,7 +13,7 @@ import { ethers } from 'ethers';
 
 export default function Home() {
 
-  const MAKE_MOVE_GAS_LIMIT = 150000n;
+  const MAKE_MOVE_GAS_LIMIT = 200000n;
 
   // const { open } = useWeb3Modal();
   const { address, isConnected, isConnecting, isDisconnected } = useAccount();
@@ -105,7 +105,9 @@ export default function Home() {
   }, [rawPrizePool]);
 
   useEffect(() => {
-    setMoveCount(rawMoveCount);
+    if (rawMoveCount) {
+      setMoveCount(rawMoveCount);
+    }
   }, [rawMoveCount]);
 
   return (

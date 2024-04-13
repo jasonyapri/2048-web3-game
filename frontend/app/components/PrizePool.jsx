@@ -84,7 +84,7 @@ const PrizePool = ({ prizePoolInEth, address }) => {
     const [prizePercentage, setPrizePercentage] = useState([0, 0, 0, 0, 0, 0, 0]);
 
     useEffect(() => {
-        setPrizePercentage(rawPrizePercentage.map(item => item.result));
+        if (rawPrizePercentage) setPrizePercentage(rawPrizePercentage.map(item => item.result));
     }, [rawPrizePercentage]);
 
     const prizeDistributedContracts = [
