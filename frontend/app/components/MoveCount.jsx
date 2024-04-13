@@ -8,11 +8,80 @@ import { ethers } from 'ethers';
 import Web3Game2048ContractData from '@/contracts/Web3Game2048ContractData';
 import moment from 'moment';
 import { useContractEvent } from 'wagmi';
+import useWindowSize from 'react-use/lib/useWindowSize'
+import Confetti from 'react-confetti'
 
 const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_OPTIMISM_SEPOLIA_RPC_URL);
 
-const MoveCount = ({ moveCount }) => {
+const MoveCount = ({ moveCount, address }) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const { width, height } = useWindowSize();
+
+    const [showConfetti, setShowConfetti] = useState(false);
+
+    useContractEvent({
+        ...Web3Game2048ContractData,
+        eventName: 'GameOver',
+        async listener(gameOverEvents) {
+            for (let gameOverEvent of gameOverEvents) {
+                toast.danger(`Game Over after ${newMoveEvent.args.moveCount} moves.`);
+            }
+        },
+    });
+
+    useContractEvent({
+        ...Web3Game2048ContractData,
+        eventName: 'YouHaveWonTheGame',
+        async listener(gameWonEvents) {
+            for (let gameWonEvent of gameWonEvents) {
+                toast(`Someone has won the game!`);
+            }
+        },
+    });
+
+    useContractEvent({
+        ...Web3Game2048ContractData,
+        eventName: 'YouWonAPrize',
+        async listener(prizeWonEvents) {
+            for (let prizeWonEvent of prizeWonEvents) {
+
+                setShowConfetti(true);
+                setTimeout(() => {
+                    setShowConfetti(false);
+                }, 10000);
+
+                const prizeWon = prizeWonEvent.args.prizeWon;
+                let prizeLabel;
+                switch (prizeWon) {
+                    case 0:
+                        prizeLabel = 'grand prize! (2048)';
+                        break;
+                    case 1:
+                        prizeLabel = '1st prize! (1024)';
+                        break;
+                    case 2:
+                        prizeLabel = '2nd prize! (512)';
+                        break;
+                    case 3:
+                        prizeLabel = '3rd prize! (256)';
+                        break;
+                    case 4:
+                        prizeLabel = '4th prize! (128)';
+                        break;
+                    case 5:
+                        prizeLabel = '5th prize! (64)';
+                        break;
+                    case 6:
+                        prizeLabel = '6th prize! (32)';
+                        break;
+                    default:
+                        prizeLabel = 'unknown prize! (?)';
+                }
+
+                toast(`Someone won the ${prizeLabel}`);
+            }
+        },
+    });
 
     const [moveHistory, setMoveHistory] = useState([]);
     const [isFetchingMoveHistory, setIsFetchingMoveHistory] = useState(false);
@@ -69,18 +138,11 @@ const MoveCount = ({ moveCount }) => {
         }
     };
 
-    const notify = () => {
-        toast("Default Message!");
-        // toast.success("Success Message!");
-        // toast.info("Info Message!");
-        // toast.error("Error Message!");
-        // toast.warning("Warning Message!");
-    };
-
     useContractEvent({
         ...Web3Game2048ContractData,
         eventName: 'Moved',
         async listener(newMoveEvents) {
+            console.log(newMoveEvents);
             for (let newMoveEvent of newMoveEvents) {
                 let block = await provider.getBlock(parseInt(newMoveEvent.blockNumber));
                 const newMove = {
@@ -125,6 +187,13 @@ const MoveCount = ({ moveCount }) => {
                 <span className="move-count-title">MOVE COUNT</span>
                 <div className="move-count-number">{moveCount.toString()}</div>
             </Button>
+
+            {showConfetti && (
+                <Confetti
+                    width={width}
+                    height={height}
+                />
+            )}
 
             <Modal
                 isOpen={isOpen}
