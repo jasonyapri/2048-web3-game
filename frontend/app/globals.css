@@ -446,6 +446,19 @@ body {
       }
     }
 
+    .donate-to-prize-pool {
+      font-size: 20px;
+
+      a.open-donate-modal-button {
+        @apply text-theme-secondary font-black underline;
+        cursor: pointer;
+
+        &:hover {
+          @apply text-theme-primary;
+        }
+      }
+    }
+
     .line {
       height: 1px;
       background: #D7D4D0;

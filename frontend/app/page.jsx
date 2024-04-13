@@ -9,6 +9,7 @@ import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useAccount, useContractRead, useContractWrite, useContractReads, useContractEvent } from 'wagmi';
 import MoveCount from './components/MoveCount';
 import PrizePool from './components/PrizePool';
+import Donate from './components/Donate';
 import { ethers } from 'ethers';
 
 export default function Home() {
@@ -208,6 +209,8 @@ export default function Home() {
           <p>You’re playing the web3 version of 2048 where the board is shared among all players worldwide. Everyone have the chance to win ETH from the Prize Pool once you reach a certain number for the first time!</p>
           <span>See <a style={{ cursor: "pointer" }} onClick={() => setOpenPrizeModal(true)} className="list-prizes-button">List of Prizes</a>.</span>
         </div>
+        <div className="line"></div>
+        <Donate />
         <div className="line"></div>
         <footer className="game-footer">
           Created by <a href="https://jasonyapri.com" className="author" target="_blank">Jason Yapri</a>. Proudly made in <a href="https://www.google.com/search?q=indonesia" className="indonesia" target="_blank">Indonesia</a>.
