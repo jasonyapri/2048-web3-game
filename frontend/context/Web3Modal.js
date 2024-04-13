@@ -8,7 +8,7 @@ import { infuraProvider } from 'wagmi/providers/infura';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 
 // 1. Get projectId at https://cloud.walletconnect.com
-const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
+const projectId = process.env.PROJECT_ID;
 
 const metadata = {
     name: process.env.APP_NAME,

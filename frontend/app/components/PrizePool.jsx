@@ -10,7 +10,7 @@ import Web3Game2048ContractData from '@/contracts/Web3Game2048ContractData';
 import moment from 'moment';
 import { useContractEvent, useContractRead, useContractReads, useContractWrite } from 'wagmi';
 
-const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_OPTIMISM_SEPOLIA_RPC_URL);
+const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
 
 const PrizePool = ({ prizePoolInEth, address }) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();

@@ -11,7 +11,7 @@ import { useContractEvent } from 'wagmi';
 import useWindowSize from 'react-use/lib/useWindowSize'
 import Confetti from 'react-confetti'
 
-const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_RPC_URL);
+const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
 
 const MoveCount = ({ moveCount, address }) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -239,7 +239,7 @@ const MoveCount = ({ moveCount, address }) => {
                                                 <TableRow key={index}>
                                                     <TableCell key="timestamp">{moment.unix(item.timestamp).format('MMMM D, YYYY | HH:mm')}</TableCell>
                                                     <TableCell key="player">
-                                                        <a href={process.env.NEXT_PUBLIC_OPTIMISM_SEPOLIA_ETHERSCAN_URL + item.player} target="_blank" rel="noopener noreferrer">
+                                                        <a href={process.env.ETHERSCAN_URL + item.player} target="_blank" rel="noopener noreferrer">
                                                             {`${item.player.slice(0, 6)}...${item.player.slice(-4)}`}
                                                         </a>
                                                     </TableCell>
