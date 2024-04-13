@@ -12,13 +12,21 @@ import { useContractEvent, useContractRead, useContractReads, useContractWrite }
 
 const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
 
-const PrizePool = ({ prizePoolInEth, address }) => {
+const PrizePool = ({ prizePoolInEth, address, openPrizeModal, setOpenPrizeModal }) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+    useEffect(() => {
+        if (openPrizeModal) {
+            onOpen();
+            setOpenPrizeModal(false);
+        }
+    }, [openPrizeModal]);
 
     const { data: rawWinnerPrizeBalance, isError: fetchWinnerPrizeBalanceIsError, isLoading: fetchWinnerPrizeBalanceIsLoading, refetch: refetchWinnerPrizeBalance } = useContractRead({
         ...Web3Game2048ContractData,
         functionName: 'winnerPrizeBalance',
-        args: [address]
+        args: [address],
+        watch: true
     });
 
     useEffect(() => {

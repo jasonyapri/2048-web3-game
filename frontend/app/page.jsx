@@ -53,6 +53,8 @@ export default function Home() {
     watch: true
   });
 
+  const [openPrizeModal, setOpenPrizeModal] = useState(false);
+
   const [actionIsAllowed, setActionIsAllowed] = useState(false);
 
   useEffect(() => {
@@ -136,7 +138,7 @@ export default function Home() {
           </div>
           <div className="game-info">
             <MoveCount moveCount={moveCount} address={address} />
-            <PrizePool prizePoolInEth={prizePoolInEth} address={address}></PrizePool>
+            <PrizePool prizePoolInEth={prizePoolInEth} address={address} openPrizeModal={openPrizeModal} setOpenPrizeModal={setOpenPrizeModal} ></PrizePool>
           </div>
         </div>
         <div className="game-instructions instruction-1">
@@ -204,7 +206,7 @@ export default function Home() {
         <div className="line"></div>
         <div className="game-instructions instruction-3">
           <p>You’re playing the web3 version of 2048 where the board is shared among all players worldwide. Everyone have the chance to win ETH from the Prize Pool once you reach a certain number for the first time!</p>
-          <span>See <a href="#" className="list-prizes-button">List of Prizes</a>.</span>
+          <span>See <a style={{ cursor: "pointer" }} onClick={() => setOpenPrizeModal(true)} className="list-prizes-button">List of Prizes</a>.</span>
         </div>
         <div className="line"></div>
         <footer className="game-footer">
