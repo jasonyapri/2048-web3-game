@@ -372,6 +372,73 @@ contract Web3Game2048ResetGameTest is Web3Game2048BaseTest {
         assertEq(modifiedWeb3Game.fifthPrizeDistributed(), false);
         assertEq(modifiedWeb3Game.sixthPrizeDistributed(), false);
     }
+
+    function test_ManualResetGameByOwner() public {
+        modifiedWeb3Game.hackGameBoard_PriorToResetGame();
+        modifiedWeb3Game.hackSetAllPrizesDistributed();
+
+        assertEq(modifiedWeb3Game.firstPrizeDistributed(), true);
+        assertEq(modifiedWeb3Game.secondPrizeDistributed(), true);
+        assertEq(modifiedWeb3Game.thirdPrizeDistributed(), true);
+        assertEq(modifiedWeb3Game.fourthPrizeDistributed(), true);
+        assertEq(modifiedWeb3Game.fifthPrizeDistributed(), true);
+        assertEq(modifiedWeb3Game.sixthPrizeDistributed(), true);
+
+        // _printModifiedGameBoard("BEFORE");
+        /*
+            Game Board - BEFORE:
+            0 32 64 32
+            4 2 8 64
+            64 32 16 8
+            128 256 512 1024
+        */
+
+        vm.prank(address(this));
+        modifiedWeb3Game.resetGame();
+
+        // _printModifiedGameBoard("AFTER");
+        /*
+            Game Board - AFTER:
+            0 2 0 0
+            2 0 0 0
+            0 0 0 0
+            0 0 0 0
+        */
+
+        assertEq(web3Game.moveCount(), 0); // No move has been made after game is reset
+        assertEq(_caclulateTilesSum(), 4); // 2 x 2 (Initial Tiles)
+        assertEq(modifiedWeb3Game.firstPrizeDistributed(), false);
+        assertEq(modifiedWeb3Game.secondPrizeDistributed(), false);
+        assertEq(modifiedWeb3Game.thirdPrizeDistributed(), false);
+        assertEq(modifiedWeb3Game.fourthPrizeDistributed(), false);
+        assertEq(modifiedWeb3Game.fifthPrizeDistributed(), false);
+        assertEq(modifiedWeb3Game.sixthPrizeDistributed(), false);
+    }
+
+    function test_RevertIf_ManualReset_NotCalledByOwner() public {
+        modifiedWeb3Game.hackGameBoard_PriorToResetGame();
+        modifiedWeb3Game.hackSetAllPrizesDistributed();
+
+        assertEq(modifiedWeb3Game.firstPrizeDistributed(), true);
+        assertEq(modifiedWeb3Game.secondPrizeDistributed(), true);
+        assertEq(modifiedWeb3Game.thirdPrizeDistributed(), true);
+        assertEq(modifiedWeb3Game.fourthPrizeDistributed(), true);
+        assertEq(modifiedWeb3Game.fifthPrizeDistributed(), true);
+        assertEq(modifiedWeb3Game.sixthPrizeDistributed(), true);
+
+        // _printModifiedGameBoard("BEFORE");
+        /*
+            Game Board - BEFORE:
+            0 32 64 32
+            4 2 8 64
+            64 32 16 8
+            128 256 512 1024
+        */
+
+        vm.prank(address(1));
+        vm.expectRevert();
+        modifiedWeb3Game.resetGame();
+    }
 }
 
 contract Web3Game2048DonateToPrizePoolTest is Web3Game2048BaseTest {
