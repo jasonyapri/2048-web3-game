@@ -2,7 +2,7 @@
 // @author: Jason Yapri
 // @website: https://jasonyapri.com
 // @linkedIn: https://linkedin.com/in/jasonyapri
-// @version: 0.8.0 (2024.04.02)
+// @version: 0.9.0 (2024.04.15)
 // Contract: Web3 Game - 2048
 pragma solidity ^0.8.24;
 
