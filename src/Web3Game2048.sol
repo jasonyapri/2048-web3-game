@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 // @author: Jason Yapri
 // @website: https://jasonyapri.com
+// @github: https://github.com/jasonyapri
 // @linkedIn: https://linkedin.com/in/jasonyapri
 // @version: 0.9.0 (2024.04.15)
 // Contract: Web3 Game - 2048
