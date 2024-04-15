@@ -72,6 +72,8 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
     );
     event TilesReset();
     event CircuitBreakerToggled(bool stopped);
+    event WinnerPrizeWithdrawn(address indexed winner, uint256 amount);
+    event CommissionWithdrawn(address indexed owner, uint256 amount);
 
     error NoValidMoveMade(address player);
     error NoAmountSent();
@@ -171,7 +173,11 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
         );
     }
 
-    function resetGame() internal {
+    function resetGame() external onlyOwner stopInEmergency {
+        _resetGame();
+    }
+
+    function _resetGame() internal {
         // Reset Tiles
         for (uint8 i = 0; i < 4; i++) {
             for (uint8 j = 0; j < 4; j++) {
@@ -427,21 +433,21 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
             // Player won the grand prize!
             distributePrize(msg.sender, prizeWon);
             emit YouHaveWonTheGame(msg.sender, moveCount);
-            resetGame();
+            _resetGame();
         } else if (prizeWon > 0) {
             // Player won other prizes
             distributePrize(msg.sender, prizeWon);
             placeNewTile();
             if (!checkForValidMove()) {
                 emit GameOver(moveCount);
-                resetGame();
+                _resetGame();
             }
         } else {
             // Game continues as usual
             placeNewTile();
             if (!checkForValidMove()) {
                 emit GameOver(moveCount);
-                resetGame();
+                _resetGame();
             }
         }
     }
@@ -564,6 +570,8 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
         uint256 amount = commissionPool;
         commissionPool = 0;
         payable(owner()).sendValue(amount);
+
+        emit CommissionWithdrawn(owner(), amount);
     }
 
     function withdrawWinnerPrize() external nonReentrant {
@@ -571,5 +579,7 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
         uint256 amount = winnerPrizeBalance[msg.sender];
         winnerPrizeBalance[msg.sender] = 0;
         payable(msg.sender).sendValue(amount);
+
+        emit WinnerPrizeWithdrawn(msg.sender, amount);
     }
 }
