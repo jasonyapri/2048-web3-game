@@ -14,6 +14,7 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
     using Address for address payable;
 
     mapping(address => uint256) public winnerPrizeBalance;
+    mapping(address => string) public playerNames;
     uint256 public prizePool; // 32 bytes | slot 1
     uint256 internal commissionPool; // 32 bytes | slot 2
     uint256 public moveCount; // 32 bytes | slot 3
@@ -93,6 +94,10 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
     modifier stopInEmergency() {
         if (stopped) revert EmergencyLockIsActivated();
         _;
+    }
+
+    function setPlayerName(string calldata name) external {
+        playerNames[msg.sender] = name;
     }
 
     function toggleCircuitBreaker() external onlyOwner {
