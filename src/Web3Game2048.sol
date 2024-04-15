@@ -51,7 +51,7 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
         RIGHT
     }
 
-    event Moved(address player, Move move);
+    event Moved(address indexed player, Move move);
     event YouHaveWonTheGame(address indexed winner, uint256 moveCount);
     event YouWonAPrize(
         address winner,
@@ -73,7 +73,7 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
     event TilesReset();
     event CircuitBreakerToggled(bool stopped);
 
-    error NoValidMoveMade();
+    error NoValidMoveMade(address player);
     error NoAmountSent();
     error NotAuthorized(address sender);
     error InvalidPercentage();
@@ -418,7 +418,7 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
         } else if (move == Move.RIGHT) {
             moved = moveTilesRight();
         }
-        if (!moved) revert NoValidMoveMade();
+        if (!moved) revert NoValidMoveMade(msg.sender);
         moveCount++;
         emit Moved({player: msg.sender, move: move});
 

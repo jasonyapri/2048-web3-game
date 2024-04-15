@@ -185,7 +185,7 @@ contract Web3Game2048ConstructorTest is Web3Game2048BaseTest {
 }
 
 contract Web3Game2048MakeMoveTest is Web3Game2048BaseTest {
-    error NoValidMoveMade();
+    error NoValidMoveMade(address player);
 
     function test_MakeMoveUp() public {
         // _printGameBoard("BEFORE");
@@ -316,7 +316,9 @@ contract Web3Game2048MakeMoveTest is Web3Game2048BaseTest {
             0 0 0 0
         */
 
-        vm.expectRevert(abi.encodeWithSelector(NoValidMoveMade.selector));
+        vm.expectRevert(
+            abi.encodeWithSelector(NoValidMoveMade.selector, address(this))
+        );
         web3Game.makeMove(Web3Game2048.Move.LEFT);
     }
 
