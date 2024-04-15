@@ -100,9 +100,13 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
 
     function calculateWinnerPrize(
         uint256 _remainingPrizePool,
-        uint256 _prizePercentage
+        uint256 _prizePercentage,
+        bool _prizeDistributed
     ) internal pure returns (uint256 winnerPrize, uint256 remainingPrizePool) {
-        uint256 totalPrize = (_remainingPrizePool * _prizePercentage) / 100;
+        uint256 totalPrize = 0;
+        if (!_prizeDistributed) {
+            totalPrize = (_remainingPrizePool * _prizePercentage) / 100;
+        }
         uint256 commission = (totalPrize * COMMISSION_PERCENTAGE) / 100;
         winnerPrize = totalPrize - commission;
         remainingPrizePool = _remainingPrizePool - totalPrize;
@@ -126,37 +130,44 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
 
         (sixthWinnerPrize, remainingPrizePool) = calculateWinnerPrize(
             remainingPrizePool,
-            SIXTH_PRIZE_PERCENTAGE
+            SIXTH_PRIZE_PERCENTAGE,
+            sixthPrizeDistributed
         );
 
         (fifthWinnerPrize, remainingPrizePool) = calculateWinnerPrize(
             remainingPrizePool,
-            FIFTH_PRIZE_PERCENTAGE
+            FIFTH_PRIZE_PERCENTAGE,
+            fifthPrizeDistributed
         );
 
         (fourthWinnerPrize, remainingPrizePool) = calculateWinnerPrize(
             remainingPrizePool,
-            FOURTH_PRIZE_PERCENTAGE
+            FOURTH_PRIZE_PERCENTAGE,
+            fourthPrizeDistributed
         );
 
         (thirdWinnerPrize, remainingPrizePool) = calculateWinnerPrize(
             remainingPrizePool,
-            THIRD_PRIZE_PERCENTAGE
+            THIRD_PRIZE_PERCENTAGE,
+            thirdPrizeDistributed
         );
 
         (secondWinnerPrize, remainingPrizePool) = calculateWinnerPrize(
             remainingPrizePool,
-            SECOND_PRIZE_PERCENTAGE
+            SECOND_PRIZE_PERCENTAGE,
+            secondPrizeDistributed
         );
 
         (firstWinnerPrize, remainingPrizePool) = calculateWinnerPrize(
             remainingPrizePool,
-            FIRST_PRIZE_PERCENTAGE
+            FIRST_PRIZE_PERCENTAGE,
+            firstPrizeDistributed
         );
 
         (grandWinnerPrize, finalRemainingPrizePool) = calculateWinnerPrize(
             remainingPrizePool,
-            GRAND_PRIZE_PERCENTAGE
+            GRAND_PRIZE_PERCENTAGE,
+            false
         );
     }
 

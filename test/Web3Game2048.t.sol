@@ -1077,4 +1077,72 @@ contract Web3Game2048CalculatePrizesProjectionTest is Web3Game2048BaseTest {
         assertEq(grandWinnerPrize, 91730);
         assertEq(remainingPrizePool, 96557);
     }
+
+    function test_CalculatePrizesProjection_AfterAllPrizesDistributed() public {
+        modifiedWeb3Game.hackSetAllPrizesDistributed();
+        modifiedWeb3Game.hackPrizePool(300000);
+        (
+            uint256 sixthWinnerPrize,
+            uint256 fifthWinnerPrize,
+            uint256 fourthWinnerPrize,
+            uint256 thirdWinnerPrize,
+            uint256 secondWinnerPrize,
+            uint256 firstWinnerPrize,
+            uint256 grandWinnerPrize,
+            uint256 remainingPrizePool
+        ) = modifiedWeb3Game.calculatePrizesProjection();
+
+        // console.log("sixthWinnerPrize: ", sixthWinnerPrize);
+        // console.log("fifthWinnerPrize: ", fifthWinnerPrize);
+        // console.log("fourthWinnerPrize: ", fourthWinnerPrize);
+        // console.log("thirdWinnerPrize: ", thirdWinnerPrize);
+        // console.log("secondWinnerPrize: ", secondWinnerPrize);
+        // console.log("firstWinnerPrize: ", firstWinnerPrize);
+        // console.log("grandWinnerPrize: ", grandWinnerPrize);
+        // console.log("remainingPrizePool: ", remainingPrizePool);
+
+        assertEq(sixthWinnerPrize, 0);
+        assertEq(fifthWinnerPrize, 0);
+        assertEq(fourthWinnerPrize, 0);
+        assertEq(thirdWinnerPrize, 0);
+        assertEq(secondWinnerPrize, 0);
+        assertEq(firstWinnerPrize, 0);
+        assertEq(grandWinnerPrize, 142500);
+        assertEq(remainingPrizePool, 150000);
+    }
+
+    function test_CalculatePrizesProjection_AfterThreePrizesDistributed()
+        public
+    {
+        modifiedWeb3Game.hackSetThreePrizesDistributed();
+        modifiedWeb3Game.hackPrizePool(300000);
+        (
+            uint256 sixthWinnerPrize,
+            uint256 fifthWinnerPrize,
+            uint256 fourthWinnerPrize,
+            uint256 thirdWinnerPrize,
+            uint256 secondWinnerPrize,
+            uint256 firstWinnerPrize,
+            uint256 grandWinnerPrize,
+            uint256 remainingPrizePool
+        ) = modifiedWeb3Game.calculatePrizesProjection();
+
+        // console.log("sixthWinnerPrize: ", sixthWinnerPrize);
+        // console.log("fifthWinnerPrize: ", fifthWinnerPrize);
+        // console.log("fourthWinnerPrize: ", fourthWinnerPrize);
+        // console.log("thirdWinnerPrize: ", thirdWinnerPrize);
+        // console.log("secondWinnerPrize: ", secondWinnerPrize);
+        // console.log("firstWinnerPrize: ", firstWinnerPrize);
+        // console.log("grandWinnerPrize: ", grandWinnerPrize);
+        // console.log("remainingPrizePool: ", remainingPrizePool);
+
+        assertEq(sixthWinnerPrize, 0);
+        assertEq(fifthWinnerPrize, 0);
+        assertEq(fourthWinnerPrize, 0);
+        assertEq(thirdWinnerPrize, 14250);
+        assertEq(secondWinnerPrize, 27075);
+        assertEq(firstWinnerPrize, 48735);
+        assertEq(grandWinnerPrize, 97470);
+        assertEq(remainingPrizePool, 102600);
+    }
 }
