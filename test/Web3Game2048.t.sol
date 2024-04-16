@@ -451,7 +451,24 @@ contract Web3Game2048DonateToPrizePoolTest is Web3Game2048BaseTest {
         uint contractBalanceBefore = address(web3Game).balance;
         uint donatorBalanceBefore = address(1).balance;
 
-        web3Game.donateToPrizePool{value: 1 ether}("Jason Yapri");
+        web3Game.donateToPrizePool{value: 1 ether}();
+
+        uint contractBalanceAfter = address(web3Game).balance;
+        uint donatorBalanceAfter = address(1).balance;
+
+        assertEq(contractBalanceBefore + 1 ether, contractBalanceAfter);
+        assertEq(donatorBalanceAfter < donatorBalanceBefore, true);
+    }
+
+    function test_donateToPrizePool_WithoutCallingFunction() public {
+        deal(address(1), 2 ether);
+        vm.startPrank(address(1));
+
+        uint contractBalanceBefore = address(web3Game).balance;
+        uint donatorBalanceBefore = address(1).balance;
+
+        (bool success, ) = payable(address(web3Game)).call{value: 1 ether}("");
+        if (!success) revert NoAmountSent();
 
         uint contractBalanceAfter = address(web3Game).balance;
         uint donatorBalanceAfter = address(1).balance;
@@ -463,7 +480,7 @@ contract Web3Game2048DonateToPrizePoolTest is Web3Game2048BaseTest {
     function test_RevertIf_NoAmountSent() public {
         vm.prank(address(1));
         vm.expectRevert(abi.encodeWithSelector(NoAmountSent.selector));
-        web3Game.donateToPrizePool("Jason Yapri");
+        web3Game.donateToPrizePool();
     }
 
     function test_RevertIf_CircuitBreakerActivated() public {
@@ -473,7 +490,7 @@ contract Web3Game2048DonateToPrizePoolTest is Web3Game2048BaseTest {
         vm.startPrank(address(1));
 
         vm.expectRevert();
-        web3Game.donateToPrizePool{value: 1 ether}("Jason Yapri");
+        web3Game.donateToPrizePool{value: 1 ether}();
     }
 }
 
@@ -488,7 +505,7 @@ contract Web3Game2048DonateToAuthorTest is Web3Game2048BaseTest {
         uint ownerBalanceBefore = address(this).balance;
         uint donatorBalanceBefore = address(1).balance;
 
-        web3Game.donateToAuthor{value: 1 ether}("Theodora");
+        web3Game.donateToAuthor{value: 1 ether}();
 
         uint contractBalanceAfter = address(web3Game).balance;
         uint ownerBalanceAfter = address(this).balance;
@@ -502,7 +519,7 @@ contract Web3Game2048DonateToAuthorTest is Web3Game2048BaseTest {
     function test_RevertIf_NoAmountSent() public {
         vm.prank(address(1));
         vm.expectRevert(abi.encodeWithSelector(NoAmountSent.selector));
-        web3Game.donateToAuthor("Theodora");
+        web3Game.donateToAuthor();
     }
 
     function test_RevertIf_CircuitBreakerActivated() public {
@@ -512,7 +529,7 @@ contract Web3Game2048DonateToAuthorTest is Web3Game2048BaseTest {
         vm.startPrank(address(1));
 
         vm.expectRevert();
-        web3Game.donateToAuthor{value: 1 ether}("Theodora");
+        web3Game.donateToAuthor{value: 1 ether}();
     }
 }
 

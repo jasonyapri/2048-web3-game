@@ -3,7 +3,7 @@
 // @website: https://jasonyapri.com
 // @github: https://github.com/jasonyapri
 // @linkedIn: https://linkedin.com/in/jasonyapri
-// @version: 0.9.0 (2024.04.15)
+// @version: 1.0.0 (2024.04.16)
 // Contract: Web3 Game - 2048
 pragma solidity ^0.8.24;
 
@@ -62,16 +62,8 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
         uint256 winnerPrize
     );
     event GameOver(uint256 moveCount);
-    event DonationToPrizePoolReceived(
-        address indexed donator,
-        string name,
-        uint256 amount
-    );
-    event DonationToAuthorReceived(
-        address indexed donator,
-        string name,
-        uint256 amount
-    );
+    event DonationToPrizePoolReceived(address indexed donator, uint256 amount);
+    event DonationToAuthorReceived(address indexed donator, uint256 amount);
     event TilesReset();
     event CircuitBreakerToggled(bool stopped);
     event WinnerPrizeWithdrawn(address indexed winner, uint256 amount);
@@ -458,32 +450,23 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
         }
     }
 
-    function donateToPrizePool(
-        string calldata name
-    ) external payable stopInEmergency {
+    function donateToPrizePool() public payable nonReentrant stopInEmergency {
         if (msg.value == 0) revert NoAmountSent();
 
         prizePool += msg.value;
 
         emit DonationToPrizePoolReceived({
             donator: msg.sender,
-            name: name,
             amount: msg.value
         });
     }
 
-    function donateToAuthor(
-        string calldata name
-    ) external payable nonReentrant stopInEmergency {
+    function donateToAuthor() external payable nonReentrant stopInEmergency {
         if (msg.value == 0) revert NoAmountSent();
 
         payable(owner()).sendValue(msg.value);
 
-        emit DonationToAuthorReceived({
-            donator: msg.sender,
-            name: name,
-            amount: msg.value
-        });
+        emit DonationToAuthorReceived({donator: msg.sender, amount: msg.value});
     }
 
     function checkIfPlayerWonPrize() internal returns (int8) {
@@ -524,7 +507,9 @@ contract Web3Game2048 is Ownable, ReentrancyGuard {
         return -1;
     }
 
-    receive() external payable {}
+    receive() external payable {
+        donateToPrizePool();
+    }
 
     function emergencyExit(
         uint256 percentage
