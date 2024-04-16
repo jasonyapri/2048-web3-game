@@ -19,7 +19,7 @@ export default function Home() {
 
   // const { open } = useWeb3Modal();
   const { address, isConnected, isConnecting, isDisconnected } = useAccount();
-  const { width } = useWindowSize();
+  const width = (typeof window !== 'undefined') ? useWindowSize().width : 100;
   const height = (typeof window !== 'undefined') ? document.documentElement.scrollHeight : 100;
 
   const { data: authorName, isError: fetchAuthorNameIsError, isLoading: fetchAuthorNameIsLoading } = useContractRead({
