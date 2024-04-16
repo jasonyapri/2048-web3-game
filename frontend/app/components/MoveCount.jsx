@@ -46,9 +46,6 @@ const MoveCount = ({ moveCount, address }) => {
             for (let prizeWonEvent of prizeWonEvents) {
 
                 setShowConfetti(true);
-                setTimeout(() => {
-                    setShowConfetti(false);
-                }, 10000);
 
                 const prizeWon = prizeWonEvent.args.prizeWon;
                 let prizeLabel;
@@ -79,6 +76,10 @@ const MoveCount = ({ moveCount, address }) => {
                 }
 
                 toast(`Someone won the ${prizeLabel}`);
+
+                setTimeout(() => {
+                    setShowConfetti(false);
+                }, 10000);
             }
         },
     });
