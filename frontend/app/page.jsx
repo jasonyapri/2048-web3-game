@@ -210,7 +210,7 @@ export default function Home() {
           <span>See <a style={{ cursor: "pointer" }} onClick={() => setOpenPrizeModal(true)} className="list-prizes-button">List of Prizes</a>.</span>
         </div>
         <div className="line"></div>
-        <Donate />
+        <Donate address={address} />
         <div className="line"></div>
         <footer className="game-footer">
           Created by <a href="https://jasonyapri.com" className="author" target="_blank">Jason Yapri</a>. Proudly made in <a href="https://www.google.com/search?q=indonesia" className="indonesia" target="_blank">Indonesia</a>.

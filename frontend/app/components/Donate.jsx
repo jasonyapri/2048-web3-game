@@ -9,7 +9,7 @@ import Confetti from 'react-confetti'
 import useWindowSize from 'react-use/lib/useWindowSize'
 import { toast } from "react-toastify";
 
-const Donate = () => {
+const Donate = ({ address }) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
     const DEFAULT_DONATE_AMOUNT = "0.05";
@@ -18,6 +18,17 @@ const Donate = () => {
     const { width } = useWindowSize();
     const height = document.documentElement.scrollHeight;
 
+    const { data: rawPlayerName, isError: fetchPlayerNameIsError, isLoading: fetchPlayerNameIsLoading, refetch: refetchPlayerName } = useContractRead({
+        ...Web3Game2048ContractData,
+        functionName: 'playerNames',
+        args: [address],
+        watch: true
+    });
+
+    useEffect(() => {
+        setDonatorName(rawPlayerName);
+    }, [rawPlayerName]);
+
     useContractEvent({
         ...Web3Game2048ContractData,
         eventName: 'DonationToPrizePoolReceived',
@@ -25,7 +36,7 @@ const Donate = () => {
             for (let donationLog of donationLogs) {
                 setShowConfetti(true);
 
-                toast(`Somebody donated ${ethers.utils.formatEther(donationLog.args.amount)} to the Prize Pool.`);
+                toast(`Somebody donated ${ethers.utils.formatEther(donationLog.args.amount)} ETH to the Prize Pool!`);
 
                 setDonateToPrizePoolAmount(DEFAULT_DONATE_AMOUNT);
 
@@ -47,6 +58,12 @@ const Donate = () => {
             setDonateToPrizePoolAmountInWei(newAmountInWei);
         }
     }, [donateToPrizePoolAmount]);
+
+    const { data: setPlayerNameData, isLoading: setPlayerNameIsLoading, isSuccess: setPlayerNameIsSuccess, write: setPlayerName } = useContractWrite({
+        ...Web3Game2048ContractData,
+        functionName: 'setPlayerName',
+        args: [donatorName],
+    });
 
     const { data: donateToPrizePooleData, isLoading: donateToPrizePoolIsLoading, isSuccess: donateToPrizePoolIsSuccess, write: donateToPrizePool } = useContractWrite({
         ...Web3Game2048ContractData,
@@ -96,6 +113,12 @@ const Donate = () => {
                                         </div>
                                     }
                                 />
+                                <Button color="secondary" className="w-28" size="sm" isDisabled={setPlayerNameIsLoading} onClick={() => setPlayerName()}>
+                                    {setPlayerNameIsLoading ? "Loading..." : "Set Name"}
+                                </Button>
+
+                                <Divider />
+
                                 <h2>Donate to Prize Pool</h2>
                                 <Input
                                     type="number"
