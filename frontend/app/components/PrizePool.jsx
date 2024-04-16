@@ -15,6 +15,23 @@ const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
 const PrizePool = ({ prizePoolInEth, address, openPrizeModal, setOpenPrizeModal }) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+    useContractEvent({
+        ...Web3Game2048ContractData,
+        eventName: 'WinnerPrizeWithdrawn',
+        async listener(logs) {
+            await Promise.all(logs.map(async (log) => {
+                let block = await provider.getBlock(parseInt(newMoveEvent.blockNumber));
+                const data = {
+                    timestamp: block.timestamp,
+                    winner: log.args.winner,
+                    amount: log.amount,
+                    subject: (log.args.winner == address) ? "You" : "Someone",
+                }
+                toast.success(`${data.subject} has withdrawn ${ethers.utils.formatEther(data.amount)} ETH from their prize balance~`);
+            }));
+        },
+    });
+
     useEffect(() => {
         if (openPrizeModal) {
             onOpen();

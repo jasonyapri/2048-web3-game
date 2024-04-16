@@ -15,17 +15,18 @@ const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
 
 const MoveCount = ({ moveCount, address }) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const { width, height } = useWindowSize();
+    const { width } = useWindowSize();
+    const height = document.documentElement.scrollHeight;
 
     const [showConfetti, setShowConfetti] = useState(false);
 
     useContractEvent({
         ...Web3Game2048ContractData,
         eventName: 'GameOver',
-        listener(gameOverEvents) {
-            for (let gameOverEvent of gameOverEvents) {
-                toast.danger(`Game Over after ${newMoveEvent.args.moveCount} moves.`);
-            }
+        async listener(gameOverEvents) {
+            await Promise.all(gameOverEvents.map(async (gameOverEvent) => {
+                toast.danger(`Game Over after ${gameOverEvent.args.moveCount} moves.`);
+            }));
         },
     });
 
@@ -33,9 +34,10 @@ const MoveCount = ({ moveCount, address }) => {
         ...Web3Game2048ContractData,
         eventName: 'YouHaveWonTheGame',
         async listener(gameWonEvents) {
-            for (let gameWonEvent of gameWonEvents) {
-                toast(`Someone has won the game!`);
-            }
+            await Promise.all(gameWonEvents.map(async (gameWonEvent) => {
+                const subject = (gameWonEvent.args.winner == address) ? 'You' : 'Someone';
+                toast(`${subject} has won the game!`);
+            }));
         },
     });
 
@@ -43,10 +45,11 @@ const MoveCount = ({ moveCount, address }) => {
         ...Web3Game2048ContractData,
         eventName: 'YouWonAPrize',
         async listener(prizeWonEvents) {
-            for (let prizeWonEvent of prizeWonEvents) {
+            await Promise.all(prizeWonEvents.map(async (prizeWonEvent) => {
 
                 setShowConfetti(true);
 
+                const subject = (prizeWonEvent.args.winner == address) ? 'You' : 'Someone';
                 const prizeWon = prizeWonEvent.args.prizeWon;
                 let prizeLabel;
                 switch (prizeWon) {
@@ -75,12 +78,12 @@ const MoveCount = ({ moveCount, address }) => {
                         prizeLabel = 'unknown prize! (?)';
                 }
 
-                toast(`Someone won the ${prizeLabel}`);
+                toast(`${subject} won the ${prizeLabel}`);
 
                 setTimeout(() => {
                     setShowConfetti(false);
                 }, 10000);
-            }
+            }));
         },
     });
 
@@ -142,19 +145,19 @@ const MoveCount = ({ moveCount, address }) => {
     useContractEvent({
         ...Web3Game2048ContractData,
         eventName: 'Moved',
-        listener(newMoveEvents) {
-            console.log(newMoveEvents);
-            for (let newMoveEvent of newMoveEvents) {
+        async listener(newMoveEvents) {
+            await Promise.all(newMoveEvents.map(async (newMoveEvent) => {
                 let block = provider.getBlock(parseInt(newMoveEvent.blockNumber));
                 const newMove = {
                     timestamp: block.timestamp,
                     player: newMoveEvent.args.player,
                     blockNumber: newMoveEvent.blockNumber,
                     move: newMoveEvent.args.move,
+                    subject: (newMoveEvent.args.player == address) ? 'You' : 'Someone',
                 }
-                toast.success(`Someone moved the tiles ${getMoveLabel(newMove.move)}.`);
-                setMoveHistory([newMove, ...moveHistory]);
-            }
+                toast.success(`${newMove.subject} moved the tiles ${getMoveLabel(newMove.move)}.`);
+                setMoveHistory(prevMoveHistory => [newMove, ...prevMoveHistory]);
+            }));
         },
     });
 

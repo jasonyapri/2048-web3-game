@@ -32,8 +32,8 @@ const Donate = ({ address }) => {
     useContractEvent({
         ...Web3Game2048ContractData,
         eventName: 'DonationToPrizePoolReceived',
-        listener(donationLogs) {
-            for (let donationLog of donationLogs) {
+        async listener(donationLogs) {
+            await Promise.all(donationLogs.map(async (donationLog) => {
                 setShowConfetti(true);
 
                 toast(`Somebody donated ${ethers.utils.formatEther(donationLog.args.amount)} ETH to the Prize Pool!`);
@@ -43,7 +43,7 @@ const Donate = ({ address }) => {
                 setTimeout(() => {
                     setShowConfetti(false);
                 }, 10000);
-            }
+            }));
         },
     });
 
