@@ -198,7 +198,6 @@ body {
           box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
 
           &.tile-2 {
-            @apply flex justify-center items-center;
             background: linear-gradient(
               to bottom left,
               #FFF1D0,
@@ -215,7 +214,6 @@ body {
           }
 
           &.tile-4 {
-            @apply flex justify-center items-center;
             background: linear-gradient(
               to bottom left,
               #E9EBF8,
@@ -232,7 +230,6 @@ body {
           }
 
           &.tile-8 {
-            @apply flex justify-center items-center;
             background: linear-gradient(
               to bottom left,
               #A5F8D3,
@@ -249,7 +246,6 @@ body {
           }
 
           &.tile-16 {
-            @apply flex justify-center items-center;
             background: linear-gradient(
               to bottom left,
               #FFB997,
@@ -266,7 +262,6 @@ body {
           }
 
           &.tile-32 {
-            @apply flex justify-center items-center;
             background: linear-gradient(
               to bottom left,
               #F06543,
@@ -283,7 +278,6 @@ body {
           }
 
           &.tile-64 {
-            @apply flex justify-center items-center;
             background: linear-gradient(
               to bottom left,
               #BD320F,
@@ -300,7 +294,6 @@ body {
           }
 
           &.tile-128 {
-            @apply flex justify-center items-center;
             background: linear-gradient(
               to bottom left,
               #95B8D1,
@@ -317,7 +310,6 @@ body {
           }
 
           &.tile-256 {
-            @apply flex justify-center items-center;
             background: linear-gradient(
               to bottom left,
               #2B2D42,
@@ -334,7 +326,6 @@ body {
           }
 
           &.tile-512 {
-            @apply flex justify-center items-center;
             background: linear-gradient(
               to bottom left,
               #977390,
@@ -351,7 +342,6 @@ body {
           }
 
           &.tile-1024 {
-            @apply flex justify-center items-center;
             background: linear-gradient(
               to bottom left,
               #A54657,
@@ -368,7 +358,6 @@ body {
           }
 
           &.tile-2048 {
-            @apply flex justify-center items-center;
             background: linear-gradient(
               to bottom left,
               #FDC801,

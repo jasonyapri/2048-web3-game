@@ -116,6 +116,21 @@ export default function Home() {
     }
   }, [rawMoveCount]);
 
+  const backgroundStyle = {
+    0: '',
+    2: 'linear-gradient(to bottom left,  #FFF1D0, #99917D)',
+    4: 'linear-gradient(to bottom left,  #E9EBF8, #898A92)',
+    8: 'linear-gradient(to bottom left,  #A5F8D3, #61927C)',
+    16: 'linear-gradient(to bottom left,  #FFB997, #996F5B)',
+    32: 'linear-gradient(to bottom left,  #F06543, #8A3A27)',
+    64: 'linear-gradient(to bottom left,  #BD320F, #571707)',
+    128: 'linear-gradient(to bottom left,  #95B8D1, #4C5E6B)',
+    256: 'linear-gradient(to bottom left,  #2B2D42, #6D73A8)',
+    512: 'linear-gradient(to bottom left,  #977390, #31252F)',
+    1024: 'linear-gradient(to bottom left,  #A54657, #3F1B21)',
+    2048: 'linear-gradient(to bottom left,  #FDC801, #977701)',
+  };
+
   return (
     <div className="game-container">
       <ToastContainer />
@@ -133,6 +148,8 @@ export default function Home() {
           <span>CONNECT WALLET</span>
         </button> */}
         <img src="/img/optimism.png" className="optimism-logo" />
+
+
       </header>
       <main className="game-main">
         <div className="game-header">
@@ -154,7 +171,7 @@ export default function Home() {
               <div className={`row row-${rowIndex}`} key={rowIndex}>
                 {
                   Array.from({ length: 4 }, (_, colIndex) => (
-                    <div className={`tile tile-${rowIndex}-${colIndex} tile-${gameBoardTiles ? (gameBoardTiles[(rowIndex * 4) + colIndex]) : ""}`} key={`${rowIndex}-${colIndex}`}></div>
+                    <div className={`tile tile-${rowIndex}-${colIndex} tile-${gameBoardTiles ? (gameBoardTiles[(rowIndex * 4) + colIndex]) : ""} flex justify-center items-center`} key={`${rowIndex}-${colIndex}`} style={{ background: backgroundStyle[gameBoardTiles ? (gameBoardTiles[(rowIndex * 4) + colIndex]) : "0"] }}></div>
                   ))
                 }
               </div>
