@@ -12,7 +12,7 @@ import { useContractEvent, useContractRead, useContractReads, useContractWrite }
 
 const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
 
-const PrizePool = ({ prizePoolInEth, address, openPrizeModal, setOpenPrizeModal }) => {
+const PrizePool = ({ prizePoolInEth, address, openPrizeModal, setOpenPrizeModal, width, height }) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
     useContractEvent({

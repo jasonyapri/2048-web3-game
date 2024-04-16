@@ -6,17 +6,14 @@ import Web3Game2048ContractData from '@/contracts/Web3Game2048ContractData';
 import { useContractEvent, useContractRead, useContractReads, useContractWrite } from 'wagmi';
 import { ethers } from 'ethers';
 import Confetti from 'react-confetti'
-import useWindowSize from 'react-use/lib/useWindowSize'
 import { toast } from "react-toastify";
 
-const Donate = ({ address }) => {
+const Donate = ({ address, width, height }) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
     const DEFAULT_DONATE_AMOUNT = "0.05";
 
     const [showConfetti, setShowConfetti] = useState(false);
-    const { width } = useWindowSize();
-    const height = document.documentElement.scrollHeight;
 
     const { data: rawPlayerName, isError: fetchPlayerNameIsError, isLoading: fetchPlayerNameIsLoading, refetch: refetchPlayerName } = useContractRead({
         ...Web3Game2048ContractData,

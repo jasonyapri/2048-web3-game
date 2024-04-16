@@ -11,6 +11,7 @@ import MoveCount from './components/MoveCount';
 import PrizePool from './components/PrizePool';
 import Donate from './components/Donate';
 import { ethers } from 'ethers';
+import useWindowSize from 'react-use/lib/useWindowSize'
 
 export default function Home() {
 
@@ -18,6 +19,8 @@ export default function Home() {
 
   // const { open } = useWeb3Modal();
   const { address, isConnected, isConnecting, isDisconnected } = useAccount();
+  const { width } = useWindowSize();
+  const height = (typeof window !== 'undefined') ? document.documentElement.scrollHeight : 100;
 
   const { data: authorName, isError: fetchAuthorNameIsError, isLoading: fetchAuthorNameIsLoading } = useContractRead({
     ...Web3Game2048ContractData,
@@ -138,8 +141,8 @@ export default function Home() {
             <img src="/img/title.png" className="title-logo" />
           </div>
           <div className="game-info">
-            <MoveCount moveCount={moveCount} address={address} />
-            <PrizePool prizePoolInEth={prizePoolInEth} address={address} openPrizeModal={openPrizeModal} setOpenPrizeModal={setOpenPrizeModal} ></PrizePool>
+            <MoveCount moveCount={moveCount} address={address} width={width} height={height} />
+            <PrizePool prizePoolInEth={prizePoolInEth} address={address} openPrizeModal={openPrizeModal} setOpenPrizeModal={setOpenPrizeModal} width={width} height={height} ></PrizePool>
           </div>
         </div>
         <div className="game-instructions instruction-1">
@@ -210,7 +213,7 @@ export default function Home() {
           <span>See <a style={{ cursor: "pointer" }} onClick={() => setOpenPrizeModal(true)} className="list-prizes-button">List of Prizes</a>.</span>
         </div>
         <div className="line"></div>
-        <Donate address={address} />
+        <Donate address={address} width={width} height={height} />
         <div className="line"></div>
         <footer className="game-footer">
           Created by <a href="https://jasonyapri.com" className="author" target="_blank">Jason Yapri</a>. Proudly made in <a href="https://www.google.com/search?q=indonesia" className="indonesia" target="_blank">Indonesia</a>.

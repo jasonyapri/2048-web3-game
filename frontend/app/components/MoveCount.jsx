@@ -8,15 +8,12 @@ import { ethers } from 'ethers';
 import Web3Game2048ContractData from '@/contracts/Web3Game2048ContractData';
 import moment from 'moment';
 import { useContractEvent } from 'wagmi';
-import useWindowSize from 'react-use/lib/useWindowSize'
 import Confetti from 'react-confetti'
 
 const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
 
-const MoveCount = ({ moveCount, address }) => {
+const MoveCount = ({ moveCount, address, width, height }) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const { width } = useWindowSize();
-    const height = document.documentElement.scrollHeight;
 
     const [showConfetti, setShowConfetti] = useState(false);
 
