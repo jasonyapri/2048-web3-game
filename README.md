@@ -1,28 +1,37 @@
 ## Introduction
-Blockchain-based implementation of the popular 2048 game,
-leveraging Web3 technology to enable decentralized gameplay and transactions.
+<a href="https://2048.jasonyapri.com" target="_blank"><img src="img/jasonyapri-web3-game-2048.jpg" alt="Web3 Game: 2048. Created by Jason Yapri" height="300"></a>&nbsp;
+<a href="https://2048.jasonyapri.com" target="_blank"><img src="img/jasonyapri-web3-game-2048_2.png" alt="Web3 Game: 2048. Created by Jason Yapri" height="300"></a>
+<p>Web3 Implementation of the 2048 Game running on the EVM L2 blockchain: Optimism Sepolia Testnet.</p>
+<p>The board is shared among all players worldwide. Everyone have the chance to win ETH from the Prize Pool once you reach a certain number for the first time! <i>(Currently it's only optimized for desktop browser with browser wallet like Metamask)</i></p>
+👉 <a href="https://2048.jasonyapri.com">Try it now</a> 👈
 
-The game is played on a 4x4 grid, where the player combines tiles with the same numbers
-to achieve the tile with the number 2048.
 
 ## Getting Started
 
 ### Smart Contract
 
-...
+```
+forge test -vv
+
+forge script script/Web3Game2048.s.sol:Web3Game2048Script --broadcast --verify
+```
+
+1) Run the test to make sure it all passed
+2) Create `.env` file based on `.env.sample`
+3) Deploy the solidity smart contract using the script
 
 ### Frontend
 
 First, open frontend folder and run the development server:
 
 ```bash
+cd frontend
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+npm run build
+
+npm run start
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
