@@ -22,7 +22,7 @@ const MoveCount = ({ moveCount, address, width, height }) => {
         eventName: 'GameOver',
         async listener(gameOverEvents) {
             await Promise.all(gameOverEvents.map(async (gameOverEvent) => {
-                toast.danger(`Game Over after ${gameOverEvent.args.moveCount} moves.`);
+                toast.error(`Game Over after ${gameOverEvent.args.moveCount} moves.`);
             }));
         },
     });
@@ -144,9 +144,19 @@ const MoveCount = ({ moveCount, address, width, height }) => {
         eventName: 'Moved',
         async listener(newMoveEvents) {
             await Promise.all(newMoveEvents.map(async (newMoveEvent) => {
-                let block = provider.getBlock(parseInt(newMoveEvent.blockNumber));
+                let block = provider.getBlock(parseInt(newMoveEvent.blockNumber)); try {
+                    // Call your smart contract function here
+                    // For example:
+                    // await contract.someFunction();
+                } catch (error) {
+                    if (error.code === 'CALL_EXCEPTION') {
+                        console.log('The function was reverted.');
+                    } else {
+                        console.log('An unknown error occurred:', error);
+                    }
+                }
                 const newMove = {
-                    timestamp: block.timestamp,
+                    timestamp: moment.unix(block.timestamp).format('MMMM D, YYYY | HH:mm'),
                     player: newMoveEvent.args.player,
                     blockNumber: newMoveEvent.blockNumber,
                     move: newMoveEvent.args.move,

@@ -77,6 +77,9 @@ export default function Home() {
     functionName: 'makeMove',
     args: [0],
     gas: MAKE_MOVE_GAS_LIMIT,
+    onSettled(data, error) {
+      if (error) toast.error("Up is not a valid move. Try another direction~");
+    },
   });
 
   const { data: makeMoveDownData, isLoading: makeMoveDownIsLoading, isSuccess: makeMoveDownIsSuccess, write: makeMoveDown } = useContractWrite({
@@ -84,6 +87,9 @@ export default function Home() {
     functionName: 'makeMove',
     args: [1],
     gas: MAKE_MOVE_GAS_LIMIT,
+    onSettled(data, error) {
+      if (error) toast.error("Down is not a valid move. Try another direction~");
+    },
   });
 
   const { data: makeMoveLeftData, isLoading: makeMoveLeftIsLoading, isSuccess: makeMoveLeftIsSuccess, write: makeMoveLeft } = useContractWrite({
@@ -91,6 +97,9 @@ export default function Home() {
     functionName: 'makeMove',
     args: [2],
     gas: MAKE_MOVE_GAS_LIMIT,
+    onSettled(data, error) {
+      if (error) toast.error("Left is not a valid move. Try another direction~");
+    },
   });
 
   const { data: makeMoveRightData, isLoading: makeMoveRightIsLoading, isSuccess: makeMoveRightIsSuccess, write: makeMoveRight } = useContractWrite({
@@ -98,6 +107,9 @@ export default function Home() {
     functionName: 'makeMove',
     args: [3],
     gas: MAKE_MOVE_GAS_LIMIT,
+    onSettled(data, error) {
+      if (error) toast.error("Right is not a valid move. Try another direction~");
+    },
   });
 
   const [prizePoolInEth, setPrizePoolInEth] = useState(0);
