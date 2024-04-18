@@ -106,7 +106,7 @@ export default function Home() {
   useEffect(() => {
     if (rawPrizePool) {
       const prizePoolInWei = ethers.BigNumber.from(rawPrizePool);
-      setPrizePoolInEth(ethers.utils.formatEther(prizePoolInWei));
+      setPrizePoolInEth(parseFloat(ethers.utils.formatEther(prizePoolInWei)).toFixed(6));
     }
   }, [rawPrizePool]);
 
