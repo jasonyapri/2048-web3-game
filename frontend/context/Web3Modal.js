@@ -6,6 +6,8 @@ import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { optimism, optimismSepolia, chain } from 'viem/chains';
 import { infuraProvider } from 'wagmi/providers/infura';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { InjectedConnector } from 'wagmi/connectors/injected';
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 
 // 1. Get projectId at https://cloud.walletconnect.com
 const projectId = process.env.PROJECT_ID;
@@ -32,6 +34,15 @@ const { chains, publicClient } = configureChains(
 
 const wagmiConfig = createConfig({
     autoConnect: true,
+    connectors: [
+        new InjectedConnector({ chains }),
+        new WalletConnectConnector({
+            chains: [optimismSepolia],
+            options: {
+              projectId: process.env.PROJECT_ID,
+            },
+          })
+      ],
     publicClient,
     metadata,
 })
