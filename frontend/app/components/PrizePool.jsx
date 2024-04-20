@@ -222,6 +222,7 @@ const PrizePool = ({ prizePoolInEth, address, openPrizeModal, setOpenPrizeModal,
             <Modal
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
+                placement="center"
                 classNames={{
                     header: "bg-theme-header",
                     body: "bg-theme-header",
@@ -236,8 +237,8 @@ const PrizePool = ({ prizePoolInEth, address, openPrizeModal, setOpenPrizeModal,
                                 Anyone who reach the following tile will be rewarded with ETH from the Prize Pool !
                                 <div className="gap-4 grid grid-cols-3 sm:grid-cols-3">
                                     {prizeList.map((item, index) => (
-                                        <Card shadow="sm" key={index}>
-                                            <CardBody className="overflow-visible p-1">
+                                        <Card shadow="sm" key={index} className="prize-card">
+                                            <CardBody className="overflow-visible p-1 prize-card-body flex-none">
                                                 <Tooltip showArrow={true} content={`${prizePercentage[index]}% of Prize Pool`} key="secondary" color="secondary">
                                                     <Image
                                                         shadow="sm"

@@ -209,6 +209,7 @@ const MoveCount = ({ moveCount, address, width, height }) => {
             <Modal
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
+                placement="center"
                 classNames={{
                     header: "bg-theme-header",
                     body: "bg-theme-header",
