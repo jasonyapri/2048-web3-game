@@ -6,6 +6,16 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --main-font-size: 20px;
+  --mobile-font-size: 17px;
+  --tile-font-size: 55px;
+  --mobile-tile-font-size: 35px;
+  --tile-2-font-size: 48px;
+  --mobile-tile-2-font-size: 32px;
+  --tile-3-font-size: 40px;
+  --mobile-tile-3-font-size: 30px;
+  --tile-4-font-size: 36px;
+  --mobile-tile-4-font-size: 26px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -72,14 +82,15 @@ body {
     }
     
     .optimism-logo {
-      height: 46.667px;
+      display: none;
     }
   }
   
   main.game-main {
     @apply flex flex-col space-y-3;
+    padding: 0 20px;
     
-    width: 530px;
+    width: 100%;
     margin-top: 40px;
   
     .game-header {
@@ -89,9 +100,9 @@ body {
 
       .title-group {
         .subtitle {
-          @apply flex items-center justify-center w-20 h-6 font-black rounded-md;
+          @apply flex items-center justify-center w-16 sm:w-20 h-5 sm:h-6 font-black rounded-md;
   
-          font-size: 14px;
+          font-size: 11px;
           color: black;
           background: linear-gradient(
             to top right,
@@ -103,7 +114,7 @@ body {
         }
   
         .title-logo {
-          height: 73px;
+          height: 45px;
         }
   
         .title {
@@ -121,8 +132,8 @@ body {
         .move-count {
           @apply flex flex-col items-center justify-center text-theme-primary-background px-wallet-balance-horizontal pt-wallet-balance-top pb-wallet-balance-bottom rounded-md border-1 border-black font-black duration-200;
           
-          height: 60px;
-          width: 130px;
+          height: 46.1538461538px;
+          width: 80px;
           background: linear-gradient(
             to bottom,
             #FDC801,
@@ -135,13 +146,13 @@ body {
           }
       
           .move-count-title {
-            font-size: 14px;
-            margin-top: 10px;
-            line-height: 10px;
+            font-size: 11px;
+            margin-top: 13px;
+            line-height: 1px;
           }
           
           .move-count-number {
-            font-size: 23px;
+            font-size: 18px;
           }
         }
 
@@ -150,9 +161,9 @@ body {
         }
   
         .prize-pool {
-          @apply w-44 flex flex-col items-center justify-center text-theme-primary-background px-wallet-balance-horizontal pt-wallet-balance-top pb-wallet-balance-bottom rounded-md border-1 border-black font-black;
+          @apply w-32 sm:w-44 flex flex-col items-center justify-center text-theme-primary-background px-wallet-balance-horizontal pt-wallet-balance-top pb-wallet-balance-bottom rounded-md border-1 border-black font-black;
           
-          height: 60px;
+          height: 46.1538461538px;
           background: linear-gradient(
             to bottom,
             #FDC801,
@@ -165,14 +176,13 @@ body {
           }
       
           .prize-pool-title {
-            font-size: 12px;
-            margin-top: 10px;
-            line-height: 10px;
-            font-size: 14px;
+            font-size: 11px;
+            margin-top: 13px;
+            line-height: 1px;
           }
           
           .prize-pool-amount {
-            font-size: 23px;
+            font-size: 18px;
           }
         }
       }
@@ -185,7 +195,7 @@ body {
       color: black;
       border-radius: 10px;
       box-shadow: 0 0 15px 2px rgba(255, 255, 255, 0.4);
-      padding: 15px;
+      padding: 10px;
 
       .row {
         @apply flex space-x-3 justify-around w-full;
@@ -206,7 +216,7 @@ body {
 
             &::before {
               content: '2';
-              font-size: 55px;
+              font-size: var(--mobile-tile-font-size);
               font-weight: bold;
               color: #1C2A4A;
               text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -222,7 +232,7 @@ body {
 
             &::before {
               content: '4';
-              font-size: 55px;
+              font-size: var(--mobile-tile-font-size);
               font-weight: bold;
               color: #1C2A4A;
               text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -238,7 +248,7 @@ body {
 
             &::before {
               content: '8';
-              font-size: 55px;
+              font-size: var(--mobile-tile-font-size);
               font-weight: bold;
               color: #1C2A4A;
               text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -254,7 +264,7 @@ body {
 
             &::before {
               content: '16';
-              font-size: 48px;
+              font-size: var(--mobile-tile-2-font-size);
               font-weight: bold;
               color: #1C2A4A;
               text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -270,7 +280,7 @@ body {
 
             &::before {
               content: '32';
-              font-size: 48px;
+              font-size: var(--mobile-tile-2-font-size);
               font-weight: bold;
               color: #FFFFFF;
               text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -286,7 +296,7 @@ body {
 
             &::before {
               content: '64';
-              font-size: 48px;
+              font-size: var(--mobile-tile-2-font-size);
               font-weight: bold;
               color: #FFFFFF;
               text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -302,7 +312,7 @@ body {
 
             &::before {
               content: '128';
-              font-size: 40px;
+              font-size: var(--mobile-tile-3-font-size);
               font-weight: bold;
               color: #FFFFFF;
               text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -318,7 +328,7 @@ body {
 
             &::before {
               content: '256';
-              font-size: 40px;
+              font-size: var(--mobile-tile-3-font-size);
               font-weight: bold;
               color: #FFFFFF;
               text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -334,7 +344,7 @@ body {
 
             &::before {
               content: '512';
-              font-size: 40px;
+              font-size: var(--mobile-tile-3-font-size);
               font-weight: bold;
               color: #FFFFFF;
               text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -350,7 +360,7 @@ body {
 
             &::before {
               content: '1024';
-              font-size: 36px;
+              font-size: var(--mobile-tile-4-font-size);
               font-weight: bold;
               color: #FFFFFF;
               text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -366,7 +376,7 @@ body {
 
             &::before {
               content: '2048';
-              font-size: 36px;
+              font-size: var(--mobile-tile-4-font-size);
               font-weight: bold;
               color: #0A0F1B;
               text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -382,6 +392,8 @@ body {
 
       .game-buttons {
         @apply flex w-full space-x-3 justify-center;
+
+        margin-top: 10px;
     
         .game-button {
           @apply text-white border-1 space-x-2 border-black rounded-md flex items-center justify-center duration-200;
@@ -407,16 +419,16 @@ body {
         @apply flex w-full justify-center;
   
         margin-top: 8px !important;
+        margin-bottom: 15px !important;
   
         &.hide {
           display: none;
         }
       }
     }
-    
 
     .game-instructions {
-      font-size: 20px;
+      font-size: var(--mobile-font-size);
 
       .title {
         @apply text-theme-secondary font-black;
@@ -436,7 +448,7 @@ body {
     }
 
     .donate-to-prize-pool {
-      font-size: 20px;
+      font-size: var(--mobile-font-size);
 
       a.open-donate-modal-button {
         @apply text-theme-secondary font-black underline;
@@ -456,7 +468,7 @@ body {
     }
 
     .game-footer {
-      font-size: 20px;
+      font-size: var(--mobile-font-size);
       margin-bottom: 100px !important;
 
       a.author {
@@ -480,4 +492,147 @@ body {
 
 table {
   color: #141414;
+}
+
+@media (min-width: 640px) {
+  .wallet-header {
+    .optimism-logo {
+      height: 46.667px !important;
+    }
+  }
+
+  main.game-main{
+    width: 530px !important;
+    padding: 0px !important;
+
+    .game-header {
+      .title-group {
+        .subtitle {
+          font-size: 14px !important;
+        }
+  
+        .title-logo {
+          height: 73px !important;
+        }
+      }
+
+      .game-info {
+        .move-count {
+          height: 60px !important;
+          width: 130px !important;
+      
+          .move-count-title {
+            font-size: 14px !important;
+            margin-top: 10px !important;
+            line-height: 10px !important;
+          }
+          
+          .move-count-number {
+            font-size: 23px !important;
+          }
+        }
+      
+        .prize-pool {
+          height: 60px !important;
+      
+          .prize-pool-title {
+            font-size: 12px !important;
+            margin-top: 10px !important;
+            line-height: 10px !important;
+            font-size: 14px !important;
+          }
+                
+          .prize-pool-amount {
+            font-size: 23px !important;
+          }
+        }
+      }
+    }
+
+    .game-board {
+      padding: 15px !important;
+
+      .row {
+        .tile {
+          &.tile-2 {
+            &::before {
+              font-size: var(--tile-font-size) !important;
+            }
+          }
+
+          &.tile-4 {
+            &::before {
+              font-size: var(--tile-font-size) !important;
+            }
+          }
+
+          &.tile-8 {
+            &::before {
+              font-size: var(--tile-font-size) !important;
+            }
+          }
+
+          &.tile-16 {
+            &::before {
+              font-size: var(--tile-2-font-size) !important;
+            }
+          }
+
+          &.tile-32 {
+            &::before {
+              font-size: var(--tile-2-font-size) !important;
+            }
+          }
+
+          &.tile-64 {
+            &::before {
+              font-size: var(--tile-2-font-size) !important;
+            }
+          }
+
+          &.tile-128 {
+            &::before {
+              font-size: var(--tile-3-font-size) !important;
+            }
+          }
+
+          &.tile-256 {
+            &::before {
+              font-size: var(--tile-3-font-size) !important;
+            }
+          }
+
+          &.tile-512 {
+            &::before {
+              font-size: var(--tile-3-font-size) !important;
+            }
+          }
+
+          &.tile-1024 {
+            &::before {
+              font-size: var(--tile-4-font-size) !important;
+            }
+          }
+
+          &.tile-2048 {
+            &::before {
+              font-size: var(--tile-4-font-size) !important;
+            }
+          }
+        }
+      }
+    }
+
+    .game-instructions {
+      font-size: var(--main-font-size) !important;
+
+      .donate-to-prize-pool {
+        font-size: var(--main-font-size) !important;
+      }
+    }
+
+    .game-footer {
+      font-size: var(--main-font-size) !important;
+    }
+  }
 }
