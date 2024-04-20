@@ -78,7 +78,11 @@ export default function Home() {
     args: [0],
     gas: MAKE_MOVE_GAS_LIMIT,
     onSettled(data, error) {
-      if (error) toast.error("Up is not a valid move. Try another direction~");
+      if (error) {
+        if (error.message.includes('NoValidMoveMade')) {
+          toast.error("Up is not a valid move. Try another direction~");
+        }
+      }
     },
   });
 
@@ -88,7 +92,11 @@ export default function Home() {
     args: [1],
     gas: MAKE_MOVE_GAS_LIMIT,
     onSettled(data, error) {
-      if (error) toast.error("Down is not a valid move. Try another direction~");
+      if (error) {
+        if (error.message.includes('NoValidMoveMade')) {
+          toast.error("Down is not a valid move. Try another direction~");
+        }
+      }
     },
   });
 
@@ -98,7 +106,11 @@ export default function Home() {
     args: [2],
     gas: MAKE_MOVE_GAS_LIMIT,
     onSettled(data, error) {
-      if (error) toast.error("Left is not a valid move. Try another direction~");
+      if (error) {
+        if (error.message.includes('NoValidMoveMade')) {
+          toast.error("Left is not a valid move. Try another direction~");
+        }
+      }
     },
   });
 
@@ -108,7 +120,11 @@ export default function Home() {
     args: [3],
     gas: MAKE_MOVE_GAS_LIMIT,
     onSettled(data, error) {
-      if (error) toast.error("Right is not a valid move. Try another direction~");
+      if (error) {
+        if (error.message.includes('NoValidMoveMade')) {
+          toast.error("Right is not a valid move. Try another direction~");
+        }
+      }
     },
   });
 
