@@ -1,5 +1,5 @@
 const Web3Game2048ContractData = {
-  "address": "0xc9F361e91daa010cC79C6B57E9a6EA0A26C3724e",
+  "address": "0x2CF3548eE283C07636E86EE921aBa3F465F159d0",
   "abi": [
    {
       "inputs":[

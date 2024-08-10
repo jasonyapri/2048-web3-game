@@ -6,6 +6,7 @@ import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { optimism, optimismSepolia, chain } from 'viem/chains';
 import { infuraProvider } from 'wagmi/providers/infura';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 
@@ -27,9 +28,17 @@ const metadata = {
 const { chains, publicClient } = configureChains(
     [optimismSepolia],
     [
-        alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY }),
-        // infuraProvider({ apiKey: process.env.INFURA_API_KEY }),
+        jsonRpcProvider({
+          rpc: (chain) => ({
+            http: process.env.QUICKNODE_OPTIMISM_SEPOLIA_RPC_URL,
+            webSocket: process.env.QUICKNODE_OPTIMISM_SEPOLIA_RPC_WS_URL
+          }),
+        }),
     ],
+    // [
+    //     alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY }),
+    //     infuraProvider({ apiKey: process.env.INFURA_API_KEY }),
+    // ],
 );
 
 const wagmiConfig = createConfig({

@@ -10,3 +10,4 @@ gas_reports = ["Web3Game2048"]
 [rpc_endpoints]
 optimism_sepolia = "${OPTIMISM_SEPOLIA_RPC_URL}"
 optimism_mainnet = "${OPTIMISM_MAINNET_RPC_URL}"
+manta_sepolia = "${MANTA_SEPOLIA_RPC_URL}"

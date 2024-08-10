@@ -88,40 +88,40 @@ const MoveCount = ({ moveCount, address, width, height }) => {
     const [isFetchingMoveHistory, setIsFetchingMoveHistory] = useState(false);
 
     useEffect(() => {
-        const fetchMoveHistory = async () => {
-            setIsFetchingMoveHistory(true);
+        // const fetchMoveHistory = async () => {
+        //     setIsFetchingMoveHistory(true);
 
-            // Connect to the contract
-            let contract = new ethers.Contract(Web3Game2048ContractData.address, Web3Game2048ContractData.abi, provider);
+        //     // Connect to the contract
+        //     let contract = new ethers.Contract(Web3Game2048ContractData.address, Web3Game2048ContractData.abi, provider);
 
-            // Get the event filter
-            let filter = contract.filters.Moved(); // Replace "EventName" with your event name
+        //     // Get the event filter
+        //     let filter = contract.filters.Moved(); // Replace "EventName" with your event name
 
-            // Get the event logs
-            let logs = await provider.getLogs({
-                fromBlock: 0,
-                toBlock: 'latest',
-                address: contract.address,
-                topics: filter.topics,
-            });
+        //     // Get the event logs
+        //     let logs = await provider.getLogs({
+        //         fromBlock: 0,
+        //         toBlock: 'latest',
+        //         address: contract.address,
+        //         topics: filter.topics,
+        //     });
 
-            // Parse the logs and get block details
-            let events = await Promise.all(logs.map(async (log) => {
-                let event = contract.interface.parseLog(log);
-                let block = await provider.getBlock(log.blockNumber);
-                return {
-                    move: event.args.move,
-                    player: event.args.player,
-                    blockNumber: log.blockNumber,
-                    timestamp: block.timestamp
-                };
-            }));
+        //     // Parse the logs and get block details
+        //     let events = await Promise.all(logs.map(async (log) => {
+        //         let event = contract.interface.parseLog(log);
+        //         let block = await provider.getBlock(log.blockNumber);
+        //         return {
+        //             move: event.args.move,
+        //             player: event.args.player,
+        //             blockNumber: log.blockNumber,
+        //             timestamp: block.timestamp
+        //         };
+        //     }));
 
-            setMoveHistory(events.reverse());
-            setIsFetchingMoveHistory(false);
-        };
+        //     setMoveHistory(events.reverse());
+        //     setIsFetchingMoveHistory(false);
+        // };
 
-        fetchMoveHistory();
+        // fetchMoveHistory();
     }, []);
 
     const getMoveLabel = (move) => {
@@ -194,7 +194,7 @@ const MoveCount = ({ moveCount, address, width, height }) => {
 
     return (
         <>
-            <Button className="move-count" onPress={onOpen}>
+            <Button className="move-count" onPress={false && onOpen}>
                 <span className="move-count-title">MOVE COUNT</span>
                 <div className="move-count-number">{moveCount.toString()}</div>
             </Button>

@@ -3,7 +3,7 @@
 // @website: https://jasonyapri.com
 // @github: https://github.com/jasonyapri
 // @linkedIn: https://linkedin.com/in/jasonyapri
-// @version: 1.0.0 (2024.04.16)
+// @version: 1.0.0 (2024.08.10)
 // Contract: Web3 Game - 2048
 pragma solidity ^0.8.24;
 

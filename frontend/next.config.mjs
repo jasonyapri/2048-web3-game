@@ -10,7 +10,8 @@ const nextConfig = {
     PROJECT_ID: process.env.PROJECT_ID,
     RPC_URL: process.env.RPC_URL,
     ETHERSCAN_URL: process.env.ETHERSCAN_URL,
-    RPC_URL: process.env.RPC_URL,
+    QUICKNODE_OPTIMISM_SEPOLIA_RPC_URL: process.env.QUICKNODE_OPTIMISM_SEPOLIA_RPC_URL,
+    QUICKNODE_OPTIMISM_SEPOLIA_RPC_WS_URL: process.env.QUICKNODE_OPTIMISM_SEPOLIA_RPC_WS_URL,
   },
     webpack: config => {
         config.externals.push('pino-pretty', 'lokijs', 'encoding')
