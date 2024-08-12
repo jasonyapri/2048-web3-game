@@ -3,7 +3,7 @@
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
 
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
-import { optimism, optimismSepolia, chain } from 'viem/chains';
+import { optimism, optimismSepolia } from 'viem/chains';
 import { infuraProvider } from 'wagmi/providers/infura';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
@@ -23,15 +23,45 @@ const metadata = {
 // Default Wagmi Config with Public RPC
 // const chains = [optimismSepolia];
 // const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
+const mantaSepoliaTestnet = {
+    "id": 3441006,
+    "name": "Manta Pacific Sepolia Testnet",
+    "network": "manta-sepolia",
+    "nativeCurrency": {
+        "decimals": 18,
+        "name": "ETH",
+        "symbol": "ETH"
+    },
+    "rpcUrls": {
+        "default": {
+            "http": [
+                "https://pacific-rpc.sepolia-testnet.manta.network/http"
+            ]
+        }
+    },
+    "blockExplorers": {
+        "default": {
+            "name": "Manta Sepolia Testnet Explorer",
+            "url": "https://pacific-explorer.sepolia-testnet.manta.network",
+            "apiUrl": "https://pacific-explorer.sepolia-testnet.manta.network/api"
+        }
+    },
+    "contracts": {
+        "multicall3": {
+            "address": "0xca54918f7B525C8df894668846506767412b53E3",
+            "blockCreated": 479584
+        }
+    },
+    "testnet": true
+};
 
 // Custom Config with Alchemy and Infura RPC
 const { chains, publicClient } = configureChains(
-    [optimismSepolia],
+    [mantaSepoliaTestnet],
     [
         jsonRpcProvider({
           rpc: (chain) => ({
-            http: process.env.QUICKNODE_OPTIMISM_SEPOLIA_RPC_URL,
-            webSocket: process.env.QUICKNODE_OPTIMISM_SEPOLIA_RPC_WS_URL
+            http: process.env.ONERPC_MANTA_SEPOLIA_RPC_URL
           }),
         }),
     ],
@@ -46,7 +76,7 @@ const wagmiConfig = createConfig({
     connectors: [
         new InjectedConnector({ chains }),
         new WalletConnectConnector({
-            chains: [optimismSepolia],
+            chains: [mantaSepoliaTestnet],
             options: {
               projectId: process.env.PROJECT_ID,
             },
@@ -61,7 +91,7 @@ createWeb3Modal({
     wagmiConfig,
     projectId,
     chains,
-    defaultChain: optimismSepolia,
+    defaultChain: mantaSepoliaTestnet,
     enableAnalytics: true // Optional - defaults to your Cloud configuration
 });
 

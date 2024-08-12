@@ -12,6 +12,7 @@ const nextConfig = {
     ETHERSCAN_URL: process.env.ETHERSCAN_URL,
     QUICKNODE_OPTIMISM_SEPOLIA_RPC_URL: process.env.QUICKNODE_OPTIMISM_SEPOLIA_RPC_URL,
     QUICKNODE_OPTIMISM_SEPOLIA_RPC_WS_URL: process.env.QUICKNODE_OPTIMISM_SEPOLIA_RPC_WS_URL,
+    ONERPC_MANTA_SEPOLIA_RPC_URL: process.env.ONERPC_MANTA_SEPOLIA_RPC_URL,
   },
     webpack: config => {
         config.externals.push('pino-pretty', 'lokijs', 'encoding')

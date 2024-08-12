@@ -11,9 +11,9 @@ contract CounterScript is Script {
     Counter counter;
 
     function setUp() public {
-        // vm.createSelectFork(vm.rpcUrl("optimism_sepolia"));
+        vm.createSelectFork(vm.rpcUrl("optimism_sepolia"));
         // vm.createSelectFork(vm.rpcUrl("optimism_mainnet"));
-        vm.createSelectFork(vm.rpcUrl("manta_sepolia"));
+        // vm.createSelectFork(vm.rpcUrl("manta_sepolia"));
     }
 
     function run() public {
