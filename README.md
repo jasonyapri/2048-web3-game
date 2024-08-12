@@ -7,7 +7,7 @@
 <a href="https://2048.jasonyapri.com" target="_blank"><img src="img/jasonyapri-web3-game-2048_05.jpg" alt="Web3 Game: 2048. Created by Jason Yapri" height="300"></a>
 
 <p>Web3 Implementation of the 2048 Game running on Manta Pacific Sepolia Testnet.</p>
-<p>The board is shared among all players worldwide. Everyone have the chance to win ETH from the Prize Pool once you reach a certain number for the first time! <i>(Currently it's only optimized for desktop browser with browser wallet like Metamask)</i></p>
+<p>The board is shared among all players worldwide. Everyone have the chance to win ETH from the Prize Pool once you reach a certain number for the first time!</p>
 👉 <a href="https://2048.jasonyapri.com">Try it now</a> 👈
 
 ## Getting Started
