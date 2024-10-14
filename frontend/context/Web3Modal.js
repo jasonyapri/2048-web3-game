@@ -1,7 +1,6 @@
 'use client';
 
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
-
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { optimism, optimismSepolia } from 'viem/chains';
 import { infuraProvider } from 'wagmi/providers/infura';
@@ -23,10 +22,42 @@ const metadata = {
 // Default Wagmi Config with Public RPC
 // const chains = [optimismSepolia];
 // const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
-const mantaSepoliaTestnet = {
-    "id": 3441006,
-    "name": "Manta Pacific Sepolia Testnet",
-    "network": "manta-sepolia",
+// const mantaSepoliaTestnet = {
+//     "id": 3441006,
+//     "name": "Manta Pacific Sepolia Testnet",
+//     "network": "manta-sepolia",
+//     "nativeCurrency": {
+//         "decimals": 18,
+//         "name": "ETH",
+//         "symbol": "ETH"
+//     },
+//     "rpcUrls": {
+//         "default": {
+//             "http": [
+//                 "https://pacific-rpc.sepolia-testnet.manta.network/http"
+//             ]
+//         }
+//     },
+//     "blockExplorers": {
+//         "default": {
+//             "name": "Manta Sepolia Testnet Explorer",
+//             "url": "https://pacific-explorer.sepolia-testnet.manta.network",
+//             "apiUrl": "https://pacific-explorer.sepolia-testnet.manta.network/api"
+//         }
+//     },
+//     "contracts": {
+//         "multicall3": {
+//             "address": "0xca54918f7B525C8df894668846506767412b53E3",
+//             "blockCreated": 479584
+//         }
+//     },
+//     "testnet": true
+// };
+
+const liskSepolia = {
+    "id": 4202,
+    "name": "Lisk Sepolia Testnet",
+    "network": "lisk-sepolia",
     "nativeCurrency": {
         "decimals": 18,
         "name": "ETH",
@@ -35,33 +66,33 @@ const mantaSepoliaTestnet = {
     "rpcUrls": {
         "default": {
             "http": [
-                "https://pacific-rpc.sepolia-testnet.manta.network/http"
+                "https://rpc.sepolia-api.lisk.com"
             ]
         }
     },
     "blockExplorers": {
         "default": {
-            "name": "Manta Sepolia Testnet Explorer",
-            "url": "https://pacific-explorer.sepolia-testnet.manta.network",
-            "apiUrl": "https://pacific-explorer.sepolia-testnet.manta.network/api"
+            "name": "Lisk Sepolia Testnet Explorer",
+            "url": "	https://sepolia-blockscout.lisk.com",
+            "apiUrl": "https://sepolia-blockscout.lisk.com/api"
         }
     },
-    "contracts": {
-        "multicall3": {
-            "address": "0xca54918f7B525C8df894668846506767412b53E3",
-            "blockCreated": 479584
-        }
-    },
+    // "contracts": {
+    //     "multicall3": {
+    //         "address": "0xca54918f7B525C8df894668846506767412b53E3",
+    //         "blockCreated": 479584
+    //     }
+    // },
     "testnet": true
 };
 
 // Custom Config with Alchemy and Infura RPC
 const { chains, publicClient } = configureChains(
-    [mantaSepoliaTestnet],
+    [liskSepolia],
     [
         jsonRpcProvider({
           rpc: (chain) => ({
-            http: process.env.ONERPC_MANTA_SEPOLIA_RPC_URL
+            http: process.env.LISK_SEPOLIA_RPC_URL
           }),
         }),
     ],
@@ -76,7 +107,7 @@ const wagmiConfig = createConfig({
     connectors: [
         new InjectedConnector({ chains }),
         new WalletConnectConnector({
-            chains: [mantaSepoliaTestnet],
+            chains: [liskSepolia],
             options: {
               projectId: process.env.PROJECT_ID,
             },
@@ -91,7 +122,7 @@ createWeb3Modal({
     wagmiConfig,
     projectId,
     chains,
-    defaultChain: mantaSepoliaTestnet,
+    defaultChain: liskSepolia,
     enableAnalytics: true // Optional - defaults to your Cloud configuration
 });
 

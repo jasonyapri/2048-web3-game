@@ -1,11 +1,29 @@
 const Web3Game2048ContractData = {
 //   "address": "0x2CF3548eE283C07636E86EE921aBa3F465F159d0", // optimism sepolia
-  "address": "0x0301a4608c809B1029aA62d847BA7A64Dc7b3BB2", // manta sepolia
+//   "address": "0x0301a4608c809B1029aA62d847BA7A64Dc7b3BB2", // manta sepolia
+  "address": "0x5125812eb842c7B1BC27A9Bfaf77E7E4e1177a5B", // lisk sepolia
   "abi": [
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            }
+        ],
         "stateMutability": "payable",
         "type": "constructor"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "AddressInsufficientBalance",
+        "type": "error"
     },
     {
         "inputs": [],
@@ -15,6 +33,11 @@ const Web3Game2048ContractData = {
     {
         "inputs": [],
         "name": "EmergencyLockIsActivated",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "FailedInnerCall",
         "type": "error"
     },
     {
@@ -52,6 +75,33 @@ const Web3Game2048ContractData = {
             }
         ],
         "name": "NotAuthorized",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            }
+        ],
+        "name": "OwnableInvalidOwner",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "OwnableUnauthorizedAccount",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "ReentrancyGuardReentrantCall",
         "type": "error"
     },
     {
@@ -775,7 +825,7 @@ const Web3Game2048ContractData = {
         "stateMutability": "payable",
         "type": "receive"
     }
-]
+  ],
 };
 
 export default Web3Game2048ContractData;

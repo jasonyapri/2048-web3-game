@@ -1,7 +1,19 @@
 DEPLOYMENT COMMAND
 
+# Deployed Contracts:
+Optimism Sepolia: 
+Manta Sepolia:
+Base Sepolia: 
+Lisk Sepolia: 0x5125812eb842c7B1BC27A9Bfaf77E7E4e1177a5B
+
 # Deploy and Verify Smart Contract
 forge script script/Web3Game2048.s.sol:Web3Game2048Script --broadcast --verify
+
+## Lisk
+forge script script/Web3Game2048.s.sol:Web3Game2048Script --broadcast --verify \
+  --verifier blockscout \
+  --verifier-url https://sepolia-blockscout.lisk.com/api/
+
 
 # Manually Verify Deployed Contract after deployed to Optimism Sepolia (previously the API Key is Invalid)
 forge verify-contract --chain-id 11155420 --compiler-version 0.8.24 0xe4EE33F790f790950E0064E0E5aC474BE36d577F src/Web3Game2048.sol:Web3Game2048 --constructor-args 0x00000000000000000000000047331edc7220ad93d62130ce64c10f7166f4c947

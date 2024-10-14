@@ -14,7 +14,8 @@ contract Web3Game2048Script is Script {
     function setUp() public {
         // vm.createSelectFork(vm.rpcUrl("optimism_sepolia"));
         // vm.createSelectFork(vm.rpcUrl("optimism_mainnet"));
-        vm.createSelectFork(vm.rpcUrl("manta_sepolia"));
+        // vm.createSelectFork(vm.rpcUrl("manta_sepolia"));
+        vm.createSelectFork(vm.rpcUrl("lisk_sepolia"));
     }
 
     function run() public {
