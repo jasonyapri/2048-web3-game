@@ -40,7 +40,7 @@ export default function Home() {
     watch: true
   });
 
-  const targetChainId = 4202;
+  const targetChainId = process.env.CHAIN_ID;
   const { chain } = useNetwork()
   const { switchNetwork } = useSwitchNetwork({
     chainId: targetChainId,
