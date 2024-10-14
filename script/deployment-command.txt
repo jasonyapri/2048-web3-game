@@ -43,3 +43,7 @@ After makeMove(Move.RIGHT):
 0	0	0	0
 0	0	0	0
 0	2	2	4
+
+# Batch Transfer
+
+forge script script/BatchTransfer.s.sol:BatchTransferScript --broadcast
