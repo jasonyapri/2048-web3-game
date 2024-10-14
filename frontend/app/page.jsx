@@ -12,6 +12,7 @@ import PrizePool from './components/PrizePool';
 import Donate from './components/Donate';
 import { ethers } from 'ethers';
 import useWindowSize from 'react-use/lib/useWindowSize'
+import { useNetwork, useSwitchNetwork } from 'wagmi'
 
 export default function Home() {
 
@@ -38,6 +39,18 @@ export default function Home() {
     functionName: 'moveCount',
     watch: true
   });
+
+  const targetChainId = 4202;
+  const { chain } = useNetwork()
+  const { switchNetwork } = useSwitchNetwork({
+    chainId: targetChainId,
+  })
+
+  useEffect(() => {
+    if (chain?.id !== targetChainId) {
+      switchNetwork?.(targetChainId)
+    }
+  }, [chain, switchNetwork, targetChainId])
 
   const [gameBoardTiles, setGameBoardTiles] = useState(null);
 

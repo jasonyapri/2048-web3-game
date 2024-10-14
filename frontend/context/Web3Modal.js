@@ -106,12 +106,12 @@ const wagmiConfig = createConfig({
     autoConnect: true,
     connectors: [
         new InjectedConnector({ chains }),
-        new WalletConnectConnector({
-            chains: [liskSepolia],
-            options: {
-              projectId: process.env.PROJECT_ID,
-            },
-          })
+        // new WalletConnectConnector({
+        //     chains: [liskSepolia],
+        //     options: {
+        //       projectId: process.env.PROJECT_ID,
+        //     },
+        //   })
       ],
     publicClient,
     metadata,
