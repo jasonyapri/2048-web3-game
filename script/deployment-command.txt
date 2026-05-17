@@ -5,9 +5,11 @@ Optimism Sepolia:
 Manta Sepolia:
 Base Sepolia: 
 Lisk Sepolia: 0x5125812eb842c7B1BC27A9Bfaf77E7E4e1177a5B
+Ethereum Sepolia: https://sepolia.etherscan.io/address/0xA26574575F5711C009aC2cE2fc1F8aD69a5196E9
 
 # Deploy and Verify Smart Contract
 forge script script/Web3Game2048.s.sol:Web3Game2048Script --broadcast --verify
+
 
 ## Lisk
 forge script script/Web3Game2048.s.sol:Web3Game2048Script --broadcast --verify \
