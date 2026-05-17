@@ -1,7 +1,8 @@
 const Web3Game2048ContractData = {
 //   "address": "0x2CF3548eE283C07636E86EE921aBa3F465F159d0", // optimism sepolia
 //   "address": "0x0301a4608c809B1029aA62d847BA7A64Dc7b3BB2", // manta sepolia
-  "address": "0x5125812eb842c7B1BC27A9Bfaf77E7E4e1177a5B", // lisk sepolia
+//   "address": "0x5125812eb842c7B1BC27A9Bfaf77E7E4e1177a5B", // lisk sepolia
+  "address": "0xA26574575F5711C009aC2cE2fc1F8aD69a5196E9", // Ethereum sepolia
   "abi": [
     {
         "inputs": [

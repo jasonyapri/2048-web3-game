@@ -2,7 +2,7 @@
 
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
-import { optimism, optimismSepolia } from 'viem/chains';
+import { optimism, optimismSepolia, sepolia } from 'viem/chains';
 import { infuraProvider } from 'wagmi/providers/infura';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
@@ -88,11 +88,11 @@ const liskSepolia = {
 
 // Custom Config with Alchemy and Infura RPC
 const { chains, publicClient } = configureChains(
-    [liskSepolia],
+    [sepolia],
     [
         jsonRpcProvider({
           rpc: (chain) => ({
-            http: process.env.LISK_SEPOLIA_RPC_URL
+            http: process.env.ETHEREUM_SEPOLIA_RPC_URL
           }),
         }),
     ],
@@ -122,7 +122,7 @@ createWeb3Modal({
     wagmiConfig,
     projectId,
     chains,
-    defaultChain: liskSepolia,
+    defaultChain: sepolia,
     enableAnalytics: true // Optional - defaults to your Cloud configuration
 });
 
