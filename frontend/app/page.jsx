@@ -273,6 +273,14 @@ export default function Home() {
         <div className="line"></div>
         <Donate address={address} width={width} height={height} />
         <div className="line"></div>
+        <div className="game-instructions instruction-3">
+          <p><span className="highlighted">Smart Contract:</span> <a href="https://sepolia.etherscan.io/address/0xA26574575F5711C009aC2cE2fc1F8aD69a5196E9#code" className="author contract-link" target="_blank">{`${Web3Game2048ContractData.address.substring(0, 6)}...${Web3Game2048ContractData.address.substring(Web3Game2048ContractData.address.length - 4)}`}</a></p>
+        </div>
+        <div className="line"></div>
+        <div className="game-instructions instruction-3">
+          <p><span className="highlighted">Faucet:</span> <a href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia" className="faucet-link author" target="_blank">https://cloud.google.com/application/web3/faucet/ethereum/sepolia</a></p>
+        </div>
+        <div className="line"></div>
         <footer className="game-footer">
           Created by <a href="https://jasonyapri.com" className="author" target="_blank">Jason Yapri</a>. Proudly made in <a href="https://www.google.com/search?q=indonesia" className="indonesia" target="_blank">Indonesia</a>.
         </footer>
